@@ -1,0 +1,17 @@
+{
+  "name": "@camera-rental-house/cloud-storage",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    "./cloudinary": "./cloudinary.ts",
+    "./r2": "./r2.ts",
+    "./supabase": "./supabaseStorage.ts"
+  },
+  "dependencies": {
+    "cloudinary": "^2.9.0",
+    "@aws-sdk/client-s3": "^3.750.0",
+    "@aws-sdk/lib-storage": "^3.750.0",
+    "@supabase/supabase-js": "^2.48.1"
+  }
+}

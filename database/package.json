@@ -1,0 +1,14 @@
+{
+  "name": "@camera-rental-house/database",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./supabase.ts",
+    "./migrate": "./migrate_db.ts"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.48.1",
+    "dotenv": "^16.4.7"
+  }
+}

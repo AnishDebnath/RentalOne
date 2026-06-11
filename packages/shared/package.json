@@ -1,0 +1,26 @@
+{
+  "name": "@camera-rental-house/shared",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.ts"
+    },
+    "./auth": {
+      "types": "./index.ts",
+      "import": "./index.ts"
+    },
+    "./data": {
+      "types": "./categories.ts",
+      "import": "./categories.ts"
+    }
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

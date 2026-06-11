@@ -1,0 +1,93 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scrollbar-gutter: stable;
+  overflow-x: hidden;
+  scroll-behavior: initial;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+body {
+  @apply font-sans text-ink antialiased bg-page selection:bg-primary/20 selection:text-primary-dark;
+  padding-right: 0 !important;
+  margin: 0;
+  overflow-x: hidden;
+  position: relative;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+@layer components {
+  .app-shell {
+    @apply mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8;
+  }
+
+  .card-surface {
+    @apply rounded-card border border-line bg-card shadow-card transition-all duration-200 ease-in-out;
+  }
+
+  .card-hover {
+    @apply hover:scale-[1.02] hover:shadow-cardHover;
+  }
+
+  .pill-button {
+    @apply inline-flex min-h-11 items-center justify-center rounded-pill px-5 py-3 text-sm font-semibold transition-all duration-200 ease-in-out active:scale-95 md:text-base;
+  }
+
+  .primary-button {
+    @apply pill-button bg-primary text-white hover:bg-primary-hover focus:outline-none focus:ring-4 focus:ring-primary/20;
+  }
+
+  .secondary-button {
+    @apply pill-button border border-line bg-white text-ink hover:border-primary/40 hover:bg-primary-light hover:text-primary-dark focus:outline-none focus:ring-4 focus:ring-primary/10;
+  }
+
+  .input-shell {
+    @apply flex min-h-12 items-center gap-3 rounded-input border border-line bg-white px-4 transition-all duration-200 ease-in-out focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10;
+  }
+
+  .page-animate {
+    @apply animate-fade-up opacity-0;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

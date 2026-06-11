@@ -1,0 +1,102 @@
+### Health
+GET http://localhost:5000/api/health
+
+### User signup
+POST http://localhost:5000/api/auth/signup
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="fullName"
+
+Alex Director
+--boundary
+Content-Disposition: form-data; name="phone"
+
+9876543210
+--boundary
+Content-Disposition: form-data; name="email"
+
+alex@example.com
+--boundary
+Content-Disposition: form-data; name="password"
+
+securepass123
+--boundary
+Content-Disposition: form-data; name="aadhaarNo"
+
+123412341234
+--boundary
+Content-Disposition: form-data; name="voterNo"
+
+ABCD1234567
+--boundary--
+
+### User login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "alex@example.com",
+  "password": "securepass123"
+}
+
+### Admin login
+POST http://localhost:5000/api/auth/admin/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "securepassword"
+}
+
+### Products list
+GET http://localhost:5000/api/products?category=Cameras&limit=8&offset=0
+
+### Product details
+GET http://localhost:5000/api/products/{{productId}}
+
+### Create rental
+POST http://localhost:5000/api/rentals
+Authorization: Bearer {{userToken}}
+Content-Type: application/json
+
+{
+  "pickupDate": "2026-04-05",
+  "eventDate": "2026-04-06",
+  "items": [
+    {
+      "productId": "{{productId}}",
+      "quantity": 1
+    }
+  ]
+}
+
+### My rentals
+GET http://localhost:5000/api/rentals/my
+Authorization: Bearer {{userToken}}
+
+### Dashboard
+GET http://localhost:5000/api/admin/dashboard
+Authorization: Bearer {{adminToken}}
+
+### Upcoming rentals
+GET http://localhost:5000/api/admin/rentals/upcoming
+Authorization: Bearer {{adminToken}}
+
+### Release product
+POST http://localhost:5000/api/manage/release
+Authorization: Bearer {{managerToken}}
+Content-Type: application/json
+
+{
+  "uniqueCode": "CAM-4X9K"
+}
+
+### Return product
+POST http://localhost:5000/api/manage/return
+Authorization: Bearer {{managerToken}}
+Content-Type: application/json
+
+{
+  "uniqueCode": "CAM-4X9K"
+}

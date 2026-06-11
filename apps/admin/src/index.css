@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  @apply bg-page font-sans text-ink antialiased;
+  background:
+    linear-gradient(135deg, #f4e8e8 0%, #f7f8fb 44%, #e9f3ff 100%);
+}
+
+@layer components {
+  .admin-shell {
+    @apply mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8;
+  }
+
+  .card-surface {
+    @apply rounded-[1rem] border border-line bg-white shadow-sm transition-all duration-200 ease-in-out;
+  }
+
+  .pill-button {
+    @apply inline-flex min-h-11 items-center justify-center rounded-pill px-5 py-3 text-sm font-semibold transition-all duration-200 ease-in-out active:scale-95;
+  }
+
+  .primary-button {
+    @apply pill-button bg-primary text-white hover:bg-primary-hover;
+  }
+
+  .secondary-button {
+    @apply pill-button border border-line bg-white/90 text-ink hover:bg-primary-light hover:text-primary-dark;
+  }
+
+  .input-shell {
+    @apply flex min-h-12 items-center gap-3 rounded-input border border-line bg-white/90 px-4 transition-all duration-200 ease-in-out focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    @apply w-1;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-slate-200 hover:bg-slate-300 transition-colors;
+  }
+
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

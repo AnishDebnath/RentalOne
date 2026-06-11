@@ -1,0 +1,22 @@
+{
+  "name": "@camera-rental-house/types",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "import": "./index.ts"
+    },
+    "./api.types": {
+      "types": "./api.types.ts",
+      "import": "./api.types.ts"
+    },
+    "./user.types": {
+      "types": "./user.types.ts",
+      "import": "./user.types.ts"
+    }
+  }
+}

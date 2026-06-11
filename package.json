@@ -1,0 +1,28 @@
+{
+  "name": "camera-rental-house",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "server",
+    "database",
+    "cloud-storage"
+  ],
+  "scripts": {
+    "dev": "npx concurrently \"npm run dev:server\" \"npm run dev:client\" \"npm run dev:admin\"",
+    "dev:client": "npm --workspace apps/client run dev",
+    "dev:admin": "npm --workspace apps/admin run dev",
+    "dev:server": "npm --workspace server run dev",
+    "build": "npm run build --workspaces --if-present",
+    "build:client": "npm --workspace apps/client run build",
+    "build:admin": "npm --workspace apps/admin run build",
+    "build:server": "npm --workspace server run build",
+    "start:server": "npm --workspace server run start"
+  },
+  "dependencies": {
+    "date-fns": "^4.1.0",
+    "framer-motion": "^12.38.0"
+  }
+}

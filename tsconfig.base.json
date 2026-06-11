@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@camera-rental-house/shared": ["packages/shared/index.ts"],
+      "@camera-rental-house/shared/*": ["packages/shared/*"],
+      "@camera-rental-house/database": ["database/supabase.ts"],
+      "@camera-rental-house/cloud-storage/*": ["cloud-storage/*"],
+      "@camera-rental-house/types": ["packages/types/index.ts"],
+      "@camera-rental-house/ui": ["packages/ui/index.ts"],
+      "@camera-rental-house/utils": ["packages/utils/index.ts"]
+    }
+  }
+}
