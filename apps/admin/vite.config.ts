@@ -6,7 +6,8 @@ export default defineConfig(({ command }) => ({
   plugins: [react()],
   server: {
     port: 5174,
-    host: true, 
+    host: true,
+    allowedHosts: ['camera-rental-house-admin.up.railway.app'],
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
