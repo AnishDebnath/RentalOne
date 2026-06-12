@@ -1,8 +1,6 @@
 services:
   client:
     name: client
-    source:
-      root: .
     build:
       builder: NIXPACKS
       buildCommand: npm install && npm run build:client
@@ -17,8 +15,6 @@ services:
 
   admin:
     name: admin
-    source:
-      root: .
     build:
       builder: NIXPACKS
       buildCommand: npm install && npm run build:admin
@@ -33,8 +29,6 @@ services:
 
   api-server:
     name: api-server
-    source:
-      root: .
     build:
       builder: NIXPACKS
       buildCommand: npm install && npm run build:server
