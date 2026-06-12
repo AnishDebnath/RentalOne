@@ -1,4 +1,4 @@
-import supabase from '@camera-rental-house/database';
+import supabase from '../db/supabase';
 
 interface StorageProps {
   buffer: Buffer;

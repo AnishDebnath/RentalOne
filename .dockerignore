@@ -1,0 +1,10 @@
+# Ignore build artifacts and dependencies
+node_modules
+dist
+.git
+.env
+.DS_Store
+
+# Ignore infrastructure folders if any remnants remain
+database
+cloud-storage

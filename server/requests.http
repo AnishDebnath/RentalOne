@@ -76,7 +76,7 @@ GET http://localhost:5000/api/rentals/my
 Authorization: Bearer {{userToken}}
 
 ### Dashboard
-GET http://localhost:5000/api/admin/dashboard
+GET http://localhost:5000/api/admin/d ashboard
 Authorization: Bearer {{adminToken}}
 
 ### Upcoming rentals

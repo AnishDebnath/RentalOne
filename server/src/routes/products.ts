@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import supabase from '@camera-rental-house/database';
+import supabase from '../db/supabase';
 
 const router = express.Router();
 

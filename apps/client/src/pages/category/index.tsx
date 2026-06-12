@@ -80,7 +80,7 @@ const Category = () => {
         }
       });
       
-      const mappedProducts = data.items.map((p: any) => ({
+      const mappedProducts = (data.items || []).map((p: any) => ({
         ...p,
         images: (p.images || []).map((url: string, i: number) => ({
           id: String(i),

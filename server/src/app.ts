@@ -1,7 +1,13 @@
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.join(__dirname, '../.env') });
+
 import crypto from 'crypto';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import express, { Request, Response, NextFunction } from 'express';
 import authRoutes from './routes/auth.js';
 import productsRoutes from './routes/products.js';
@@ -11,8 +17,6 @@ import manageRoutes from './routes/manage.js';
 import houseRoutes from './routes/houses.js';
 import authMiddleware from './middleware/authMiddleware.js';
 import roleMiddleware from './middleware/roleMiddleware.js';
-
-dotenv.config();
 
 const app = express();
 

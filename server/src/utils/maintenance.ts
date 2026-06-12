@@ -1,4 +1,4 @@
-import supabase from '@camera-rental-house/database';
+import supabase from '../db/supabase';
 
 export const runRentalMaintenance = async () => {
   console.log('[Maintenance] Checking for expired rentals (not collected within 24h)...');

@@ -4,9 +4,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import dotenv from 'dotenv';
-import supabase from '@camera-rental-house/database';
-import { uploadFile as uploadToCloudinary } from '@camera-rental-house/cloud-storage/cloudinary';
-import { uploadToSupabase } from '@camera-rental-house/cloud-storage/supabase';
+import supabase from '../db/supabase.js';
+import { uploadFile as uploadToCloudinary } from '../storage/cloudinary.js';
+import { uploadToSupabase } from '../storage/supabaseStorage.js';
 import { processImage } from '../utils/imageProcessor.js';
 import generateQrBase64 from '../utils/qrGenerator.js';
 import generateMemberId from '../utils/memberIdGenerator.js';
@@ -313,6 +313,7 @@ router.post(
 );
 
 router.post('/login', async (req: Request, res: Response) => {
+  console.log('Login route hit with identifier:', req.body.identifier);
   try {
     const { identifier, password } = req.body;
 

@@ -13,13 +13,26 @@ const FeaturedGear = () => {
     const fetchProducts = async () => {
       try {
         const { data } = await axiosInstance.get('/products?limit=8&sort=most_rented');
-        const mappedProducts = data.items.map((p: any) => ({
+        console.log('DEBUG: Full API response:', data);
+        
+        // Bulletproof items extraction
+        let items: any[] = [];
+        if (Array.isArray(data)) {
+          items = data;
+        } else if (data && typeof data === 'object' && Array.isArray(data.items)) {
+          items = data.items;
+        }
+        console.log('DEBUG: Items for mapping:', items);
+
+        const mappedProducts = items.map((p: any) => ({
           ...p,
-          images: (p.images || []).map((url: string, i: number) => ({
-            id: String(i),
-            image_url: url,
-            display_order: i
-          }))
+          images: Array.isArray(p.images) 
+            ? p.images.map((url: string, i: number) => ({
+                id: String(i),
+                image_url: url,
+                display_order: i
+              }))
+            : []
         }));
         setProducts(mappedProducts);
       } catch (err) {
@@ -69,11 +82,13 @@ const FeaturedGear = () => {
         </Link>
       </div>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
-        {products.map((product, index) => (
-          <div key={product.id} className={index >= 6 ? 'hidden lg:block' : 'block'}>
-            <ProductCard product={product} hideCart={true} />
-          </div>
-        ))}
+        {Array.isArray(products) && products.length > 0 ? (
+          products.map((product, index) => (
+            <div key={product.id || index} className={index >= 6 ? 'hidden lg:block' : 'block'}>
+              <ProductCard product={product} hideCart={true} />
+            </div>
+          ))
+        ) : null}
       </div>
     </section>
   );

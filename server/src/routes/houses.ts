@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import supabase from '@camera-rental-house/database';
+import supabase from '../db/supabase.js';
 import generateMemberId from '../utils/memberIdGenerator.js';
 import generateHouseId from '../utils/houseIdGenerator.js';
 import generateQrBase64 from '../utils/qrGenerator.js';

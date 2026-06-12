@@ -7,11 +7,11 @@ let supabaseClient: SupabaseClient | null = null;
 
 const getSupabaseEnv = () => {
   const supabaseUrl = process.env.SUPABASE_URL?.trim();
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY?.trim();
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
 
   if (!supabaseUrl || !supabaseServiceKey) {
     throw new Error(
-      'Server configuration error: SUPABASE_URL and SUPABASE_SERVICE_KEY must be set in the server environment.',
+      'Server configuration error: SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set in the server environment.',
     );
   }
 

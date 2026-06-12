@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import supabase from '@camera-rental-house/database';
+import supabase from '../db/supabase';
 
 const randomBlock = (): string =>
   crypto

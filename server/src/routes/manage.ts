@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
-import supabase from '@camera-rental-house/database';
-import { uploadFile, deleteFile } from '@camera-rental-house/cloud-storage/cloudinary';
+import supabase from '../db/supabase.js';
+import { uploadFile, deleteFile } from '../storage/cloudinary.js';
 import { processImage } from '../utils/imageProcessor.js';
 
 const extractPublicId = (url: string | null): string | null => {

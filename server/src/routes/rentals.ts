@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import express, { Request, Response } from 'express';
-import supabase from '@camera-rental-house/database';
+import supabase from '../db/supabase';
 
 import generateRentalId from '../utils/rentalIdGenerator.js';
 
