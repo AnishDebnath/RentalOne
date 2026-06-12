@@ -2,12 +2,14 @@ services:
   client:
     name: client
     source:
-      directory: apps/client
-    config:
-      static:
-        directory: dist
-        index: index.html
-        spa: true
+      root: .
+    build:
+      builder: NIXPACKS
+      buildCommand: npm install && npm run build:client
+    deploy:
+      static: true
+      directory: apps/client/dist
+      spa: true
     env:
       VITE_API_URL: ${API_URL}
       VITE_AUTH_APP_URL: ${CLIENT_URL}
@@ -16,12 +18,14 @@ services:
   admin:
     name: admin
     source:
-      directory: apps/admin
-    config:
-      static:
-        directory: dist
-        index: index.html
-        spa: true
+      root: .
+    build:
+      builder: NIXPACKS
+      buildCommand: npm install && npm run build:admin
+    deploy:
+      static: true
+      directory: apps/admin/dist
+      spa: true
     env:
       VITE_API_URL: ${API_URL}
       VITE_AUTH_APP_URL: ${CLIENT_URL}
@@ -30,9 +34,13 @@ services:
   api-server:
     name: api-server
     source:
-      directory: server
-    config:
-      healthcheck: /api/health
+      root: .
+    build:
+      builder: NIXPACKS
+      buildCommand: npm install && npm run build:server
+    deploy:
+      startCommand: npm run start:server
+      healthcheckPath: /api/health
     env:
       PORT: 5000
       NODE_ENV: production
