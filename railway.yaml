@@ -1,39 +1,37 @@
 services:
   client:
     name: client
+    source:
+      root: .
     build:
-      builder: NIXPACKS
-      buildCommand: npm install && npm run build:client
+      dockerfile: apps/client/Dockerfile
+      args:
+        VITE_API_URL: ${API_URL}
     deploy:
-      static: true
-      directory: apps/client/dist
-      spa: true
+      healthcheckPath: /
     env:
-      VITE_API_URL: ${API_URL}
-      VITE_AUTH_APP_URL: ${CLIENT_URL}
-      VITE_ADMIN_APP_URL: ${ADMIN_URL}
+      API_URL: ${API_URL}
 
   admin:
     name: admin
+    source:
+      root: .
     build:
-      builder: NIXPACKS
-      buildCommand: npm install && npm run build:admin
+      dockerfile: apps/admin/Dockerfile
+      args:
+        VITE_API_URL: ${API_URL}
     deploy:
-      static: true
-      directory: apps/admin/dist
-      spa: true
+      healthcheckPath: /
     env:
-      VITE_API_URL: ${API_URL}
-      VITE_AUTH_APP_URL: ${CLIENT_URL}
-      VITE_ADMIN_APP_URL: ${ADMIN_URL}
+      API_URL: ${API_URL}
 
   api-server:
     name: api-server
+    source:
+      root: .
     build:
-      builder: NIXPACKS
-      buildCommand: npm install && npm run build:server
+      dockerfile: server/Dockerfile
     deploy:
-      startCommand: npm run start:server
       healthcheckPath: /api/health
     env:
       PORT: 5000
