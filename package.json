@@ -6,9 +6,7 @@
   "workspaces": [
     "apps/*",
     "packages/*",
-    "server",
-    "database",
-    "cloud-storage"
+    "server"
   ],
   "scripts": {
     "dev": "npx concurrently \"npm run dev:server\" \"npm run dev:client\" \"npm run dev:admin\"",
