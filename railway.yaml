@@ -6,13 +6,13 @@ services:
     build:
       dockerfile: apps/client/Dockerfile
       args:
-        VITE_API_URL: ${API_URL}
-        VITE_ADMIN_APP_URL: ${ADMIN_URL}
-        VITE_CLIENT_APP_URL: ${CLIENT_URL}
+        VITE_API_URL: ${VITE_API_URL:-${API_URL}}
+        VITE_ADMIN_APP_URL: ${VITE_ADMIN_APP_URL:-${ADMIN_URL}}
+        VITE_CLIENT_APP_URL: ${VITE_CLIENT_APP_URL:-${CLIENT_URL}}
     deploy:
       healthcheckPath: /
     env:
-      API_URL: ${API_URL}
+      API_URL: ${VITE_API_URL:-${API_URL}}
 
   admin:
     name: admin
@@ -21,13 +21,13 @@ services:
     build:
       dockerfile: apps/admin/Dockerfile
       args:
-        VITE_API_URL: ${API_URL}
-        VITE_ADMIN_APP_URL: ${ADMIN_URL}
-        VITE_CLIENT_APP_URL: ${CLIENT_URL}
+        VITE_API_URL: ${VITE_API_URL:-${API_URL}}
+        VITE_ADMIN_APP_URL: ${VITE_ADMIN_APP_URL:-${ADMIN_URL}}
+        VITE_CLIENT_APP_URL: ${VITE_CLIENT_APP_URL:-${CLIENT_URL}}
     deploy:
       healthcheckPath: /
     env:
-      API_URL: ${API_URL}
+      API_URL: ${VITE_API_URL:-${API_URL}}
 
   api-server:
     name: api-server

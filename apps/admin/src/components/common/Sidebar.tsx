@@ -20,7 +20,7 @@ import axiosInstance from '../../api/axiosInstance';
 import logo from '@camera-rental-house/ui/assets/logo.png';
 import { useLenis } from '@camera-rental-house/ui';
 
-const authAppUrl = resolveAuthAppUrl(import.meta.env.VITE_AUTH_APP_URL);
+const authAppUrl = resolveAuthAppUrl(import.meta.env.VITE_CLIENT_APP_URL || import.meta.env.VITE_AUTH_APP_URL);
 
 const Sidebar = ({ open, onClose }) => {
   const { pathname } = useLocation();

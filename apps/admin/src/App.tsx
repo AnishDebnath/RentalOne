@@ -28,7 +28,7 @@ import {
 import { useToast, ScrollToTop, PageTransition } from '@camera-rental-house/ui';
 import { AnimatePresence } from 'framer-motion';
 
-const authAppUrl = resolveAuthAppUrl(import.meta.env.VITE_AUTH_APP_URL);
+const authAppUrl = resolveAuthAppUrl(import.meta.env.VITE_CLIENT_APP_URL || import.meta.env.VITE_AUTH_APP_URL);
 
 const ProtectedRoute = ({ children, allowedRoles = ['admin'] }: { children: any; allowedRoles?: string[] }) => {
   const location = useLocation();
@@ -55,6 +55,7 @@ const AuthRedirect = () => {
   const navigate = useNavigate();
   const { addToast } = useToast();
   const toastShownRef = useRef(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -65,9 +66,27 @@ const AuthRedirect = () => {
     const userParam = params.get('user');
     const clearSession = params.get('clear_session');
 
+    const checkRedirectLoop = (targetUrl: string) => {
+      try {
+        const url = new URL(targetUrl, window.location.origin);
+        if (url.origin === window.location.origin) {
+          return true;
+        }
+        return false;
+      } catch (e) {
+        return true;
+      }
+    };
+
     // Handle logout/clear session redirect
     if (clearSession === 'true') {
       clearAdminSession();
+      
+      if (checkRedirectLoop(authAppUrl)) {
+        setError(`Configuration Error: Auth URL (${authAppUrl}) points back to Admin app. Please set VITE_CLIENT_APP_URL in Railway variables.`);
+        return;
+      }
+
       window.location.replace(`${authAppUrl}/login?clear_session=true`);
       return;
     }
@@ -97,15 +116,8 @@ const AuthRedirect = () => {
 
     const requestedPath = next?.startsWith('/') ? next : '/';
     
-    // Prevent redirect loops if authAppUrl is misconfigured to point to the admin app
-    try {
-      const targetUrl = new URL(authAppUrl);
-      if (targetUrl.origin === window.location.origin) {
-        console.error('CRITICAL: VITE_AUTH_APP_URL is not configured or points to the admin app. Redirect aborted to prevent loop.');
-        return;
-      }
-    } catch (e) {
-      console.error('Invalid authAppUrl:', authAppUrl);
+    if (checkRedirectLoop(authAppUrl)) {
+      setError(`Configuration Error: Auth URL (${authAppUrl}) is missing or invalid. Set VITE_CLIENT_APP_URL.`);
       return;
     }
 
@@ -113,7 +125,37 @@ const AuthRedirect = () => {
     window.location.replace(authUrl);
   }, [location.search, navigate, addToast]);
 
-  return <div className="admin-shell py-10 text-sm text-muted">Redirecting...</div>;
+  if (error) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
+        <div className="mb-4 h-12 w-12 rounded-full bg-rose-50 flex items-center justify-center text-rose-500">
+          <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <h2 className="text-lg font-black text-ink">System Configuration Error</h2>
+        <p className="mt-2 text-sm text-muted max-w-md break-all">{error}</p>
+        <div className="mt-6 flex flex-col gap-3">
+          <button 
+            onClick={() => window.location.href = '/'}
+            className="text-xs font-bold text-primary hover:underline"
+          >
+            Try going back to Dashboard
+          </button>
+          <p className="text-[10px] text-slate-400">Current App Origin: {window.location.origin}</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
+        <p className="text-sm font-bold text-muted">Redirecting to Auth Server...</p>
+      </div>
+    </div>
+  );
 };
 
 function App() {
