@@ -3,12 +3,8 @@ FROM node:22-alpine AS builder
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
 WORKDIR /app
-COPY package*.json ./
-COPY apps/client/package.json ./apps/client/
-COPY packages ./packages
-COPY server/package.json ./server/
-RUN npm ci
 COPY . .
+RUN npm ci
 RUN npm run build --workspace apps/client
 
 # Production Stage
