@@ -5,6 +5,3 @@ dist
 .env
 .DS_Store
 
-# Ignore infrastructure folders if any remnants remain
-database
-cloud-storage

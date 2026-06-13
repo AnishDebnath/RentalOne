@@ -7,7 +7,7 @@ COPY package*.json ./
 COPY apps/admin/package.json ./apps/admin/
 COPY packages ./packages
 COPY server/package.json ./server/
-RUN npm install
+RUN npm ci
 COPY . .
 RUN npm run build --workspace apps/admin
 

@@ -7,7 +7,7 @@ COPY package*.json ./
 COPY apps/client/package.json ./apps/client/
 COPY packages ./packages
 COPY server/package.json ./server/
-RUN npm install
+RUN npm ci
 COPY . .
 RUN npm run build --workspace apps/client
 
