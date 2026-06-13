@@ -56,6 +56,19 @@ function App() {
           window.location.reload();
           return;
         }
+
+        // Prevent redirect loops if adminAppUrl is misconfigured to point to the client app
+        try {
+          const targetUrl = new URL(adminAppUrl);
+          if (targetUrl.origin === window.location.origin) {
+            console.error('CRITICAL: VITE_ADMIN_APP_URL is not configured or points to the client app. Redirect aborted to prevent loop.');
+            return;
+          }
+        } catch (e) {
+          console.error('Invalid adminAppUrl:', adminAppUrl);
+          return;
+        }
+
         const defaultPath = role === 'admin' ? '/' : '/rentals';
         const params = new URLSearchParams({
           token,

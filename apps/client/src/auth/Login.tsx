@@ -24,7 +24,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ identifier: '', password: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  
+
   const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const isClearingSession = searchParams.get('clear_session') === 'true';
   const hasJustLoggedOut = searchParams.get('logged_out') === 'true';
@@ -42,10 +42,10 @@ const Login = () => {
   useEffect(() => {
     if (hasJustLoggedOut && !toastShownRef.current) {
       toastShownRef.current = true;
-      addToast({ 
-        title: 'Signed out', 
-        message: 'Your session has been securely closed.', 
-        tone: 'success' 
+      addToast({
+        title: 'Signed out',
+        message: 'Your session has been securely closed.',
+        tone: 'success'
       });
       navigate('/login', { replace: true });
     }
@@ -82,13 +82,13 @@ const Login = () => {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     const validationError = validate();
     if (validationError) {
-      setErrors({ 
-        general: validationError, 
-        identifier: (validationError.includes('Email') || validationError.includes('Phone')) ? 'error' : '', 
-        password: validationError.includes('Password') ? 'error' : '' 
+      setErrors({
+        general: validationError,
+        identifier: (validationError.includes('Email') || validationError.includes('Phone')) ? 'error' : '',
+        password: validationError.includes('Password') ? 'error' : ''
       });
       return;
     }
@@ -99,10 +99,24 @@ const Login = () => {
     try {
       const requestedNext = searchParams.get('next');
       const data = await login(form, { silent: true });
-      
+
       // Handle Admin/Staff redirect to Admin portal
       if (data.user.role === 'admin' || data.user.role === 'staff') {
         const nextPath = '/';
+
+        // Prevent redirect loops if adminAppUrl is misconfigured to point to the client app
+        try {
+          const targetUrl = new URL(adminAppUrl);
+          if (targetUrl.origin === window.location.origin) {
+            console.error('CRITICAL: VITE_ADMIN_APP_URL is not configured or points to the client app. Redirect aborted to prevent loop.');
+            setErrors({ general: 'System misconfiguration: Admin portal URL not found. Please contact support.' });
+            return;
+          }
+        } catch (e) {
+          console.error('Invalid adminAppUrl:', adminAppUrl);
+          setErrors({ general: 'Invalid configuration for Admin portal.' });
+          return;
+        }
 
         const params = new URLSearchParams({
           token: data.accessToken,
@@ -115,7 +129,7 @@ const Login = () => {
             username: data.user.username
           }))
         });
-        
+
         window.location.replace(`${adminAppUrl}/auth-redirect?${params.toString()}`);
         return;
       }

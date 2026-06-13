@@ -87,6 +87,19 @@ const AuthRedirect = () => {
     }
 
     const requestedPath = next?.startsWith('/') ? next : '/';
+    
+    // Prevent redirect loops if authAppUrl is misconfigured to point to the admin app
+    try {
+      const targetUrl = new URL(authAppUrl);
+      if (targetUrl.origin === window.location.origin) {
+        console.error('CRITICAL: VITE_AUTH_APP_URL is not configured or points to the admin app. Redirect aborted to prevent loop.');
+        return;
+      }
+    } catch (e) {
+      console.error('Invalid authAppUrl:', authAppUrl);
+      return;
+    }
+
     const authUrl = `${authAppUrl}/login?next=${encodeURIComponent(requestedPath)}`;
     window.location.replace(authUrl);
   }, [location.search, navigate, addToast]);

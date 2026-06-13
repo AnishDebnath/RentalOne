@@ -39,6 +39,6 @@ const resolveAppUrl = (
 export const resolveAuthAppUrl = (envValue?: string) => resolveAppUrl(envValue, 5173);
 
 export const resolveAdminAppUrl = (envValue?: string) =>
-  resolveAppUrl(envValue, 5174, '/admin');
+  resolveAppUrl(envValue, 5174);
 
 export const resolveClientAppUrl = (envValue?: string) => resolveAppUrl(envValue, 5173);
