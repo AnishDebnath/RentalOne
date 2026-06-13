@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import supabase from '../db/supabase';
+import supabase from '../db/supabase.ts';
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ const toLocalDateString = (isoString: string) => {
   if (!isoString) return '';
   const date = new Date(isoString);
   if (isNaN(date.getTime())) return isoString.slice(0, 10);
-  
+
   // Align with India Standard Time (+05:30)
   const localTime = date.getTime() + (5.5 * 60 * 60 * 1000);
   const localDate = new Date(localTime);
@@ -67,7 +67,7 @@ const enrichProduct = async (product: any, pickupDate?: string, dropDate?: strin
       // If product has any overdue rental, it can't return -> always on_rent
       const hasOverdue = rentalsForProduct.some((r: any) => {
         const isReleased = r.status === 'released' || r.status === 'active';
-        const isOverdue = new Date().setHours(0,0,0,0) > new Date(r.event_date).setHours(0,0,0,0);
+        const isOverdue = new Date().setHours(0, 0, 0, 0) > new Date(r.event_date).setHours(0, 0, 0, 0);
         return isReleased && isOverdue;
       });
       if (hasOverdue) {
@@ -87,7 +87,7 @@ const enrichProduct = async (product: any, pickupDate?: string, dropDate?: strin
       const hasReleased = rentalsForProduct.some((r: any) => r.status === 'released' || r.status === 'active');
       const hasOverdue = rentalsForProduct.some((r: any) => {
         const isReleased = r.status === 'released' || r.status === 'active';
-        const isOverdue = new Date().setHours(0,0,0,0) > new Date(r.event_date).setHours(0,0,0,0);
+        const isOverdue = new Date().setHours(0, 0, 0, 0) > new Date(r.event_date).setHours(0, 0, 0, 0);
         return isReleased && isOverdue;
       });
       if (hasReleased || hasOverdue) {

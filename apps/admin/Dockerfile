@@ -5,6 +5,8 @@ ENV VITE_API_URL=$VITE_API_URL
 WORKDIR /app
 COPY package*.json ./
 COPY apps/admin/package.json ./apps/admin/
+COPY packages ./packages
+COPY server/package.json ./server/
 RUN npm install
 COPY . .
 RUN npm run build --workspace apps/admin
