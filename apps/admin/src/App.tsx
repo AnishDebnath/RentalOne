@@ -23,6 +23,7 @@ import {
   saveAuthSession,
   saveAuthUser,
   resolveAuthAppUrl,
+  clearAdminSession,
 } from '@camera-rental-house/shared';
 import { useToast, ScrollToTop, PageTransition } from '@camera-rental-house/ui';
 import { AnimatePresence } from 'framer-motion';
@@ -62,6 +63,14 @@ const AuthRedirect = () => {
     const next = params.get('next');
     const welcome = params.get('welcome');
     const userParam = params.get('user');
+    const clearSession = params.get('clear_session');
+
+    // Handle logout/clear session redirect
+    if (clearSession === 'true') {
+      clearAdminSession();
+      window.location.replace(`${authAppUrl}/login?clear_session=true`);
+      return;
+    }
 
     if (welcome === 'true' && !toastShownRef.current) {
       toastShownRef.current = true;
@@ -104,7 +113,7 @@ const AuthRedirect = () => {
     window.location.replace(authUrl);
   }, [location.search, navigate, addToast]);
 
-  return <div className="admin-shell py-10 text-sm text-muted">Redirecting to login...</div>;
+  return <div className="admin-shell py-10 text-sm text-muted">Redirecting...</div>;
 };
 
 function App() {
