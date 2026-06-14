@@ -102,14 +102,17 @@ const Login = () => {
 
       // Handle Admin/Staff redirect to Admin portal
       if (data.user.role === 'admin' || data.user.role === 'staff') {
-        const nextPath = '/';
+        const nextPath = requestedNext || '/';
 
-        // Prevent redirect loops if adminAppUrl is misconfigured to point to the client app
+        // Prevent redirect loops if adminAppUrl is misconfigured to point to the client app (root)
         try {
-          const targetUrl = new URL(adminAppUrl);
-          if (targetUrl.origin === window.location.origin) {
-            console.error('CRITICAL: VITE_ADMIN_APP_URL is not configured or points to the client app. Redirect aborted to prevent loop.');
-            setErrors({ general: 'System misconfiguration: Admin portal URL not found. Please contact support.' });
+          const targetUrl = new URL(adminAppUrl, window.location.origin);
+          const currentUrl = new URL(window.location.href);
+          
+          // If it's the same origin, it's ONLY a loop if it's NOT pointing to /admin
+          if (targetUrl.origin === currentUrl.origin && !targetUrl.pathname.startsWith('/admin')) {
+            console.error('CRITICAL: VITE_ADMIN_APP_URL points to the client app root. Redirect aborted.');
+            setErrors({ general: 'System misconfiguration: Admin portal path invalid.' });
             return;
           }
         } catch (e) {
