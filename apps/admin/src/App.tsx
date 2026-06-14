@@ -69,7 +69,9 @@ const AuthRedirect = () => {
     const checkRedirectLoop = (targetUrl: string) => {
       try {
         const url = new URL(targetUrl, window.location.origin);
-        if (url.origin === window.location.origin) {
+        // In unified deployment, origin is same. Check path.
+        // If target is root (client) and we are in /admin, it's not a loop.
+        if (url.origin === window.location.origin && url.pathname.startsWith('/admin')) {
           return true;
         }
         return false;

@@ -36,9 +36,9 @@ const resolveAppUrl = (
     : `${browserOrigin()}${productionPath}`;
 };
 
-export const resolveAuthAppUrl = (envValue?: string) => resolveAppUrl(envValue, 5173);
+export const resolveAuthAppUrl = (envValue?: string) => resolveAppUrl(envValue, 5173, '/');
 
 export const resolveAdminAppUrl = (envValue?: string) =>
-  resolveAppUrl(envValue, 5174);
+  resolveAppUrl(envValue, 5174, '/admin');
 
 export const resolveClientAppUrl = (envValue?: string) => resolveAppUrl(envValue, 5173);
