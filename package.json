@@ -17,7 +17,8 @@
     "build:client": "npm --workspace apps/client run build",
     "build:admin": "npm --workspace apps/admin run build",
     "build:server": "npm --workspace server run build",
-    "start:server": "npm --workspace server run start"
+    "start:server": "npm --workspace server run start",
+    "vercel-build": "npm run build:client && npm run build:admin && mkdir -p public && cp -r apps/client/dist/* public/ && mkdir -p public/admin && cp -r apps/admin/dist/* public/admin/"
   },
   "dependencies": {
     "date-fns": "^4.1.0",
