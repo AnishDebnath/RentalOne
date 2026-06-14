@@ -67,17 +67,8 @@ const AuthRedirect = () => {
     const clearSession = params.get('clear_session');
 
     const checkRedirectLoop = (targetUrl: string) => {
-      try {
-        const url = new URL(targetUrl, window.location.origin);
-        // It's a loop ONLY if target is /admin and we are already in /admin
-        if (url.origin === window.location.origin && url.pathname.startsWith('/admin')) {
-          return true;
-        }
-        // If target is root (client) or different origin, it's NOT a loop
-        return false;
-      } catch (e) {
-        return false; // Not a valid URL or external, not a loop
-      }
+      // Temporary disable for debugging/loading
+      return false;
     };
 
     // Handle logout/clear session redirect
