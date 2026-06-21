@@ -205,7 +205,8 @@ router.get('/:id', async (req: Request, res: Response) => {
       .maybeSingle();
 
     if (error) {
-      throw error;
+      console.error('Supabase Fetch Error:', error);
+      return res.status(500).json({ message: 'Database error while fetching product details.', details: error.message });
     }
 
     if (!data) {
