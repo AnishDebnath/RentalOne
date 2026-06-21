@@ -8,9 +8,15 @@ import { deleteFile, getSignedUrl, uploadFile } from '../storage/cloudinary.js';
 import generateUniqueCode from '../utils/codeGenerator.js';
 import generateQrBase64 from '../utils/qrGenerator.js';
 import roleMiddleware from '../middleware/roleMiddleware.js';
+import { validate, validateUuid } from '../validations/middleware.js';
+import {
+  createProductSchema,
+  updateProductSchema,
+  createStaffSchema,
+} from '../validations/schemas.js';
 
 const router = express.Router();
-const upload = multer({ 
+const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 50 * 1024 * 1024 } // 50MB limit
 });
@@ -37,13 +43,9 @@ router.get('/staff', roleMiddleware(['admin', 'manager']), async (_req: Request,
   }
 });
 
-router.post('/staff', roleMiddleware(['admin', 'manager']), async (req: Request, res: Response) => {
+router.post('/staff', roleMiddleware(['admin', 'manager']), validate(createStaffSchema), async (req: Request, res: Response) => {
   try {
     const { username, fullName, phone, role, password } = req.body;
-
-    if (!username || !fullName || !phone || !role || !password) {
-      return res.status(400).json({ message: 'All fields are required.' });
-    }
 
     const passwordHash = await bcrypt.hash(password, 12);
 
@@ -96,7 +98,7 @@ router.get('/dashboard', roleMiddleware(['admin']), async (_req: Request, res: R
         supabase.from('users').select('id', { count: 'exact', head: true }).not('is_verified', 'is', true).not('is_blocked', 'is', true),
         supabase.from('rentals').select('id', { count: 'exact', head: true }).eq('pickup_date', today),
         supabase.from('rentals').select('products').eq('status', 'released'),
-        supabase.from('rentals').select('*').order('created_at', { ascending: false }).limit(10),
+        supabase.from('rentals').select('id, rental_no, user_id, products, total_amount, status, pickup_date, event_date, created_at').order('created_at', { ascending: false }).limit(10),
         supabase.from('rentals').select('created_at, products, total_amount').gte('created_at', monthStart.toISOString())
       ]);
 
@@ -105,11 +107,11 @@ router.get('/dashboard', roleMiddleware(['admin']), async (_req: Request, res: R
       if (results[2].status === 'fulfilled') pendingUsersCount = results[2].value;
       if (results[3].status === 'fulfilled') activeTodayCount = results[3].value;
       if (results[4].status === 'fulfilled') activeRentals = results[4].value;
-      
+
       if (results[5].status === 'fulfilled' && !results[5].value.error) {
         recentRentals = results[5].value;
       } else {
-        const simple = await supabase.from('rentals').select('*').order('created_at', { ascending: false }).limit(10);
+        const simple = await supabase.from('rentals').select('id, rental_no, user_id, products, total_amount, status, pickup_date, event_date, created_at').order('created_at', { ascending: false }).limit(10);
         recentRentals = simple;
       }
 
@@ -201,7 +203,7 @@ router.get('/users', roleMiddleware(['admin']), async (req: Request, res: Respon
   }
 });
 
-router.get('/users/:id', roleMiddleware(['admin']), async (req: Request, res: Response) => {
+router.get('/users/:id', roleMiddleware(['admin']), validateUuid('id'), async (req: Request, res: Response) => {
   try {
     const { data: userData, error: userError } = await supabase
       .from('users')
@@ -240,7 +242,7 @@ router.get('/users/:id', roleMiddleware(['admin']), async (req: Request, res: Re
 });
 
 
-router.put('/users/:id/block', roleMiddleware(['admin']), async (req: Request, res: Response) => {
+router.put('/users/:id/block', roleMiddleware(['admin']), validateUuid('id'), async (req: Request, res: Response) => {
   try {
     const { data: existing, error: existingError } = await supabase
       .from('users')
@@ -273,7 +275,7 @@ router.put('/users/:id/block', roleMiddleware(['admin']), async (req: Request, r
   }
 });
 
-router.put('/users/:id/verify', roleMiddleware(['admin']), async (req: Request, res: Response) => {
+router.put('/users/:id/verify', roleMiddleware(['admin']), validateUuid('id'), async (req: Request, res: Response) => {
   try {
     const { data, error } = await supabase
       .from('users')
@@ -292,7 +294,7 @@ router.put('/users/:id/verify', roleMiddleware(['admin']), async (req: Request, 
   }
 });
 
-router.delete('/users/:id', roleMiddleware(['admin']), async (req: Request, res: Response) => {
+router.delete('/users/:id', roleMiddleware(['admin']), validateUuid('id'), async (req: Request, res: Response) => {
   try {
     const { data: rentals, error: rentalFetchError } = await supabase
       .from('rentals')
@@ -328,15 +330,9 @@ router.delete('/users/:id', roleMiddleware(['admin']), async (req: Request, res:
   }
 });
 
-router.post('/products', roleMiddleware(['admin']), upload.array('images', 8), async (req: Request, res: Response) => {
+router.post('/products', roleMiddleware(['admin']), upload.array('images', 8), validate(createProductSchema), async (req: Request, res: Response) => {
   try {
     const { name, brand, category, description, pricePerDay, price2Days, price5Days, availableQuantity } = req.body;
-
-    if (!name || !category || !pricePerDay || isNaN(Number(pricePerDay))) {
-      return res.status(400).json({
-        message: 'Name, category, and a valid numeric price are required.',
-      });
-    }
 
     const productId = crypto.randomUUID();
     const uniqueCode = await generateUniqueCode(category);
@@ -344,7 +340,7 @@ router.post('/products', roleMiddleware(['admin']), upload.array('images', 8), a
 
     const productImages = [];
     const files = (req.files as Express.Multer.File[]) || [];
-    
+
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       try {
@@ -360,7 +356,7 @@ router.post('/products', roleMiddleware(['admin']), upload.array('images', 8), a
           mimetype: 'image/jpeg',
           folder: 'Camera Rental House/Products',
         });
-        
+
         productImages.push(imageUrl);
       } catch (imgError) {
         console.error(`Error processing image ${i}:`, imgError);
@@ -389,7 +385,7 @@ router.post('/products', roleMiddleware(['admin']), upload.array('images', 8), a
 
     if (productError) {
       console.error('Supabase Insert Error:', productError);
-      return res.status(500).json({ 
+      return res.status(500).json({
         message: 'Database error: ' + (productError.message || 'Unknown error'),
         details: productError.details
       });
@@ -398,18 +394,18 @@ router.post('/products', roleMiddleware(['admin']), upload.array('images', 8), a
     return res.status(201).json(product);
   } catch (error: any) {
     console.error('Create Product Exception:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       message: error.message || 'Unable to create product.',
       error: process.env.NODE_ENV === 'development' ? error : undefined
     });
   }
 });
 
-router.put('/products/:id', roleMiddleware(['admin']), upload.array('images', 8), async (req: Request, res: Response) => {
+router.put('/products/:id', roleMiddleware(['admin']), upload.array('images', 8), validate(updateProductSchema), validateUuid('id'), async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { name, brand, category, description, pricePerDay, price2Days, price5Days, availableQuantity, removeImageUrls } = req.body;
-    
+
     const removedUrls = removeImageUrls ? JSON.parse(removeImageUrls) : [];
 
     // Fetch current product to get existing images array
@@ -435,7 +431,7 @@ router.put('/products/:id', roleMiddleware(['admin']), upload.array('images', 8)
     // Upload new images
     const newImageUrls = [];
     const files = (req.files as Express.Multer.File[]) || [];
-    
+
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       try {
@@ -451,7 +447,7 @@ router.put('/products/:id', roleMiddleware(['admin']), upload.array('images', 8)
           mimetype: 'image/jpeg',
           folder: 'Camera Rental House/Products',
         });
-        
+
         newImageUrls.push(imageUrl);
       } catch (imgError) {
         console.error(`Error processing new image ${i}:`, imgError);
@@ -491,7 +487,7 @@ router.put('/products/:id', roleMiddleware(['admin']), upload.array('images', 8)
   }
 });
 
-router.delete('/products/:id', roleMiddleware(['admin']), async (req: Request, res: Response) => {
+router.delete('/products/:id', roleMiddleware(['admin']), validateUuid('id'), async (req: Request, res: Response) => {
   try {
     const { data: currentProduct, error: fetchError } = await supabase
       .from('products')
@@ -536,7 +532,7 @@ router.get('/rentals/upcoming', roleMiddleware(['admin', 'manager', 'staff']), a
         .from('users')
         .select('id, full_name, phone, avatar_url')
         .in('id', userIds);
-      
+
       (users || []).forEach((u: any) => { usersMap[u.id] = u; });
     }
 

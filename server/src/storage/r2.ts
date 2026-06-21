@@ -72,7 +72,7 @@ export const getSignedUrl = async ({
     Key: key,
   });
 
-  return signUrl(s3Client, command, { expiresIn });
+  return signUrl(s3Client as any, command, { expiresIn });
 };
 
 export default s3Client;

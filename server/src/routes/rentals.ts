@@ -1,13 +1,15 @@
 import crypto from 'crypto';
 import express, { Request, Response } from 'express';
-import supabase from '../db/supabase';
+import supabase from '../db/supabase.js';
 
 import generateRentalId from '../utils/rentalIdGenerator.js';
+import { validate, validateUuid } from '../validations/middleware.js';
+import { createRentalSchema } from '../validations/schemas.js';
 
 const router = express.Router();
 const DEFAULT_ASSISTANT_CREW_RATE = 0;
 
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', validate(createRentalSchema), async (req: Request, res: Response) => {
   try {
     console.log('RENTAL REQUEST BODY:', req.body);
     const { pickupDate, eventDate, items = [], userId: targetUserId, assistantCrewCount = 0 } = req.body;
@@ -38,7 +40,7 @@ router.post('/', async (req: Request, res: Response) => {
     const productIds = items.map((item: any) => item.productId);
     const { data: products, error: productsError } = await supabase
       .from('products')
-      .select('id, price_per_day')
+      .select('id, name, unique_code, price_per_day, images')
       .in('id', productIds);
 
     if (productsError) throw productsError;
@@ -46,18 +48,13 @@ router.post('/', async (req: Request, res: Response) => {
     const days = Math.round((new Date(eventDate).getTime() - new Date(pickupDate).getTime()) / (1000 * 60 * 60 * 24)) + 1;
     const crewCost = (Number(assistantCrewCount) || 0) * DEFAULT_ASSISTANT_CREW_RATE * days;
     const totalAmount = (items || []).reduce((sum: number, item: any) => {
-      const product = products?.find(p => p.id === item.productId);
+      const product = products?.find((p: any) => p.id === item.productId);
       return sum + (product?.price_per_day || 0) * (item.quantity || 1) * days;
     }, 0) + crewCost;
-    
-    // Fetch full product details for snapshot
-    const { data: fullProducts } = await supabase
-      .from('products')
-      .select('id, name, unique_code, price_per_day, images')
-      .in('id', productIds);
 
+    // Use same products data for snapshots (avoids a second Supabase round-trip)
     const productSnapshots = (items || []).map((item: any) => {
-      const p = fullProducts?.find(fp => fp.id === item.productId);
+      const p = products?.find((fp: any) => fp.id === item.productId);
       return {
         id: item.productId,
         name: p?.name || 'Unknown',
@@ -151,17 +148,17 @@ router.get('/my', async (req: Request, res: Response) => {
 });
 
 // Fetch rentals for a specific production house (by house ID)
-router.get('/house/:houseId', async (req: Request, res: Response) => {
+router.get('/house/:houseId', validateUuid('houseId'), async (req: Request, res: Response) => {
   try {
     const { houseId } = req.params;
-    
+
     // 1. Get the user_id for this house
     const { data: house, error: houseError } = await supabase
       .from('production_houses')
       .select('user_id')
       .eq('id', houseId)
       .single();
-      
+
     if (houseError || !house?.user_id) {
       return res.status(404).json({ message: 'House not found or not linked to a user.' });
     }
@@ -211,7 +208,7 @@ router.get('/house/slug/:slug', async (req: Request, res: Response) => {
   }
 });
 
-router.patch('/:id', async (req: Request, res: Response) => {
+router.patch('/:id', validateUuid('id'), async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { total_amount, products, crew_price, discount } = req.body;

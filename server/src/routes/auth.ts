@@ -11,6 +11,12 @@ import { processImage } from '../utils/imageProcessor.js';
 import generateQrBase64 from '../utils/qrGenerator.js';
 import generateMemberId from '../utils/memberIdGenerator.js';
 import authMiddleware from '../middleware/authMiddleware.js';
+import { validate } from '../validations/middleware.js';
+import {
+  signupSchema,
+  loginSchema,
+  checkExistsSchema,
+} from '../validations/schemas.js';
 
 dotenv.config();
 
@@ -84,7 +90,7 @@ const validateSignupPayload = (body: any, files: any) => {
   return errors;
 };
 
-router.post('/check-exists', async (req: Request, res: Response) => {
+router.post('/check-exists', validate(checkExistsSchema), async (req: Request, res: Response) => {
   try {
     const { email, phone, aadhaarNo, voterNo } = req.body;
     let query = supabase.from('users').select('email, phone, aadhaar_no, voter_no');
@@ -147,6 +153,7 @@ router.post('/check-exists', async (req: Request, res: Response) => {
 
 router.post(
   '/signup',
+  validate(signupSchema),
   upload.fields([
     { name: 'aadhaarDoc', maxCount: 1 },
     { name: 'voterDoc', maxCount: 1 },
@@ -312,14 +319,10 @@ router.post(
   },
 );
 
-router.post('/login', async (req: Request, res: Response) => {
+router.post('/login', validate(loginSchema), async (req: Request, res: Response) => {
   console.log('Login route hit with identifier:', req.body.identifier);
   try {
     const { identifier, password } = req.body;
-
-    if (!identifier || !password) {
-      return res.status(400).json({ message: 'Identifier and password are required.' });
-    }
 
     const rawIdentifier = String(identifier).trim();
     const cleanIdentifier = rawIdentifier.toLowerCase();
@@ -762,7 +765,7 @@ router.patch(
 
       // Reset verification only if sensitive fields actually changed value
       const sensitiveFields = ['full_name', 'phone', 'email', 'aadhaar_no', 'voter_no', 'aadhaar_doc_url', 'voter_doc_url', 'avatar_url'];
-      
+
       // Normalize function — applies same transformation to both stored and new values
       const normalize = (val: any, key: string): string => {
         const str = String(val ?? '').trim();

@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import supabase from '../db/supabase';
+import supabase from '../db/supabase.js';
 
 const randomBlock = (): string =>
   crypto

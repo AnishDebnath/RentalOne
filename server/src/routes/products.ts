@@ -1,5 +1,7 @@
 import express, { Request, Response } from 'express';
-import supabase from '../db/supabase.ts';
+import supabase from '../db/supabase.js';
+import { validate, validateUuid } from '../validations/middleware.js';
+import { paginationQuery } from '../validations/schemas.js';
 
 const router = express.Router();
 
@@ -27,7 +29,12 @@ const datesOverlap = (rStartStr: string, rEndStr: string, reqStart: string, reqE
   return rStart <= reqEnd && rEnd >= reqStart;
 };
 
-const enrichProduct = async (product: any, pickupDate?: string, dropDate?: string) => {
+const enrichProduct = async (
+  product: any,
+  pickupDate?: string,
+  dropDate?: string,
+  rentalsData?: any[],
+) => {
   try {
     // Admin-marked out of stock: available_quantity column on product row itself is 0
     // (This is separate from date-based booking)
@@ -35,14 +42,19 @@ const enrichProduct = async (product: any, pickupDate?: string, dropDate?: strin
       return { ...product, booking_status: 'out_of_stock' };
     }
 
-    const { data, error } = await supabase
-      .from('rentals')
-      .select('status, products, pickup_date, event_date')
-      .in('status', ['confirmed', 'released']);
+    // Accept pre-fetched rentals to avoid N+1 queries
+    let data = rentalsData;
+    if (!data) {
+      const result = await supabase
+        .from('rentals')
+        .select('status, products, pickup_date, event_date')
+        .in('status', ['confirmed', 'released']);
 
-    if (error) {
-      console.warn('Error fetching rentals for enrichment:', error);
-      return { ...product, booking_status: 'available' };
+      if (result.error) {
+        console.warn('Error fetching rentals for enrichment:', result.error);
+        return { ...product, booking_status: 'available' };
+      }
+      data = result.data || [];
     }
 
     const rentalsForProduct = (data || []).filter((r: any) =>
@@ -102,18 +114,12 @@ const enrichProduct = async (product: any, pickupDate?: string, dropDate?: strin
   }
 };
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', validate(paginationQuery, 'query'), async (req: Request, res: Response) => {
   try {
-    const limit = Number(req.query.limit || 12);
-    const offset = Number(req.query.offset || 0);
-    const search = String(req.query.search || '').trim();
-    const category = String(req.query.category || '').trim();
-    const brand = String(req.query.brand || '').trim();
-    const status = String(req.query.status || 'all').toLowerCase();
-    const pickupDate = req.query.pickup_date ? String(req.query.pickup_date) : undefined;
-    const dropDate = req.query.drop_date ? String(req.query.drop_date) : undefined;
-
-    const sort = req.query.sort ? String(req.query.sort).toLowerCase() : undefined;
+    // After validation, these are already typed and transformed
+    const { limit, offset, search, category, brand, status, sort, pickup_date, drop_date } = req.query as any;
+    const pickupDate = pickup_date || undefined;
+    const dropDate = drop_date || undefined;
 
     let query = supabase
       .from('products')
@@ -141,7 +147,13 @@ router.get('/', async (req: Request, res: Response) => {
       throw error;
     }
 
-    let items = await Promise.all((data || []).map((p) => enrichProduct(p, pickupDate, dropDate)));
+    // Fetch rentals once — shared across all product enrichment calls to avoid N+1
+    const { data: rentals } = await supabase
+      .from('rentals')
+      .select('status, products, pickup_date, event_date')
+      .in('status', ['confirmed', 'released']);
+
+    let items = await Promise.all((data || []).map((p) => enrichProduct(p, pickupDate, dropDate, rentals || undefined)));
 
     if (sort === 'most_rented') {
       // Fetch rentals count to sort by popularity
@@ -182,6 +194,8 @@ router.get('/', async (req: Request, res: Response) => {
       filteredItems = items.filter((item) => item.booking_status === 'out_of_stock');
     }
 
+    // Cache listing response for 30 seconds (products change infrequently)
+    res.set('Cache-Control', 'public, max-age=30');
     return res.json({
       items: filteredItems,
       pagination: {
@@ -196,7 +210,7 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/:id', validateUuid('id'), async (req: Request, res: Response) => {
   try {
     const { data, error } = await supabase
       .from('products')
@@ -216,13 +230,15 @@ router.get('/:id', async (req: Request, res: Response) => {
     const pickupDate = req.query.pickup_date ? String(req.query.pickup_date) : undefined;
     const dropDate = req.query.drop_date ? String(req.query.drop_date) : undefined;
 
+    // Cache product detail for 60 seconds
+    res.set('Cache-Control', 'public, max-age=60');
     return res.json(await enrichProduct(data, pickupDate, dropDate));
   } catch (error: any) {
     return res.status(500).json({ message: error.message || 'Unable to fetch product.' });
   }
 });
 
-router.get('/:id/label', async (req: Request, res: Response) => {
+router.get('/:id/label', validateUuid('id'), async (req: Request, res: Response) => {
   try {
     const { data, error } = await supabase
       .from('products')

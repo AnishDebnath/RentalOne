@@ -26,7 +26,7 @@ export const uploadFile = async ({ buffer, key, mimetype, folder = 'Camera Renta
         folder: folder,
         resource_type: 'auto',
       },
-      (error, result) => {
+      (error: any, result: any) => {
         if (error) return reject(error);
         if (!result) return reject(new Error('Upload failed: Empty result'));
         resolve(result.secure_url);

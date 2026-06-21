@@ -8,6 +8,9 @@ dotenv.config({ path: path.join(__dirname, '../.env') });
 import crypto from 'crypto';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import helmet from 'helmet';
+import compression from 'compression';
+import rateLimit from 'express-rate-limit';
 import express, { Request, Response, NextFunction } from 'express';
 import authRoutes from './routes/auth.js';
 import productsRoutes from './routes/products.js';
@@ -17,8 +20,16 @@ import manageRoutes from './routes/manage.js';
 import houseRoutes from './routes/houses.js';
 import authMiddleware from './middleware/authMiddleware.js';
 import roleMiddleware from './middleware/roleMiddleware.js';
+import { startMaintenanceWorker, stopMaintenanceWorker } from './utils/maintenance.js';
 
 const app = express();
+
+// ── Security headers ──────────────────────────────────────────────────
+app.use(helmet());
+
+// ── Compression ───────────────────────────────────────────────────────
+// Gzip-compress all API responses (reduces bandwidth ~70%)
+app.use(compression());
 
 app.get('/api/health', (req, res) => res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() }));
 
@@ -82,6 +93,25 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 
+// ── Rate limiting ─────────────────────────────────────────────────────
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Too many requests — please try again later.' },
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Too many auth attempts — please try again later.' },
+});
+
+app.use('/api', generalLimiter);
+
 app.get('/api/health', (_req: Request, res: Response) => {
   res.json({
     status: 'ok',
@@ -90,34 +120,63 @@ app.get('/api/health', (_req: Request, res: Response) => {
   });
 });
 
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/products', productsRoutes);
 app.use('/api/rentals', authMiddleware, roleMiddleware(['user', 'admin', 'manager', 'staff']), rentalsRoutes);
 app.use('/api/manage', authMiddleware, roleMiddleware(['admin', 'manager', 'staff']), manageRoutes);
 app.use('/api/admin', authMiddleware, adminRoutes);
-app.use('/api/admin/houses', authMiddleware, houseRoutes);
+app.use('/api/admin/houses', authMiddleware, roleMiddleware(['admin', 'manager', 'staff']), houseRoutes);
 
 app.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
   console.error('SERVER ERROR:', error);
   return res.status(500).json({
     message: error?.message || 'Internal server error.',
-    error: error // temporarily exposing error for debugging
+    ...(process.env.NODE_ENV !== 'production' && { error }),
   });
 });
 
-import { startMaintenanceWorker } from './utils/maintenance.js';
-
 export default app;
 
-if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
-  const port = Number(process.env.PORT || 5000);
-  // Listen on 0.0.0.0 so the server is reachable from other devices on the LAN
-  const server = app.listen(port, '0.0.0.0', () => {
-    console.log(`Camera Rental House server listening on http://0.0.0.0:${port}`);
-    
-    // Start background maintenance worker
-    startMaintenanceWorker();
+// ── Process-level error handlers ──────────────────────────────────────
+// Prevents silent crash on unhandled rejections / exceptions.
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('UNHANDLED REJECTION at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('UNCAUGHT EXCEPTION:', error);
+  // Give logger time to flush, then exit (process is in unknown state)
+  setTimeout(() => process.exit(1), 1000);
+});
+
+// ── Graceful shutdown ─────────────────────────────────────────────────
+// Close the HTTP server and let in-flight requests finish, then exit.
+const shutdown = (signal: string) => {
+  console.log(`\n${signal} received — shutting down gracefully...`);
+  stopMaintenanceWorker();
+  server.close(() => {
+    console.log('HTTP server closed.');
+    process.exit(0);
   });
-  server.timeout = 300000;
-  server.keepAliveTimeout = 300000;
-}
+  // Force exit if graceful close takes too long
+  setTimeout(() => {
+    console.error('Forced exit after shutdown timeout.');
+    process.exit(1);
+  }, 30_000).unref();
+};
+
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
+
+// ── Server start ──────────────────────────────────────────────────────
+const port = Number(process.env.PORT) || 5000;
+
+// Listen on 0.0.0.0 so the server is reachable from other devices on the LAN
+const server = app.listen(port, '0.0.0.0', () => {
+  console.log(`Camera Rental House server listening on http://0.0.0.0:${port}`);
+
+  // Start background maintenance worker
+  startMaintenanceWorker();
+});
+server.timeout = 300000;
+server.keepAliveTimeout = 300000;

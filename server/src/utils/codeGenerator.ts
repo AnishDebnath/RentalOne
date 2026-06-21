@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import supabase from '../db/supabase';
+import supabase from '../db/supabase.js';
 
 const prefixMap: Record<string, string> = {
   cameras: 'CAM',

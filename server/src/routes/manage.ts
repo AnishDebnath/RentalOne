@@ -2,6 +2,8 @@ import express, { Request, Response } from 'express';
 import supabase from '../db/supabase.js';
 import { uploadFile, deleteFile } from '../storage/cloudinary.js';
 import { processImage } from '../utils/imageProcessor.js';
+import { validate } from '../validations/middleware.js';
+import { bulkReleaseSchema, bulkReturnSchema } from '../validations/schemas.js';
 
 const extractPublicId = (url: string | null): string | null => {
   if (!url) return null;
@@ -36,7 +38,7 @@ router.get('/me', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/bulk-release', async (req: Request, res: Response) => {
+router.post('/bulk-release', validate(bulkReleaseSchema), async (req: Request, res: Response) => {
   try {
     const { rentalId, productIds, proofPhoto, receivedBy, substitutions } = req.body;
     console.log('[Bulk Release] Request received:', { rentalId, productIdsCount: productIds?.length, hasProof: !!proofPhoto, receivedBy, substitutions });
@@ -84,7 +86,7 @@ router.post('/bulk-release', async (req: Request, res: Response) => {
           .select('*')
           .eq('id', newId)
           .single();
-        
+
         if (!newProdErr && newProd) {
           finalProducts = finalProducts.map((p: any) => {
             if (p.id === oldId) {
@@ -106,8 +108,8 @@ router.post('/bulk-release', async (req: Request, res: Response) => {
     const now = new Date().toISOString();
     const updatedProducts = finalProducts.map((p: any) => {
       if (productIds.includes(p.id)) {
-        return { 
-          ...p, 
+        return {
+          ...p,
           status: 'released',
           released_to_representative_name: receivedBy || null
         };
@@ -140,7 +142,7 @@ router.post('/bulk-release', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/bulk-return', async (req: Request, res: Response) => {
+router.post('/bulk-return', validate(bulkReturnSchema), async (req: Request, res: Response) => {
   try {
     const { rentalId, productIds, receivedBy } = req.body;
     console.log('[Bulk Return] Request received:', { rentalId, productIdsCount: productIds?.length, receivedBy });
@@ -163,8 +165,8 @@ router.post('/bulk-return', async (req: Request, res: Response) => {
     const now = new Date().toISOString();
     const updatedProducts = (rental.products || []).map((p: any) => {
       if (productIds.includes(p.id)) {
-        return { 
-          ...p, 
+        return {
+          ...p,
           status: 'returned',
           returned_by_representative_name: receivedBy || null
         };

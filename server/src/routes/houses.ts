@@ -5,6 +5,8 @@ import supabase from '../db/supabase.js';
 import generateMemberId from '../utils/memberIdGenerator.js';
 import generateHouseId from '../utils/houseIdGenerator.js';
 import generateQrBase64 from '../utils/qrGenerator.js';
+import { validate, validateUuid } from '../validations/middleware.js';
+import { createHouseSchema } from '../validations/schemas.js';
 
 const router = express.Router();
 
@@ -77,7 +79,7 @@ router.get('/', async (_req: Request, res: Response) => {
     const housesWithStats = houses.map(house => {
       const houseRentals = rentals?.filter(r => r.user_id === house.user_id) || [];
       const housePayments = allPayments?.filter(p => p.house_id === house.id) || [];
-      
+
       const thisMonthTotal = houseRentals
         .filter(r => {
           const d = new Date(r.created_at);
@@ -95,7 +97,7 @@ router.get('/', async (_req: Request, res: Response) => {
 
       const hasOverdue = houseRentals.some(r => {
         const isReleased = r.status === 'released' || r.status === 'active';
-        const isOverdue = new Date().setHours(0,0,0,0) > new Date(r.event_date).setHours(0,0,0,0);
+        const isOverdue = new Date().setHours(0, 0, 0, 0) > new Date(r.event_date).setHours(0, 0, 0, 0);
         return isReleased && isOverdue;
       });
 
@@ -125,13 +127,9 @@ router.get('/', async (_req: Request, res: Response) => {
 });
 
 // 2. Create new production house
-router.post('/', async (req: Request, res: Response) => {
+router.post('/', validate(createHouseSchema), async (req: Request, res: Response) => {
   try {
     const { name, ownerName, phone, email, address } = req.body;
-
-    if (!name || !ownerName || !phone) {
-      return res.status(400).json({ message: 'Name, Owner Name, and Phone are required.' });
-    }
 
     // 1. Generate IDs and QR
     const userId = crypto.randomUUID();
@@ -183,7 +181,7 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 // 3. Get single house detail by ID
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/:id', validateUuid('id'), async (req: Request, res: Response) => {
   try {
     const { data: house, error } = await supabase
       .from('production_houses')
@@ -290,7 +288,7 @@ router.get('/slug/:slug', async (req: Request, res: Response) => {
 });
 
 // 4. Update House Owner Credentials
-router.post('/:id/credentials', async (req: Request, res: Response) => {
+router.post('/:id/credentials', validateUuid('id'), async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body; // username will be mapped to email or a specific identifier
     if (!password) {
@@ -308,7 +306,7 @@ router.post('/:id/credentials', async (req: Request, res: Response) => {
 
     const passwordHash = await bcrypt.hash(password, 12);
     const updates: any = { password_hash: passwordHash };
-    
+
     // If username provided, update email (used as login identifier)
     if (username) {
       updates.email = username.toLowerCase();
@@ -328,7 +326,7 @@ router.post('/:id/credentials', async (req: Request, res: Response) => {
 });
 
 // 5. Get all payments for a house
-router.get('/:id/payments', async (req: Request, res: Response) => {
+router.get('/:id/payments', validateUuid('id'), async (req: Request, res: Response) => {
   try {
     const { data: payments, error } = await supabase
       .from('house_payments')
@@ -346,7 +344,7 @@ router.get('/:id/payments', async (req: Request, res: Response) => {
 });
 
 // 6. Record a new payment for a house
-router.post('/:id/payments', async (req: Request, res: Response) => {
+router.post('/:id/payments', validateUuid('id'), async (req: Request, res: Response) => {
   try {
     const { amount, paymentDate, paymentMode } = req.body;
 
@@ -374,7 +372,7 @@ router.post('/:id/payments', async (req: Request, res: Response) => {
 });
 
 // 7. Delete a payment
-router.delete('/:id/payments/:paymentId', async (req: Request, res: Response) => {
+router.delete('/:id/payments/:paymentId', validateUuid('id'), validateUuid('paymentId'), async (req: Request, res: Response) => {
   try {
     const { error } = await supabase
       .from('house_payments')
