@@ -1,7 +1,7 @@
 // Shared Data: Categories, Brands, and Assets
 // This file centralizes the core taxonomy and associated imagery for the entire platform.
 
-import logo from '../ui/assets/logo.png';
+import logo from '../ui/assets/rentalone-logo.png';
 export { logo };
 
 // Category Images (Relative to packages/shared/categories.ts)
