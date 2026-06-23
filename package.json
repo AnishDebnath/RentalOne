@@ -15,8 +15,8 @@
     "dev:server": "npm --workspace server run dev",
     "build": "echo 'ERROR: Use npm run build:admin or npm run build:client to build a specific app for Vercel deployment' && exit 1",
     "build:all": "npm run build --workspaces --if-present",
-    "build:client": "npm --workspace apps/client run build",
-    "build:admin": "npm --workspace apps/admin run build",
+    "build:client": "npm --workspace apps/client run build && node -e \"const f=require('fs');f.rmSync('dist',{recursive:true,force:true});f.cpSync('apps/client/dist','dist',{recursive:true})\"",
+    "build:admin": "npm --workspace apps/admin run build && node -e \"const f=require('fs');f.rmSync('dist',{recursive:true,force:true});f.cpSync('apps/admin/dist','dist',{recursive:true})\"",
     "build:server": "npm --workspace server run build",
     "start:server": "npm --workspace server run start"
   },
