@@ -10,7 +10,6 @@ export default defineConfig(({ command }) => ({
   server: {
     port: 5174,
     host: true,
-    allowedHosts: ['camera-rental-house-admin.up.railway.app'],
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
