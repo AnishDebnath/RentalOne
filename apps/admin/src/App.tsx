@@ -67,14 +67,17 @@ const AuthRedirect = () => {
     const clearSession = params.get('clear_session');
 
     const checkRedirectLoop = (targetUrl: string) => {
-      // Temporary disable for debugging/loading
-      return false;
+      try {
+        return new URL(targetUrl).origin === window.location.origin;
+      } catch {
+        return false;
+      }
     };
 
     // Handle logout/clear session redirect
     if (clearSession === 'true') {
       clearAdminSession();
-      
+
       if (checkRedirectLoop(authAppUrl)) {
         setError(`Configuration Error: Auth URL (${authAppUrl}) points back to Admin app. Please set VITE_CLIENT_APP_URL in Railway variables.`);
         return;
@@ -108,7 +111,7 @@ const AuthRedirect = () => {
     }
 
     const requestedPath = next?.startsWith('/') ? next : '/';
-    
+
     if (checkRedirectLoop(authAppUrl)) {
       setError(`Configuration Error: Auth URL (${authAppUrl}) is missing or invalid. Set VITE_CLIENT_APP_URL.`);
       return;
@@ -129,7 +132,7 @@ const AuthRedirect = () => {
         <h2 className="text-lg font-black text-ink">System Configuration Error</h2>
         <p className="mt-2 text-sm text-muted max-w-md break-all">{error}</p>
         <div className="mt-6 flex flex-col gap-3">
-          <button 
+          <button
             onClick={() => window.location.href = '/'}
             className="text-xs font-bold text-primary hover:underline"
           >
@@ -173,125 +176,125 @@ function App() {
           <AnimatePresence mode="wait">
             <PageTransition key={location.pathname}>
               <Routes location={location} key={location.pathname}>
-                  <Route path="/login" element={<AuthRedirect />} />
-                  <Route path="/auth-redirect" element={<AuthRedirect />} />
+                <Route path="/login" element={<AuthRedirect />} />
+                <Route path="/auth-redirect" element={<AuthRedirect />} />
 
-                  <Route
-                    path="/"
-                    element={
-                      <ProtectedRoute allowedRoles={['admin', 'staff']}>
-                        <Dashboard />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/products"
-                    element={
-                      <ProtectedRoute>
-                        <Products />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/products/add"
-                    element={
-                      <ProtectedRoute>
-                        <ProductForm />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/products/:id/edit"
-                    element={
-                      <ProtectedRoute>
-                        <ProductForm />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/users"
-                    element={
-                      <ProtectedRoute>
-                        <Users />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/users/:id"
-                    element={
-                      <ProtectedRoute>
-                        <UserDetail />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/rentals"
-                    element={
-                      <ProtectedRoute allowedRoles={['admin', 'staff']}>
-                        <Rentals />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/rentals/history"
-                    element={
-                      <ProtectedRoute allowedRoles={['admin', 'staff']}>
-                        <RentalHistory />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/release"
-                    element={
-                      <ProtectedRoute allowedRoles={['admin', 'staff']}>
-                        <ReleaseReturn />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/houses"
-                    element={
-                      <ProtectedRoute allowedRoles={['admin', 'staff']}>
-                        <ProductionHouses />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/houses/:slug"
-                    element={
-                      <ProtectedRoute allowedRoles={['admin', 'staff']}>
-                        <HouseDetail />
-                      </ProtectedRoute>
-                    }
-                  />
+                <Route
+                  path="/"
+                  element={
+                    <ProtectedRoute allowedRoles={['admin', 'staff']}>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/products"
+                  element={
+                    <ProtectedRoute>
+                      <Products />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/products/add"
+                  element={
+                    <ProtectedRoute>
+                      <ProductForm />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/products/:id/edit"
+                  element={
+                    <ProtectedRoute>
+                      <ProductForm />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/users"
+                  element={
+                    <ProtectedRoute>
+                      <Users />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/users/:id"
+                  element={
+                    <ProtectedRoute>
+                      <UserDetail />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/rentals"
+                  element={
+                    <ProtectedRoute allowedRoles={['admin', 'staff']}>
+                      <Rentals />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/rentals/history"
+                  element={
+                    <ProtectedRoute allowedRoles={['admin', 'staff']}>
+                      <RentalHistory />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/release"
+                  element={
+                    <ProtectedRoute allowedRoles={['admin', 'staff']}>
+                      <ReleaseReturn />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/houses"
+                  element={
+                    <ProtectedRoute allowedRoles={['admin', 'staff']}>
+                      <ProductionHouses />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/houses/:slug"
+                  element={
+                    <ProtectedRoute allowedRoles={['admin', 'staff']}>
+                      <HouseDetail />
+                    </ProtectedRoute>
+                  }
+                />
 
-                  <Route
-                    path="/houses/:slug/booking"
-                    element={
-                      <ProtectedRoute allowedRoles={['admin', 'staff']}>
-                        <HouseBooking />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/staff"
-                    element={
-                      <ProtectedRoute allowedRoles={['admin', 'manager']}>
-                        <Staff />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route
-                    path="/accounts"
-                    element={
-                      <ProtectedRoute allowedRoles={['admin']}>
-                        <Accounts />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-              </PageTransition>
+                <Route
+                  path="/houses/:slug/booking"
+                  element={
+                    <ProtectedRoute allowedRoles={['admin', 'staff']}>
+                      <HouseBooking />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/staff"
+                  element={
+                    <ProtectedRoute allowedRoles={['admin', 'manager']}>
+                      <Staff />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/accounts"
+                  element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <Accounts />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </PageTransition>
           </AnimatePresence>
         </main>
       </div>
