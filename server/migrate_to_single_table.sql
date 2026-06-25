@@ -44,6 +44,28 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Add missing columns for existing tables
+ALTER TABLE users ADD COLUMN IF NOT EXISTS member_id TEXT UNIQUE;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS full_name TEXT NOT NULL;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS phone TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS email TEXT UNIQUE;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash TEXT NOT NULL;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS aadhaar_no TEXT UNIQUE;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS aadhaar_doc_url TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS voter_no TEXT UNIQUE;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS voter_doc_url TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar_url TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS facebook TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS instagram TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS youtube TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS user_qr_base64 TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS is_verified BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS is_house_owner BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS is_blocked BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('user', 'admin', 'manager', 'staff', 'partner'));
+ALTER TABLE users ADD COLUMN IF NOT EXISTS changed_fields JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT now();
+
 -- Indexes for users
 CREATE INDEX IF NOT EXISTS idx_users_email ON users (email);
 CREATE INDEX IF NOT EXISTS idx_users_phone ON users (phone);
@@ -69,6 +91,20 @@ CREATE TABLE IF NOT EXISTS products (
   images            JSONB NOT NULL DEFAULT '[]'::jsonb,
   created_at        TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- Add missing columns for existing tables
+ALTER TABLE products ADD COLUMN IF NOT EXISTS name TEXT NOT NULL;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS brand TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS category TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS description TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS price_per_day NUMERIC(10,2) NOT NULL DEFAULT 0;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS price_2_days NUMERIC(10,2);
+ALTER TABLE products ADD COLUMN IF NOT EXISTS price_5_days NUMERIC(10,2);
+ALTER TABLE products ADD COLUMN IF NOT EXISTS available_quantity INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS unique_code TEXT UNIQUE NOT NULL;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS qr_base64 TEXT;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS images JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE products ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT now();
 
 -- Indexes for products
 CREATE INDEX IF NOT EXISTS idx_products_category ON products (category);
@@ -106,6 +142,25 @@ CREATE TABLE IF NOT EXISTS rentals (
   created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Add missing columns for existing tables
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS rental_no TEXT UNIQUE NOT NULL;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS pickup_date TIMESTAMPTZ NOT NULL;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS event_date TIMESTAMPTZ NOT NULL;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'confirmed' CHECK (status IN ('confirmed', 'released', 'returned', 'cancelled', 'pending_pickup'));
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS total_amount NUMERIC(10,2) NOT NULL DEFAULT 0;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS products JSONB NOT NULL DEFAULT '[]'::jsonb;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS assistant_crew_count INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS crew_price NUMERIC(10,2) NOT NULL DEFAULT 0;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS released_at TIMESTAMPTZ;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS released_by_staff_name TEXT;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS handover_proof_url TEXT;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS released_to_representative_name TEXT;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS received_at TIMESTAMPTZ;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS received_by_staff_name TEXT;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS returned_by_representative_name TEXT;
+ALTER TABLE rentals ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT now();
+
 -- Indexes for rentals
 CREATE INDEX IF NOT EXISTS idx_rentals_user_id ON rentals (user_id);
 CREATE INDEX IF NOT EXISTS idx_rentals_status ON rentals (status);
@@ -131,6 +186,18 @@ CREATE TABLE IF NOT EXISTS staff_accounts (
   created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Add missing columns for existing tables
+ALTER TABLE staff_accounts ADD COLUMN IF NOT EXISTS username TEXT UNIQUE NOT NULL;
+ALTER TABLE staff_accounts ADD COLUMN IF NOT EXISTS full_name TEXT NOT NULL;
+ALTER TABLE staff_accounts ADD COLUMN IF NOT EXISTS phone TEXT;
+ALTER TABLE staff_accounts ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT 'staff' CHECK (role IN ('admin', 'manager', 'staff', 'accountant'));
+ALTER TABLE staff_accounts ADD COLUMN IF NOT EXISTS password_hash TEXT NOT NULL;
+ALTER TABLE staff_accounts ADD COLUMN IF NOT EXISTS avatar_url TEXT;
+ALTER TABLE staff_accounts ADD COLUMN IF NOT EXISTS is_active BOOLEAN NOT NULL DEFAULT true;
+ALTER TABLE staff_accounts ADD COLUMN IF NOT EXISTS last_login_at TIMESTAMPTZ;
+ALTER TABLE staff_accounts ADD COLUMN IF NOT EXISTS last_logout_at TIMESTAMPTZ;
+ALTER TABLE staff_accounts ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT now();
+
 -- Indexes for staff_accounts
 CREATE INDEX IF NOT EXISTS idx_staff_accounts_username ON staff_accounts (username);
 CREATE INDEX IF NOT EXISTS idx_staff_accounts_role ON staff_accounts (role);
@@ -151,6 +218,16 @@ CREATE TABLE IF NOT EXISTS production_houses (
   created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Add missing columns for existing tables
+ALTER TABLE production_houses ADD COLUMN IF NOT EXISTS house_id TEXT UNIQUE NOT NULL;
+ALTER TABLE production_houses ADD COLUMN IF NOT EXISTS name TEXT NOT NULL;
+ALTER TABLE production_houses ADD COLUMN IF NOT EXISTS owner_name TEXT;
+ALTER TABLE production_houses ADD COLUMN IF NOT EXISTS phone TEXT;
+ALTER TABLE production_houses ADD COLUMN IF NOT EXISTS address TEXT;
+ALTER TABLE production_houses ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES users(id) ON DELETE SET NULL;
+ALTER TABLE production_houses ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'Active' CHECK (status IN ('Active', 'Inactive'));
+ALTER TABLE production_houses ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT now();
+
 -- Indexes for production_houses
 CREATE INDEX IF NOT EXISTS idx_production_houses_user_id ON production_houses (user_id);
 CREATE INDEX IF NOT EXISTS idx_production_houses_house_id ON production_houses (house_id);
@@ -168,6 +245,13 @@ CREATE TABLE IF NOT EXISTS house_payments (
                 CHECK (status IN ('pending', 'completed', 'failed', 'refunded')),
   created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- Add missing columns for existing tables
+ALTER TABLE house_payments ADD COLUMN IF NOT EXISTS house_id UUID NOT NULL REFERENCES production_houses(id) ON DELETE CASCADE;
+ALTER TABLE house_payments ADD COLUMN IF NOT EXISTS amount NUMERIC(10,2) NOT NULL DEFAULT 0;
+ALTER TABLE house_payments ADD COLUMN IF NOT EXISTS payment_date TIMESTAMPTZ NOT NULL DEFAULT now();
+ALTER TABLE house_payments ADD COLUMN IF NOT EXISTS status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'failed', 'refunded'));
+ALTER TABLE house_payments ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ NOT NULL DEFAULT now();
 
 -- Indexes for house_payments
 CREATE INDEX IF NOT EXISTS idx_house_payments_house_id ON house_payments (house_id);

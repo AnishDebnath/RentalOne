@@ -11,6 +11,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import rateLimit from 'express-rate-limit';
+import 'express-async-errors';
 import express, { Request, Response, NextFunction } from 'express';
 import authRoutes from './routes/auth.js';
 import productsRoutes from './routes/products.js';
@@ -129,9 +130,35 @@ app.use('/api/admin/houses', authMiddleware, roleMiddleware(['admin', 'manager',
 
 app.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
   console.error('SERVER ERROR:', error);
+
+  // Custom AppError → use its statusCode + message (already user-friendly)
+  // Also pass through any extra properties (e.g. validation `errors` array)
+  if (error?.statusCode) {
+    const body: any = { message: error.message };
+    if (error.errors) body.errors = error.errors;
+    if (error.fieldErrors) body.fieldErrors = error.fieldErrors;
+    if (error.exists !== undefined) body.exists = error.exists;
+    return res.status(error.statusCode).json(body);
+  }
+
+  // Map common PostgreSQL/Supabase error codes to user-friendly messages
+  // (avoids leaking raw DB errors like constraint names or table names)
+  const pgErrorMap: Record<string, { status: number; message: string }> = {
+    '23505': { status: 409, message: 'This record already exists.' },
+    '23503': { status: 409, message: 'Related record not found.' },
+    '23514': { status: 400, message: 'Invalid data provided.' },
+    '22P02': { status: 400, message: 'Invalid data format.' },
+    '42703': { status: 500, message: 'Something went wrong. Please try again.' },
+  };
+
+  if (typeof error?.code === 'string' && pgErrorMap[error.code]) {
+    const mapped = pgErrorMap[error.code];
+    return res.status(mapped.status).json({ message: mapped.message });
+  }
+
+  // Unexpected error → never leak raw error to user
   return res.status(500).json({
-    message: error?.message || 'Internal server error.',
-    ...(process.env.NODE_ENV !== 'production' && { error }),
+    message: 'Something went wrong. Please try again.',
   });
 });
 

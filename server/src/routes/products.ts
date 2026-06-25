@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import { AppError, NotFoundError } from '../utils/errors.js';
 import supabase from '../db/supabase.js';
 import { validate, validateUuid } from '../validations/middleware.js';
 import { paginationQuery } from '../validations/schemas.js';
@@ -115,143 +116,134 @@ const enrichProduct = async (
 };
 
 router.get('/', validate(paginationQuery, 'query'), async (req: Request, res: Response) => {
-  try {
-    // After validation, these are already typed and transformed
-    const { limit, offset, search, category, brand, status, sort, pickup_date, drop_date } = req.query as any;
-    const pickupDate = pickup_date || undefined;
-    const dropDate = drop_date || undefined;
+  // After validation, these are already typed and transformed
+  const { limit, offset, search, category, brand, status, sort, pickup_date, drop_date } = req.query as any;
+  const pickupDate = pickup_date || undefined;
+  const dropDate = drop_date || undefined;
 
-    let query = supabase
-      .from('products')
-      .select('id, name, brand, category, price_per_day, unique_code, available_quantity, images, created_at', { count: 'exact' });
+  let query = supabase
+    .from('products')
+    .select('id, name, brand, category, price_per_day, unique_code, available_quantity, images, created_at', { count: 'exact' });
 
-    if (category && category.toLowerCase() !== 'all') {
-      query = query.ilike('category', category);
-    }
-
-    if (brand && brand.toLowerCase() !== 'all') {
-      query = query.ilike('brand', brand);
-    }
-
-    if (search) {
-      query = query.or(`name.ilike.%${search}%,unique_code.ilike.%${search}%`);
-    }
-
-    query = query.order('created_at', { ascending: false }).range(offset, offset + limit - 1);
-
-    const { data, count, error } = await query;
-
-    if (error) {
-      throw error;
-    }
-
-    // Fetch rentals once — shared across all product enrichment calls to avoid N+1
-    const { data: rentals, error: rentalsError } = await supabase
-      .from('rentals')
-      .select('status, products, pickup_date, event_date')
-      .in('status', ['confirmed', 'released']);
-    if (rentalsError) console.error('Failed to fetch active rentals for products:', rentalsError);
-
-    let items = await Promise.all((data || []).map((p) => enrichProduct(p, pickupDate, dropDate, rentals || undefined)));
-
-    if (sort === 'most_rented') {
-      // Fetch rentals count to sort by popularity
-      const { data: rentals, error: rentalsCountError } = await supabase
-        .from('rentals')
-        .select('products')
-        .in('status', ['confirmed', 'released', 'returned']);
-      if (rentalsCountError) console.error('Failed to fetch rental counts for sorting:', rentalsCountError);
-
-      const rentalCounts: Record<string, number> = {};
-      (rentals || []).forEach((r: any) => {
-        (r.products || []).forEach((p: any) => {
-          if (p.id) {
-            rentalCounts[p.id] = (rentalCounts[p.id] || 0) + (p.qty || 1);
-          }
-        });
-      });
-
-      // Sort items by count descending
-      items.sort((a: any, b: any) => {
-        const countA = rentalCounts[a.id] || 0;
-        const countB = rentalCounts[b.id] || 0;
-        if (countA !== countB) return countB - countA;
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime(); // fallback
-      });
-    }
-
-    let filteredItems = items;
-    if (status === 'in_stock') {
-      filteredItems = items.filter((item) => item.booking_status === 'available');
-    } else if (status === 'on_rent') {
-      filteredItems = items.filter((item) => item.booking_status === 'on_rent');
-    } else if (status === 'booked') {
-      filteredItems = items.filter((item) => item.booking_status === 'booked');
-    } else if (status === 'out_of_stock') {
-      filteredItems = items.filter((item) => item.booking_status === 'out_of_stock');
-    }
-
-    // Cache listing response for 30 seconds (products change infrequently)
-    res.set('Cache-Control', 'public, max-age=30');
-    return res.json({
-      items: filteredItems,
-      pagination: {
-        limit,
-        offset,
-        total: count || 0,
-        hasMore: offset + limit < (count || 0),
-      },
-    });
-  } catch (error: any) {
-    return res.status(500).json({ message: error.message || 'Unable to fetch products.' });
+  if (category && category.toLowerCase() !== 'all') {
+    query = query.ilike('category', category);
   }
+
+  if (brand && brand.toLowerCase() !== 'all') {
+    query = query.ilike('brand', brand);
+  }
+
+  if (search) {
+    query = query.or(`name.ilike.%${search}%,unique_code.ilike.%${search}%`);
+  }
+
+  query = query.order('created_at', { ascending: false }).range(offset, offset + limit - 1);
+
+  const { data, count, error } = await query;
+
+  if (error) {
+    throw error;
+  }
+
+  // Fetch rentals once — shared across all product enrichment calls to avoid N+1
+  const { data: rentals, error: rentalsError } = await supabase
+    .from('rentals')
+    .select('status, products, pickup_date, event_date')
+    .in('status', ['confirmed', 'released']);
+  if (rentalsError) console.error('Failed to fetch active rentals for products:', rentalsError);
+
+  let items = await Promise.all((data || []).map((p) => enrichProduct(p, pickupDate, dropDate, rentals || undefined)));
+
+  if (sort === 'most_rented') {
+    // Fetch rentals count to sort by popularity
+    const { data: rentals, error: rentalsCountError } = await supabase
+      .from('rentals')
+      .select('products')
+      .in('status', ['confirmed', 'released', 'returned']);
+    if (rentalsCountError) console.error('Failed to fetch rental counts for sorting:', rentalsCountError);
+
+    const rentalCounts: Record<string, number> = {};
+    (rentals || []).forEach((r: any) => {
+      (r.products || []).forEach((p: any) => {
+        if (p.id) {
+          rentalCounts[p.id] = (rentalCounts[p.id] || 0) + (p.qty || 1);
+        }
+      });
+    });
+
+    // Sort items by count descending
+    items.sort((a: any, b: any) => {
+      const countA = rentalCounts[a.id] || 0;
+      const countB = rentalCounts[b.id] || 0;
+      if (countA !== countB) return countB - countA;
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime(); // fallback
+    });
+  }
+
+  let filteredItems = items;
+  if (status === 'in_stock') {
+    filteredItems = items.filter((item) => item.booking_status === 'available');
+  } else if (status === 'on_rent') {
+    filteredItems = items.filter((item) => item.booking_status === 'on_rent');
+  } else if (status === 'booked') {
+    filteredItems = items.filter((item) => item.booking_status === 'booked');
+  } else if (status === 'out_of_stock') {
+    filteredItems = items.filter((item) => item.booking_status === 'out_of_stock');
+  }
+
+  // Cache listing response for 30 seconds (products change infrequently)
+  res.set('Cache-Control', 'public, max-age=30');
+  return res.json({
+    items: filteredItems,
+    pagination: {
+      limit,
+      offset,
+      total: count || 0,
+      hasMore: offset + limit < (count || 0),
+    },
+  });
 });
 
 router.get('/:id', validateUuid('id'), async (req: Request, res: Response) => {
-  try {
-    const { data, error } = await supabase
-      .from('products')
-      .select('id, name, brand, category, price_per_day, unique_code, available_quantity, images, created_at')
-      .eq('id', req.params.id)
-      .maybeSingle();
+  const { data, error } = await supabase
+    .from('products')
+    .select('id, name, brand, category, price_per_day, unique_code, available_quantity, images, created_at')
+    .eq('id', req.params.id)
+    .maybeSingle();
 
-    if (error) {
-      console.error('Supabase Fetch Error:', error);
-      return res.status(500).json({ message: 'Database error while fetching product details.', details: error.message });
-    }
-
-    if (!data) {
-      return res.status(404).json({ message: 'Product not found.' });
-    }
-
-    const pickupDate = req.query.pickup_date ? String(req.query.pickup_date) : undefined;
-    const dropDate = req.query.drop_date ? String(req.query.drop_date) : undefined;
-
-    // Cache product detail for 60 seconds
-    res.set('Cache-Control', 'public, max-age=60');
-    return res.json(await enrichProduct(data, pickupDate, dropDate));
-  } catch (error: any) {
-    return res.status(500).json({ message: error.message || 'Unable to fetch product.' });
+  if (error) {
+    console.error('Supabase Fetch Error:', error);
+    throw new AppError(500, 'Unable to fetch product details. Please try again.');
   }
+
+  if (!data) {
+    throw new NotFoundError('Product');
+  }
+
+  const pickupDate = req.query.pickup_date ? String(req.query.pickup_date) : undefined;
+  const dropDate = req.query.drop_date ? String(req.query.drop_date) : undefined;
+
+  // Cache product detail for 60 seconds
+  res.set('Cache-Control', 'public, max-age=60');
+  return res.json(await enrichProduct(data, pickupDate, dropDate));
 });
 
 router.get('/:id/label', validateUuid('id'), async (req: Request, res: Response) => {
-  try {
-    const { data, error } = await supabase
-      .from('products')
-      .select('name, unique_code, qr_base64')
-      .eq('id', req.params.id)
-      .maybeSingle();
+  const { data, error } = await supabase
+    .from('products')
+    .select('name, unique_code, qr_base64')
+    .eq('id', req.params.id)
+    .maybeSingle();
 
-    if (error) {
-      throw error;
-    }
+  if (error) {
+    throw error;
+  }
 
-    if (!data) {
-      return res.status(404).send('Product not found.');
-    }
+  if (!data) {
+    return res.status(404).send('Product not found.');
+  }
 
-    return res.send(`<!doctype html>
+  return res.send(`<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -277,9 +269,6 @@ router.get('/:id/label', validateUuid('id'), async (req: Request, res: Response)
     </div>
   </body>
 </html>`);
-  } catch (error: any) {
-    return res.status(500).send(error.message || 'Unable to generate label.');
-  }
 });
 
 export default router;
