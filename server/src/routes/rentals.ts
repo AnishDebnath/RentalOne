@@ -66,13 +66,13 @@ router.post('/', validate(createRentalSchema), async (req: Request, res: Respons
     });
 
     // Check if target user has partner role or is_house_owner set to true (is a production house)
-    const { data: userData } = await supabase
+    const { data: userData, error: userDataError } = await supabase
       .from('users')
       .select('role, is_house_owner')
       .eq('id', finalUserId)
       .maybeSingle();
 
-    const isHouseBooking = userData?.is_house_owner === true || userData?.role === 'partner';
+    const isHouseBooking = !userDataError && (userData?.is_house_owner === true || userData?.role === 'partner');
 
     let rental = null;
     let rentalError = null;
@@ -91,7 +91,7 @@ router.post('/', validate(createRentalSchema), async (req: Request, res: Respons
         assistant_crew_count: assistantCrewCount,
         crew_price: assistantCrewCount > 0 ? DEFAULT_ASSISTANT_CREW_RATE : 0
       } as any)
-      .select('*')
+      .select('id, rental_no')
       .maybeSingle();
 
     if (insertResult.error && insertResult.error.message.includes('assistant_crew_count')) {
@@ -108,7 +108,7 @@ router.post('/', validate(createRentalSchema), async (req: Request, res: Respons
           total_amount: totalAmount,
           products: productSnapshots
         })
-        .select('*')
+        .select('id, rental_no')
         .maybeSingle();
       rental = fallbackResult.data;
       rentalError = fallbackResult.error;
@@ -131,17 +131,21 @@ router.post('/', validate(createRentalSchema), async (req: Request, res: Respons
 
 router.get('/my', async (req: Request, res: Response) => {
   try {
-    const { data, error } = await supabase
+    const limit = Math.min(Number(req.query.limit) || 20, 100);
+    const offset = Number(req.query.offset) || 0;
+
+    const { data, count: totalCount, error } = await supabase
       .from('rentals')
-      .select('*')
+      .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, received_at, created_at', { count: 'exact' })
       .eq('user_id', req.user.id)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
 
     if (error) {
       throw error;
     }
 
-    return res.json(data || []);
+    return res.json({ data: data || [], totalCount });
   } catch (error: any) {
     return res.status(500).json({ message: error.message || 'Unable to fetch rentals.' });
   }
@@ -151,6 +155,8 @@ router.get('/my', async (req: Request, res: Response) => {
 router.get('/house/:houseId', validateUuid('houseId'), async (req: Request, res: Response) => {
   try {
     const { houseId } = req.params;
+    const limit = Math.min(Number(req.query.limit) || 20, 100);
+    const offset = Number(req.query.offset) || 0;
 
     // 1. Get the user_id for this house
     const { data: house, error: houseError } = await supabase
@@ -163,15 +169,16 @@ router.get('/house/:houseId', validateUuid('houseId'), async (req: Request, res:
       return res.status(404).json({ message: 'House not found or not linked to a user.' });
     }
 
-    // 2. Fetch all rentals for that user
-    const { data, error } = await supabase
+    // 2. Fetch rentals for that user with pagination
+    const { data, count: totalCount, error } = await supabase
       .from('rentals')
-      .select('*')
+      .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, received_at, created_at', { count: 'exact' })
       .eq('user_id', house.user_id)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
 
     if (error) throw error;
-    return res.json(data || []);
+    return res.json({ data: data || [], totalCount });
   } catch (error: any) {
     return res.status(500).json({ message: error.message || 'Unable to fetch house rentals.' });
   }
@@ -182,6 +189,8 @@ router.get('/house/slug/:slug', async (req: Request, res: Response) => {
   try {
     const slug = req.params.slug as string;
     const name = slug.replace(/-/g, ' ');
+    const limit = Math.min(Number(req.query.limit) || 20, 100);
+    const offset = Number(req.query.offset) || 0;
 
     // 1. Get the user_id for this house
     const { data: house, error: houseError } = await supabase
@@ -194,15 +203,16 @@ router.get('/house/slug/:slug', async (req: Request, res: Response) => {
       return res.status(404).json({ message: 'House not found.' });
     }
 
-    // 2. Fetch all rentals for that user
-    const { data, error } = await supabase
+    // 2. Fetch rentals for that user with pagination
+    const { data, count: totalCount, error } = await supabase
       .from('rentals')
-      .select('*')
+      .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, received_at, created_at', { count: 'exact' })
       .eq('user_id', house.user_id)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
 
     if (error) throw error;
-    return res.json(data || []);
+    return res.json({ data: data || [], totalCount });
   } catch (error: any) {
     return res.status(500).json({ message: error.message || 'Unable to fetch house rentals.' });
   }
@@ -227,7 +237,7 @@ router.patch('/:id', validateUuid('id'), async (req: Request, res: Response) => 
       .from('rentals')
       .update(updates)
       .eq('id', id)
-      .select('*')
+      .select('id, rental_no, status')
       .maybeSingle();
 
     if (error) throw error;

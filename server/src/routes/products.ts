@@ -123,7 +123,7 @@ router.get('/', validate(paginationQuery, 'query'), async (req: Request, res: Re
 
     let query = supabase
       .from('products')
-      .select('*', { count: 'exact' });
+      .select('id, name, brand, category, price_per_day, unique_code, available_quantity, images, created_at', { count: 'exact' });
 
     if (category && category.toLowerCase() !== 'all') {
       query = query.ilike('category', category);
@@ -137,9 +137,7 @@ router.get('/', validate(paginationQuery, 'query'), async (req: Request, res: Re
       query = query.or(`name.ilike.%${search}%,unique_code.ilike.%${search}%`);
     }
 
-    if (sort !== 'most_rented') {
-      query = query.order('created_at', { ascending: false }).range(offset, offset + limit - 1);
-    }
+    query = query.order('created_at', { ascending: false }).range(offset, offset + limit - 1);
 
     const { data, count, error } = await query;
 
@@ -148,19 +146,21 @@ router.get('/', validate(paginationQuery, 'query'), async (req: Request, res: Re
     }
 
     // Fetch rentals once — shared across all product enrichment calls to avoid N+1
-    const { data: rentals } = await supabase
+    const { data: rentals, error: rentalsError } = await supabase
       .from('rentals')
       .select('status, products, pickup_date, event_date')
       .in('status', ['confirmed', 'released']);
+    if (rentalsError) console.error('Failed to fetch active rentals for products:', rentalsError);
 
     let items = await Promise.all((data || []).map((p) => enrichProduct(p, pickupDate, dropDate, rentals || undefined)));
 
     if (sort === 'most_rented') {
       // Fetch rentals count to sort by popularity
-      const { data: rentals } = await supabase
+      const { data: rentals, error: rentalsCountError } = await supabase
         .from('rentals')
         .select('products')
         .in('status', ['confirmed', 'released', 'returned']);
+      if (rentalsCountError) console.error('Failed to fetch rental counts for sorting:', rentalsCountError);
 
       const rentalCounts: Record<string, number> = {};
       (rentals || []).forEach((r: any) => {
@@ -178,9 +178,6 @@ router.get('/', validate(paginationQuery, 'query'), async (req: Request, res: Re
         if (countA !== countB) return countB - countA;
         return new Date(b.created_at).getTime() - new Date(a.created_at).getTime(); // fallback
       });
-
-      // Slice manually for pagination
-      items = items.slice(offset, offset + limit);
     }
 
     let filteredItems = items;
@@ -214,7 +211,7 @@ router.get('/:id', validateUuid('id'), async (req: Request, res: Response) => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*')
+      .select('id, name, brand, category, price_per_day, unique_code, available_quantity, images, created_at')
       .eq('id', req.params.id)
       .maybeSingle();
 

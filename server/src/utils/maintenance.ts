@@ -41,7 +41,11 @@ export const runRentalMaintenance = async () => {
       // 2. We don't need to update rental_items anymore. 
       // The rental status is 'cancelled', so enrichProduct will not see it as 'confirmed' or 'active' and stock is freed.
       // But we can also update the products JSONB array status to 'cancelled' for consistency.
-      const { data: currentRental } = await supabase.from('rentals').select('products').eq('id', rental.id).single();
+      const { data: currentRental, error: rentalError } = await supabase.from('rentals').select('products').eq('id', rental.id).single();
+      if (rentalError) {
+        console.error(`[Maintenance] Error fetching rental ${rental.rental_no}:`, rentalError);
+        continue;
+      }
       const updatedProducts = (currentRental?.products || []).map((p: any) => ({ ...p, status: 'cancelled' }));
 
       const { error: updateItemsError } = await supabase

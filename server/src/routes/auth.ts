@@ -332,7 +332,7 @@ router.post('/login', validate(loginSchema), async (req: Request, res: Response)
     const isMemberIdentifier = /^(CRH|HSE)-\d{4}-[A-Z0-9]{4,}$/.test(upperIdentifier);
 
     // 1. Try to find in staff_accounts (by username or phone)
-    let staffQuery = supabase.from('staff_accounts').select('*');
+    let staffQuery = supabase.from('staff_accounts').select('id, username, full_name, phone, role, is_active, avatar_url, password_hash');
     if (isPhoneIdentifier) {
       staffQuery = staffQuery.or(`username.eq.${cleanIdentifier},phone.eq.${normalizedPhone}`);
     } else {
@@ -374,7 +374,7 @@ router.post('/login', validate(loginSchema), async (req: Request, res: Response)
     }
 
     // 2. Try to find in users (by phone, email, or public member/house ID)
-    let userQuery = supabase.from('users').select('*');
+    let userQuery = supabase.from('users').select('id, email, phone, member_id, full_name, role, is_blocked, password_hash, is_house_owner, avatar_url, user_qr_base64, created_at');
     if (isPhoneIdentifier) {
       userQuery = userQuery.eq('phone', normalizedPhone);
     } else if (isMemberIdentifier) {
@@ -441,10 +441,14 @@ router.get('/admin/staff', async (req: Request, res: Response) => {
       return res.status(403).json({ message: 'Admin access required.' });
     }
 
+    const limit = Math.min(Number(req.query.limit) || 20, 100);
+    const offset = Number(req.query.offset) || 0;
+
     const { data, error } = await supabase
       .from('staff_accounts')
       .select('id, username, phone, full_name, role, is_active, created_at, last_login_at, last_logout_at')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
 
     if (error) throw error;
     return res.json(data || []);
@@ -473,11 +477,13 @@ router.post('/admin/staff', async (req: Request, res: Response) => {
     const cleanUsername = username.trim().toLowerCase();
     const cleanPhone = phone ? phone.replace(/\D/g, '') : null;
 
-    const { data: existing } = await supabase
+    const { data: existing, error: existingError } = await supabase
       .from('staff_accounts')
       .select('id')
       .or(`username.eq.${cleanUsername}${cleanPhone ? `,phone.eq.${cleanPhone}` : ''}`)
       .maybeSingle();
+
+    if (existingError) throw existingError;
 
     if (existing) {
       return res.status(409).json({ message: 'Username or Phone already taken.' });
@@ -585,7 +591,7 @@ router.get('/me', authMiddleware, async (req: Request, res: Response) => {
     const userId = (req.user as any).id;
     const { data: user, error } = await supabase
       .from('users')
-      .select('*')
+      .select('id, member_id, full_name, phone, email, role, is_house_owner, aadhaar_no, aadhaar_doc_url, voter_no, voter_doc_url, facebook, instagram, youtube, avatar_url, user_qr_base64, is_verified, created_at')
       .eq('id', userId)
       .single();
 
@@ -637,7 +643,7 @@ router.patch(
       // 1. Fetch current user
       const { data: user, error: fetchError } = await supabase
         .from('users')
-        .select('*')
+        .select('id, member_id, full_name, phone, email, role, is_house_owner, aadhaar_no, aadhaar_doc_url, voter_no, voter_doc_url, facebook, instagram, youtube, avatar_url, user_qr_base64, is_verified, created_at, is_blocked, is_house_owner, changed_fields, aadhaar_signed_url')
         .eq('id', userId)
         .single();
 
@@ -780,7 +786,7 @@ router.patch(
         // Doc URLs are new uploads — always count as changed
         if (key === 'aadhaar_doc_url' || key === 'voter_doc_url' || key === 'avatar_url') return true;
         // Normalize both sides before comparing
-        return normalize(updates[key], key) !== normalize(user[key], key);
+        return normalize(updates[key], key) !== normalize(user[key as keyof typeof user], key);
       });
       if (changedSensitiveFields.length > 0) {
         updates.is_verified = false;
@@ -793,7 +799,7 @@ router.patch(
           .from('users')
           .update(updates)
           .eq('id', userId)
-          .select('*')
+          .select('id, member_id, full_name, phone, email, role, is_house_owner, aadhaar_no, aadhaar_doc_url, voter_no, voter_doc_url, facebook, instagram, youtube, avatar_url, user_qr_base64, is_verified, created_at')
           .single();
 
         if (updateError) throw updateError;

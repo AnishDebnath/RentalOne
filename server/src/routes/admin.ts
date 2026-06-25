@@ -29,12 +29,16 @@ const extractPublicId = (url: string | null): string | null => {
   return decodeURIComponent(path.split('.')[0]);
 };
 
-router.get('/staff', roleMiddleware(['admin', 'manager']), async (_req: Request, res: Response) => {
+router.get('/staff', roleMiddleware(['admin', 'manager']), async (req: Request, res: Response) => {
   try {
+    const limit = Math.min(Number(req.query.limit) || 20, 100);
+    const offset = Number(req.query.offset) || 0;
+
     const { data, error } = await supabase
       .from('staff_accounts')
       .select('id, username, full_name, phone, role, avatar_url, is_active, last_login_at, last_logout_at, created_at')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
 
     if (error) throw error;
     return res.json(data || []);
@@ -61,7 +65,7 @@ router.post('/staff', roleMiddleware(['admin', 'manager']), validate(createStaff
           is_active: true,
         },
       ])
-      .select()
+      .select('id, username, full_name, phone, role')
       .single();
 
     if (error) {
@@ -153,11 +157,15 @@ router.get('/dashboard', roleMiddleware(['admin']), async (_req: Request, res: R
 router.get('/users', roleMiddleware(['admin']), async (req: Request, res: Response) => {
   try {
     const search = String(req.query.search || '').trim();
+    const limit = Math.min(Number(req.query.limit) || 20, 100);
+    const offset = Number(req.query.offset) || 0;
+
     let usersQuery: any = supabase
       .from('users')
-      .select('*')
+      .select('id, avatar_url, full_name, member_id, phone, is_verified, is_blocked, email, created_at', { count: 'exact' })
       .eq('is_house_owner', false)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
 
     if (search) {
       usersQuery = usersQuery.or(
@@ -165,17 +173,18 @@ router.get('/users', roleMiddleware(['admin']), async (req: Request, res: Respon
       );
     }
 
-    const { data: userData, error: userError } = await usersQuery;
+    const { data: userData, count: totalCount, error: userError } = await usersQuery;
     if (userError) throw userError;
 
     // Fetch rentals separately — avoids FK ambiguity in PostgREST embed
     const userIds = (userData || []).map((u: any) => u.id);
     let rentalsMap: Record<string, any[]> = {};
     if (userIds.length) {
-      const { data: rentalsData } = await supabase
+      const { data: rentalsData, error: rentalsError } = await supabase
         .from('rentals')
         .select('id, user_id, products, total_amount, status, event_date')
         .in('user_id', userIds);
+      if (rentalsError) console.error('Failed to fetch rentals for users:', rentalsError);
       (rentalsData || []).forEach((r: any) => {
         if (!rentalsMap[r.user_id]) rentalsMap[r.user_id] = [];
         rentalsMap[r.user_id].push(r);
@@ -197,7 +206,7 @@ router.get('/users', roleMiddleware(['admin']), async (req: Request, res: Respon
       };
     });
 
-    return res.json(users);
+    return res.json({ data: users, totalCount });
   } catch (error: any) {
     return res.status(500).json({ message: error.message || 'Unable to fetch users.' });
   }
@@ -207,7 +216,7 @@ router.get('/users/:id', roleMiddleware(['admin']), validateUuid('id'), async (r
   try {
     const { data: userData, error: userError } = await supabase
       .from('users')
-      .select('*')
+      .select('id, avatar_url, full_name, member_id, phone, email, created_at, is_blocked, is_verified, changed_fields, aadhaar_no, aadhaar_doc_url, aadhaar_signed_url, voter_no, voter_doc_url, facebook, instagram, youtube')
       .eq('id', req.params.id)
       .maybeSingle();
 
@@ -215,11 +224,12 @@ router.get('/users/:id', roleMiddleware(['admin']), validateUuid('id'), async (r
     if (!userData) return res.status(404).json({ message: 'User not found.' });
 
     // Fetch rentals separately — avoids FK ambiguity in PostgREST embed
-    const { data: rentals } = await supabase
+    const { data: rentals, error: rentalsError } = await supabase
       .from('rentals')
-      .select('*')
+      .select('id, rental_no, status, products, total_amount, pickup_date, event_date, handover_proof_url, released_to_representative_name, returned_by_representative_name, created_at')
       .eq('user_id', req.params.id)
       .order('pickup_date', { ascending: false });
+    if (rentalsError) console.error('Failed to fetch user rentals:', rentalsError);
 
     const allRentals = rentals || [];
     const completedRentals = allRentals.filter((r: any) => r.status === 'returned');
@@ -262,7 +272,7 @@ router.put('/users/:id/block', roleMiddleware(['admin']), validateUuid('id'), as
       .from('users')
       .update({ is_blocked: !existing.is_blocked })
       .eq('id', req.params.id)
-      .select('*')
+      .select('id, is_blocked')
       .single();
 
     if (error) {
@@ -281,7 +291,7 @@ router.put('/users/:id/verify', roleMiddleware(['admin']), validateUuid('id'), a
       .from('users')
       .update({ is_verified: true, changed_fields: [] })
       .eq('id', req.params.id)
-      .select('*')
+      .select('id, is_verified, changed_fields')
       .single();
 
     if (error) {
@@ -380,7 +390,7 @@ router.post('/products', roleMiddleware(['admin']), upload.array('images', 8), v
         qr_base64: qrBase64,
         images: productImages, // Single table storage
       })
-      .select('*')
+      .select('id, name, unique_code, qr_base64')
       .single();
 
     if (productError) {
@@ -411,7 +421,7 @@ router.put('/products/:id', roleMiddleware(['admin']), upload.array('images', 8)
     // Fetch current product to get existing images array
     const { data: currentProduct, error: fetchError } = await supabase
       .from('products')
-      .select('*')
+      .select('images')
       .eq('id', id)
       .single();
 
@@ -474,7 +484,7 @@ router.put('/products/:id', roleMiddleware(['admin']), upload.array('images', 8)
         images: updatedImages,
       })
       .eq('id', id)
-      .select('*')
+      .select('id')
       .single();
 
     if (updateError) {
@@ -513,13 +523,17 @@ router.delete('/products/:id', roleMiddleware(['admin']), validateUuid('id'), as
   }
 });
 
-router.get('/rentals/upcoming', roleMiddleware(['admin', 'manager', 'staff']), async (_req: Request, res: Response) => {
+router.get('/rentals/upcoming', roleMiddleware(['admin', 'manager', 'staff']), async (req: Request, res: Response) => {
   try {
-    const { data: rentals, error } = await supabase
+    const limit = Math.min(Number(req.query.limit) || 20, 100);
+    const offset = Number(req.query.offset) || 0;
+
+    const { data: rentals, count: totalCount, error } = await supabase
       .from('rentals')
-      .select('*')
+      .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, house_id, house_booking_id, assistant_crew_count, received_at, created_at', { count: 'exact' })
       .in('status', ['confirmed'])
-      .order('pickup_date', { ascending: true });
+      .order('pickup_date', { ascending: true })
+      .range(offset, offset + limit - 1);
 
     if (error) throw error;
 
@@ -528,10 +542,11 @@ router.get('/rentals/upcoming', roleMiddleware(['admin', 'manager', 'staff']), a
     let usersMap: Record<string, any> = {};
 
     if (userIds.length) {
-      const { data: users } = await supabase
+      const { data: users, error: usersError } = await supabase
         .from('users')
         .select('id, full_name, phone, avatar_url')
         .in('id', userIds);
+      if (usersError) console.error('Failed to fetch users for active rentals:', usersError);
 
       (users || []).forEach((u: any) => { usersMap[u.id] = u; });
     }
@@ -541,19 +556,23 @@ router.get('/rentals/upcoming', roleMiddleware(['admin', 'manager', 'staff']), a
       users: usersMap[r.user_id] || null,
     }));
 
-    return res.json(result);
+    return res.json({ data: result, totalCount });
   } catch (error: any) {
     return res.status(500).json({ message: error.message || 'Unable to fetch upcoming rentals.' });
   }
 });
 
-router.get('/rentals/active', roleMiddleware(['admin', 'manager', 'staff']), async (_req: Request, res: Response) => {
+router.get('/rentals/active', roleMiddleware(['admin', 'manager', 'staff']), async (req: Request, res: Response) => {
   try {
-    const { data: rentals, error } = await supabase
+    const limit = Math.min(Number(req.query.limit) || 20, 100);
+    const offset = Number(req.query.offset) || 0;
+
+    const { data: rentals, count: totalCount, error } = await supabase
       .from('rentals')
-      .select('*')
+      .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, house_id, house_booking_id, assistant_crew_count, received_at, created_at', { count: 'exact' })
       .eq('status', 'released')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
 
     if (error) throw error;
 
@@ -561,7 +580,8 @@ router.get('/rentals/active', roleMiddleware(['admin', 'manager', 'staff']), asy
     const userIds = [...new Set((rentals || []).map((r: any) => r.user_id).filter(Boolean))];
     let usersMap: Record<string, any> = {};
     if (userIds.length) {
-      const { data: users } = await supabase.from('users').select('id, full_name, phone, avatar_url').in('id', userIds);
+      const { data: users, error: usersError } = await supabase.from('users').select('id, full_name, phone, avatar_url').in('id', userIds);
+      if (usersError) console.error('Failed to fetch users for active rentals:', usersError);
       (users || []).forEach((u: any) => { usersMap[u.id] = u; });
     }
 
@@ -570,7 +590,7 @@ router.get('/rentals/active', roleMiddleware(['admin', 'manager', 'staff']), asy
       users: usersMap[r.user_id] || null,
     }));
 
-    return res.json(result);
+    return res.json({ data: result, totalCount });
   } catch (error: any) {
     return res.status(500).json({ message: error.message || 'Unable to fetch active rentals.' });
   }
@@ -583,7 +603,7 @@ router.get('/rentals/past', roleMiddleware(['admin', 'manager', 'staff']), async
 
     const { data: rentals, count, error } = await supabase
       .from('rentals')
-      .select('*', { count: 'exact' })
+      .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, house_id, house_booking_id, assistant_crew_count, received_at, created_at', { count: 'exact' })
       .in('status', ['returned', 'cancelled', 'failed'])
       .order('created_at', { ascending: false })
       .range(offset, offset + limit - 1);
@@ -594,7 +614,8 @@ router.get('/rentals/past', roleMiddleware(['admin', 'manager', 'staff']), async
     const userIds = [...new Set((rentals || []).map((r: any) => r.user_id).filter(Boolean))];
     let usersMap: Record<string, any> = {};
     if (userIds.length) {
-      const { data: users } = await supabase.from('users').select('id, full_name, phone, avatar_url').in('id', userIds);
+      const { data: users, error: usersError } = await supabase.from('users').select('id, full_name, phone, avatar_url').in('id', userIds);
+      if (usersError) console.error('Failed to fetch users for past rentals:', usersError);
       (users || []).forEach((u: any) => { usersMap[u.id] = u; });
     }
 
@@ -618,7 +639,7 @@ router.get('/rentals/:id', roleMiddleware(['admin', 'manager', 'staff']), async 
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
     console.log(`Rental lookup: id=${id} isUuid=${isUuid}`);
 
-    let rentalQuery = supabase.from('rentals').select('*');
+    let rentalQuery = supabase.from('rentals').select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, house_id, house_booking_id, assistant_crew_count, received_at, discount, created_at');
     rentalQuery = isUuid ? rentalQuery.eq('id', id) : rentalQuery.eq('rental_no', id);
 
     const { data: rental, error } = await rentalQuery.maybeSingle();
@@ -630,19 +651,21 @@ router.get('/rentals/:id', roleMiddleware(['admin', 'manager', 'staff']), async 
     let userInfo = null;
     let houseName = null;
     if (rental.user_id) {
-      const { data: user } = await supabase
+      const { data: user, error: userError } = await supabase
         .from('users')
-        .select('*')
+        .select('id, full_name, phone, avatar_url, email, is_house_owner, role')
         .eq('id', rental.user_id)
         .maybeSingle();
+      if (userError) console.error('Failed to fetch rental user:', userError);
       userInfo = user || null;
 
       if (userInfo && (userInfo.is_house_owner === true || userInfo.role === 'partner')) {
-        const { data: house } = await supabase
+        const { data: house, error: houseError } = await supabase
           .from('production_houses')
           .select('name')
           .eq('user_id', rental.user_id)
           .maybeSingle();
+        if (houseError) console.error('Failed to fetch house for rental:', houseError);
         houseName = house?.name || null;
       }
     }

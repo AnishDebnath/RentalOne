@@ -173,6 +173,17 @@ CREATE TABLE IF NOT EXISTS house_payments (
 CREATE INDEX IF NOT EXISTS idx_house_payments_house_id ON house_payments (house_id);
 CREATE INDEX IF NOT EXISTS idx_house_payments_status ON house_payments (status);
 CREATE INDEX IF NOT EXISTS idx_house_payments_payment_date ON house_payments (payment_date);
+CREATE INDEX IF NOT EXISTS idx_house_payments_created_at ON house_payments (created_at DESC);
+
+-- ============================================================
+-- ADDITIONAL INDEXES FOR FREQUENTLY FILTERED/SORTED COLUMNS
+-- ============================================================
+CREATE INDEX IF NOT EXISTS idx_users_created_at ON users (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_rentals_event_date ON rentals (event_date);
+CREATE INDEX IF NOT EXISTS idx_staff_accounts_created_at ON staff_accounts (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_staff_accounts_phone ON staff_accounts (phone);
+CREATE INDEX IF NOT EXISTS idx_production_houses_created_at ON production_houses (created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_production_houses_name ON production_houses (name);
 
 -- ============================================================
 -- ROW LEVEL SECURITY (RLS)

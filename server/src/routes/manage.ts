@@ -53,7 +53,7 @@ router.post('/bulk-release', validate(bulkReleaseSchema), async (req: Request, r
     // Fetch current rental to update products array
     const { data: rental, error: fetchError } = await supabase
       .from('rentals')
-      .select('*')
+      .select('id, rental_no, user_id, products, status, pickup_date, event_date, handover_proof_url, released_to_representative_name')
       .eq('id', rentalId)
       .single();
 
@@ -80,27 +80,32 @@ router.post('/bulk-release', validate(bulkReleaseSchema), async (req: Request, r
     // Process substitutions if any
     let finalProducts = rental.products || [];
     if (substitutions && typeof substitutions === 'object') {
-      for (const [oldId, newId] of Object.entries(substitutions)) {
-        const { data: newProd, error: newProdErr } = await supabase
-          .from('products')
-          .select('*')
-          .eq('id', newId)
-          .single();
+      const subEntries = Object.entries(substitutions);
+      const newIds = subEntries.map(([, newId]) => newId as string).filter(Boolean);
+      const { data: subProducts, error: subError } = await supabase
+        .from('products')
+        .select('id, name, unique_code, price_per_day, images')
+        .in('id', newIds);
+      const subMap = new Map((subProducts || []).map((p: any) => [p.id, p]));
 
-        if (!newProdErr && newProd) {
-          finalProducts = finalProducts.map((p: any) => {
-            if (p.id === oldId) {
-              return {
-                ...p,
-                id: newProd.id,
-                name: newProd.name,
-                unique_code: newProd.unique_code,
-                image: newProd.image || (newProd.images && newProd.images[0]) || '',
-                price_per_day: newProd.price_per_day
-              };
-            }
-            return p;
-          });
+      if (!subError) {
+        for (const [oldId, newId] of subEntries) {
+          const newProd = subMap.get(newId as string);
+          if (newProd) {
+            finalProducts = finalProducts.map((p: any) => {
+              if (p.id === oldId) {
+                return {
+                  ...p,
+                  id: newProd.id,
+                  name: newProd.name,
+                  unique_code: newProd.unique_code,
+                  image: newProd.image || (newProd.images && newProd.images[0]) || '',
+                  price_per_day: newProd.price_per_day
+                };
+              }
+              return p;
+            });
+          }
         }
       }
     }
@@ -156,7 +161,7 @@ router.post('/bulk-return', validate(bulkReturnSchema), async (req: Request, res
     // Fetch current rental to update products array
     const { data: rental, error: fetchError } = await supabase
       .from('rentals')
-      .select('*')
+      .select('id, products, status, handover_proof_url')
       .eq('id', rentalId)
       .single();
 
