@@ -32,8 +32,6 @@ app.use(helmet());
 // Gzip-compress all API responses (reduces bandwidth ~70%)
 app.use(compression());
 
-app.get('/api/health', (_req, res) => res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() }));
-
 // Allow localhost:* and any private-network IP (192.168.x.x, 10.x.x.x, 172.16-31.x.x)
 // so the app works both on localhost and when accessed over the local network.
 const PRIVATE_IP_RE = /^https?:\/\/(localhost|127\.0\.0\.1|192\.168\.\d{1,3}\.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.(1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3})(:\d+)?$/;

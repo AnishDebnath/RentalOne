@@ -11,8 +11,8 @@ const router = express.Router();
 const DEFAULT_ASSISTANT_CREW_RATE = 0;
 
 router.post('/', validate(createRentalSchema), async (req: Request, res: Response) => {
-  console.log('RENTAL REQUEST BODY:', req.body);
   const { pickupDate, eventDate, items = [], userId: targetUserId, assistantCrewCount = 0 } = req.body;
+  console.log('Rental create:', { pickupDate, eventDate, itemCount: items.length, targetUserId, assistantCrewCount });
 
   if (!pickupDate || !eventDate || !Array.isArray(items) || !items.length) {
     throw new BadRequestError('Pickup date, event date, and cart items are required.');
