@@ -157,6 +157,7 @@ router.get('/house/:houseId', validateUuid('houseId'), async (req: Request, res:
     .range(offset, offset + limit - 1);
 
   if (error) throw error;
+  res.set('Cache-Control', 'private, max-age=30');
   return res.json({ data: data || [], totalCount });
 });
 
@@ -187,6 +188,7 @@ router.get('/house/slug/:slug', validate(slugParamsSchema, 'params'), async (req
     .range(offset, offset + limit - 1);
 
   if (error) throw error;
+  res.set('Cache-Control', 'private, max-age=30');
   return res.json({ data: data || [], totalCount });
 });
 

@@ -97,21 +97,42 @@ const generalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 1000,
   standardHeaders: true,
-  legacyHeaders: false,
-  message: { message: 'Too many requests — please try again later.' },
+  message: (req: any, res: Response) => {
+    const retryAfter = req.rateLimit?.resetTime
+      ? Math.ceil((req.rateLimit.resetTime.getTime() - Date.now()) / 1000)
+      : 900;
+    return {
+      message: 'Too many requests — please try again later.',
+      retryAfter,
+      retryAfterHuman: retryAfter >= 60
+        ? `${Math.ceil(retryAfter / 60)} min`
+        : `${retryAfter} sec`,
+    };
+  },
 });
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 20,
+  max: 50,
   standardHeaders: true,
-  legacyHeaders: false,
-  message: { message: 'Too many auth attempts — please try again later.' },
+  skip: (req) => req.url === '/check-exists',
+  message: (req: any, res: Response) => {
+    const retryAfter = req.rateLimit?.resetTime
+      ? Math.ceil((req.rateLimit.resetTime.getTime() - Date.now()) / 1000)
+      : 900;
+    const minutes = Math.ceil(retryAfter / 60);
+    return {
+      message: `Too many auth attempts — please try again after ${minutes} min.`,
+      retryAfter,
+      retryAfterHuman: `${minutes} min`,
+    };
+  },
 });
 
 app.use('/api', generalLimiter);
 
 app.get('/api/health', (_req: Request, res: Response) => {
+  res.set('Cache-Control', 'no-cache');
   res.json({
     status: 'ok',
     service: 'camera-rental-house-server',

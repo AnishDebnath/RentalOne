@@ -4,6 +4,7 @@ import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
+import rateLimit from 'express-rate-limit';
 import supabase from '../db/supabase.js';
 import { uploadFile as uploadToCloudinary } from '../storage/cloudinary.js';
 import { uploadToSupabase } from '../storage/supabaseStorage.js';
@@ -25,6 +26,24 @@ const router = express.Router();
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 50 * 1024 * 1024 } // 50MB limit
+});
+
+const checkExistsLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  message: (req: any, res: Response) => {
+    const retryAfter = req.rateLimit?.resetTime
+      ? Math.ceil((req.rateLimit.resetTime.getTime() - Date.now()) / 1000)
+      : 900;
+    return {
+      message: 'Too many requests — please try again later.',
+      retryAfter,
+      retryAfterHuman: retryAfter >= 60
+        ? `${Math.ceil(retryAfter / 60)} min`
+        : `${retryAfter} sec`,
+    };
+  },
 });
 
 const refreshCookieOptions: any = {
@@ -91,7 +110,7 @@ const validateSignupPayload = (body: any, files: any) => {
   return errors;
 };
 
-router.post('/check-exists', validate(checkExistsSchema), async (req: Request, res: Response) => {
+router.post('/check-exists', checkExistsLimiter, validate(checkExistsSchema), async (req: Request, res: Response) => {
   const { email, phone, aadhaarNo, voterNo } = req.body;
   let query = supabase.from('users').select('email, phone, aadhaar_no, voter_no');
 

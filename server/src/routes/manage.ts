@@ -32,6 +32,7 @@ router.get('/me', async (req: Request, res: Response) => {
     throw new NotFoundError('Staff profile');
   }
 
+  res.set('Cache-Control', 'private, max-age=300');
   return res.json(staff);
 });
 
@@ -229,6 +230,7 @@ router.get('/counts', validate(dateQuerySchema, 'query'), async (req: Request, r
     return sum + (r.products || []).reduce((itemSum: number, p: any) => itemSum + (p.qty || 1), 0);
   }, 0);
 
+  res.set('Cache-Control', 'private, max-age=30');
   return res.json({
     totalProducts: productsCount.count || 0,
     totalActiveRentals: activeRentalsCount.count || 0,

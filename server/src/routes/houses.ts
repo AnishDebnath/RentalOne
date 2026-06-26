@@ -7,11 +7,18 @@ import generateHouseId from '../utils/houseIdGenerator.js';
 import generateQrBase64 from '../utils/qrGenerator.js';
 import { validate, validateUuid } from '../validations/middleware.js';
 import { createHouseSchema, adminPaginationQuery, slugParamsSchema, houseCredentialsSchema, housePaymentSchema } from '../validations/schemas.js';
+import { cache } from '../utils/memoryCache.js';
 
 const router = express.Router();
 
 // 1. Get stats for production houses
 router.get('/stats', async (_req: Request, res: Response) => {
+  const cached = cache.get<any>('/houses/stats');
+  if (cached) {
+    res.set('Cache-Control', 'private, max-age=30');
+    return res.json(cached);
+  }
+
   let totalHouses = 0;
   let activeItems = 0;
   let totalRevenue = 0;
@@ -38,11 +45,14 @@ router.get('/stats', async (_req: Request, res: Response) => {
     console.error('Stats fetch failed (possibly missing columns):', err);
   }
 
-  return res.json({
+  const statsData = {
     totalHouses,
     activeItems,
     totalRevenue
-  });
+  };
+  cache.set('/houses/stats', statsData, 30_000);
+  res.set('Cache-Control', 'private, max-age=30');
+  return res.json(statsData);
 });
 
 // 2. Get all production houses
@@ -121,6 +131,7 @@ router.get('/', validate(adminPaginationQuery, 'query'), async (req: Request, re
     };
   });
 
+  res.set('Cache-Control', 'private, max-age=30');
   return res.json({ data: housesWithStats, totalCount });
 });
 
@@ -171,6 +182,7 @@ router.post('/', validate(createHouseSchema), async (req: Request, res: Response
 
   if (houseError) throw houseError;
 
+  cache.clear();
   return res.status(201).json({ ...house, user });
 });
 
@@ -178,7 +190,7 @@ router.post('/', validate(createHouseSchema), async (req: Request, res: Response
 router.get('/:id', validateUuid('id'), async (req: Request, res: Response) => {
   const { data: house, error } = await supabase
     .from('production_houses')
-    .select('id, name, owner_name, house_id, phone, status, user_id, created_at, users(id, member_id, email, full_name, phone, avatar_url, facebook, instagram, youtube)')
+    .select('id, name, owner_name, house_id, phone, status, user_id, created_at, users(id, member_id, email, full_name, phone, avatar_url, facebook, instagram, youtube), house_payments(amount)')
     .eq('id', req.params.id)
     .single();
 
@@ -190,12 +202,6 @@ router.get('/:id', validateUuid('id'), async (req: Request, res: Response) => {
     .select('total_amount, created_at, status')
     .eq('user_id', house.user_id);
   if (rentalsError) console.error('Failed to fetch house rentals:', rentalsError);
-
-  const { data: payments, error: paymentsError } = await supabase
-    .from('house_payments')
-    .select('amount')
-    .eq('house_id', house.id);
-  if (paymentsError) console.error('Failed to fetch house payments:', paymentsError);
 
   const now = new Date();
   const currentMonth = now.getMonth();
@@ -213,9 +219,10 @@ router.get('/:id', validateUuid('id'), async (req: Request, res: Response) => {
     .filter(r => r.status !== 'cancelled')
     .reduce((sum, r) => sum + Number(r.total_amount || 0), 0);
 
-  const totalPayments = (payments || []).reduce((sum, p) => sum + Number(p.amount || 0), 0);
+  const totalPayments = ((house as any).house_payments || []).reduce((sum: number, p: any) => sum + Number(p.amount || 0), 0);
   const finalDue = Math.max(0, totalDue - totalPayments);
 
+  res.set('Cache-Control', 'private, max-age=60');
   return res.json({
     ...house,
     thisMonthBusiness: `₹${thisMonthTotal.toLocaleString()}`,
@@ -231,7 +238,7 @@ router.get('/slug/:slug', validate(slugParamsSchema, 'params'), async (req: Requ
 
   const { data: house, error } = await supabase
     .from('production_houses')
-    .select('id, name, owner_name, house_id, phone, status, user_id, created_at, users(id, member_id, email, full_name, phone, avatar_url, facebook, instagram, youtube)')
+    .select('id, name, owner_name, house_id, phone, status, user_id, created_at, users(id, member_id, email, full_name, phone, avatar_url, facebook, instagram, youtube), house_payments(amount)')
     .ilike('name', name)
     .single();
 
@@ -243,12 +250,6 @@ router.get('/slug/:slug', validate(slugParamsSchema, 'params'), async (req: Requ
     .select('total_amount, created_at, status')
     .eq('user_id', house.user_id);
   if (rentalsError) console.error('Failed to fetch house rentals:', rentalsError);
-
-  const { data: payments, error: paymentsError } = await supabase
-    .from('house_payments')
-    .select('amount')
-    .eq('house_id', house.id);
-  if (paymentsError) console.error('Failed to fetch house payments:', paymentsError);
 
   const houseRentals = rentals || [];
   const now = new Date();
@@ -266,9 +267,10 @@ router.get('/slug/:slug', validate(slugParamsSchema, 'params'), async (req: Requ
     .filter(r => r.status !== 'cancelled')
     .reduce((sum, r) => sum + Number(r.total_amount || 0), 0);
 
-  const totalPayments = (payments || []).reduce((sum, p) => sum + Number(p.amount || 0), 0);
+  const totalPayments = ((house as any).house_payments || []).reduce((sum: number, p: any) => sum + Number(p.amount || 0), 0);
   const finalDue = Math.max(0, totalDue - totalPayments);
 
+  res.set('Cache-Control', 'private, max-age=60');
   return res.json({
     ...house,
     thisMonthBusiness: `₹${thisMonthTotal.toLocaleString()}`,
@@ -306,6 +308,7 @@ router.post('/:id/credentials', validateUuid('id'), validate(houseCredentialsSch
 
   if (updateError) throw updateError;
 
+  cache.clear();
   return res.json({ message: 'Credentials updated successfully.' });
 });
 
@@ -324,6 +327,7 @@ router.get('/:id/payments', validateUuid('id'), async (req: Request, res: Respon
 
   if (error) throw error;
 
+  res.set('Cache-Control', 'private, max-age=30');
   return res.json({ data: payments || [], totalCount });
 });
 
@@ -344,6 +348,7 @@ router.post('/:id/payments', validateUuid('id'), validate(housePaymentSchema), a
 
   if (error) throw error;
 
+  cache.clear();
   return res.status(201).json(payment);
 });
 
@@ -357,6 +362,7 @@ router.delete('/:id/payments/:paymentId', validateUuid('id'), validateUuid('paym
 
   if (error) throw error;
 
+  cache.clear();
   return res.json({ message: 'Payment deleted successfully.' });
 });
 

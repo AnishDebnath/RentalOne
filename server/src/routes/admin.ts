@@ -10,6 +10,7 @@ import generateQrBase64 from '../utils/qrGenerator.js';
 import { NotFoundError, BadRequestError, AppError } from '../utils/errors.js';
 import roleMiddleware from '../middleware/roleMiddleware.js';
 import { validate, validateUuid } from '../validations/middleware.js';
+import { cache } from '../utils/memoryCache.js';
 import {
   createProductSchema,
   updateProductSchema,
@@ -43,6 +44,7 @@ router.get('/staff', roleMiddleware(['admin', 'manager']), validate(adminPaginat
     .range(offset, offset + limit - 1);
 
   if (error) throw error;
+  res.set('Cache-Control', 'private, max-age=30');
   return res.json(data || []);
 });
 
@@ -77,6 +79,12 @@ router.post('/staff', roleMiddleware(['admin', 'manager']), validate(createStaff
 });
 
 router.get('/dashboard', roleMiddleware(['admin']), async (_req: Request, res: Response) => {
+  const cached = cache.get<any>('/admin/dashboard');
+  if (cached) {
+    res.set('Cache-Control', 'private, max-age=30');
+    return res.json(cached);
+  }
+
   const today = new Date().toISOString().slice(0, 10);
   const monthStart = new Date();
   monthStart.setDate(1);
@@ -133,7 +141,7 @@ router.get('/dashboard', roleMiddleware(['admin']), async (_req: Request, res: R
     );
   }, 0);
 
-  return res.json({
+  const dashboardData = {
     totalProducts: productsCount.count || 0,
     activeRentalsToday: activeTodayCount.count || 0,
     totalActiveRentals: activeRentals.data?.length || 0,
@@ -142,7 +150,11 @@ router.get('/dashboard', roleMiddleware(['admin']), async (_req: Request, res: R
     pendingUsersCount: pendingUsersCount.count || 0,
     revenueThisMonth,
     recentRentals: recentRentals.data || [],
-  });
+  };
+
+  cache.set('/admin/dashboard', dashboardData, 30_000);
+  res.set('Cache-Control', 'private, max-age=30');
+  return res.json(dashboardData);
 });
 
 router.get('/users', roleMiddleware(['admin']), validate(adminPaginationQuery, 'query'), async (req: Request, res: Response) => {
@@ -196,6 +208,7 @@ router.get('/users', roleMiddleware(['admin']), validate(adminPaginationQuery, '
     };
   });
 
+  res.set('Cache-Control', 'private, max-age=30');
   return res.json({ data: users, totalCount });
 });
 
@@ -224,6 +237,7 @@ router.get('/users/:id', roleMiddleware(['admin']), validateUuid('id'), async (r
     return sum + (r.products || []).reduce((iSum: number, p: any) => iSum + (Number(p.qty || 1) * Number(p.price || 0)), 0);
   }, 0);
 
+  res.set('Cache-Control', 'private, max-age=60');
   return res.json({
     ...userData,
     rentals: allRentals,
@@ -368,6 +382,7 @@ router.post('/products', roleMiddleware(['admin']), upload.array('images', 8), v
     throw new AppError(500, 'Unable to create product. Please try again.');
   }
 
+  cache.clear();
   return res.status(201).json(product);
 });
 
@@ -449,6 +464,7 @@ router.put('/products/:id', roleMiddleware(['admin']), upload.array('images', 8)
     throw updateError;
   }
 
+  cache.clear();
   return res.json(updatedProduct);
 });
 
@@ -471,6 +487,7 @@ router.delete('/products/:id', roleMiddleware(['admin']), validateUuid('id'), as
     throw error;
   }
 
+  cache.clear();
   return res.json({ message: 'Product deleted successfully.' });
 });
 
@@ -506,6 +523,7 @@ router.get('/rentals/upcoming', roleMiddleware(['admin', 'manager', 'staff']), v
     users: usersMap[r.user_id] || null,
   }));
 
+  res.set('Cache-Control', 'private, max-age=30');
   return res.json({ data: result, totalCount });
 });
 
@@ -536,6 +554,7 @@ router.get('/rentals/active', roleMiddleware(['admin', 'manager', 'staff']), val
     users: usersMap[r.user_id] || null,
   }));
 
+  res.set('Cache-Control', 'private, max-age=30');
   return res.json({ data: result, totalCount });
 });
 
@@ -566,6 +585,7 @@ router.get('/rentals/past', roleMiddleware(['admin', 'manager', 'staff']), valid
     users: usersMap[r.user_id] || null,
   }));
 
+  res.set('Cache-Control', 'private, max-age=30');
   return res.json({
     items: result,
     pagination: { limit, offset, total: count || 0, hasMore: offset + limit < (count || 0) },
@@ -608,6 +628,7 @@ router.get('/rentals/:id', roleMiddleware(['admin', 'manager', 'staff']), valida
     }
   }
 
+  res.set('Cache-Control', 'private, max-age=60');
   return res.json({ ...rental, users: userInfo, houseName });
 });
 

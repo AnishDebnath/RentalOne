@@ -3,6 +3,7 @@ import { AppError, NotFoundError } from '../utils/errors.js';
 import supabase from '../db/supabase.js';
 import { validate, validateUuid } from '../validations/middleware.js';
 import { paginationQuery } from '../validations/schemas.js';
+import { cache } from '../utils/memoryCache.js';
 
 const router = express.Router();
 
@@ -121,6 +122,13 @@ router.get('/', validate(paginationQuery, 'query'), async (req: Request, res: Re
   const pickupDate = pickup_date || undefined;
   const dropDate = drop_date || undefined;
 
+  const cacheKey = cache.key('/products', req.query as Record<string, string | undefined>);
+  const cached = cache.get<any>(cacheKey);
+  if (cached) {
+    res.set('Cache-Control', 'public, max-age=30');
+    return res.json(cached);
+  }
+
   let query = supabase
     .from('products')
     .select('id, name, brand, category, price_per_day, unique_code, available_quantity, images, created_at', { count: 'exact' });
@@ -191,9 +199,8 @@ router.get('/', validate(paginationQuery, 'query'), async (req: Request, res: Re
     filteredItems = items.filter((item) => item.booking_status === 'out_of_stock');
   }
 
-  // Cache listing response for 30 seconds (products change infrequently)
-  res.set('Cache-Control', 'public, max-age=30');
-  return res.json({
+  // Cache listing response for 30 seconds
+  const response = {
     items: filteredItems,
     pagination: {
       limit,
@@ -201,10 +208,20 @@ router.get('/', validate(paginationQuery, 'query'), async (req: Request, res: Re
       total: count || 0,
       hasMore: offset + limit < (count || 0),
     },
-  });
+  };
+  cache.set(cacheKey, response, 30_000);
+  res.set('Cache-Control', 'public, max-age=30');
+  return res.json(response);
 });
 
 router.get('/:id', validateUuid('id'), async (req: Request, res: Response) => {
+  const cacheKey = `/products/${req.params.id}`;
+  const cached = cache.get<any>(cacheKey);
+  if (cached) {
+    res.set('Cache-Control', 'public, max-age=60');
+    return res.json(cached);
+  }
+
   const { data, error } = await supabase
     .from('products')
     .select('id, name, brand, category, price_per_day, unique_code, available_quantity, images, created_at')
@@ -223,9 +240,10 @@ router.get('/:id', validateUuid('id'), async (req: Request, res: Response) => {
   const pickupDate = req.query.pickup_date ? String(req.query.pickup_date) : undefined;
   const dropDate = req.query.drop_date ? String(req.query.drop_date) : undefined;
 
-  // Cache product detail for 60 seconds
+  const detail = await enrichProduct(data, pickupDate, dropDate);
+  cache.set(cacheKey, detail, 60_000);
   res.set('Cache-Control', 'public, max-age=60');
-  return res.json(await enrichProduct(data, pickupDate, dropDate));
+  return res.json(detail);
 });
 
 router.get('/:id/label', validateUuid('id'), async (req: Request, res: Response) => {
@@ -243,6 +261,7 @@ router.get('/:id/label', validateUuid('id'), async (req: Request, res: Response)
     return res.status(404).send('Product not found.');
   }
 
+  res.set('Cache-Control', 'public, max-age=3600');
   return res.send(`<!doctype html>
 <html lang="en">
   <head>
