@@ -4,7 +4,6 @@ import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
-import dotenv from 'dotenv';
 import supabase from '../db/supabase.js';
 import { uploadFile as uploadToCloudinary } from '../storage/cloudinary.js';
 import { uploadToSupabase } from '../storage/supabaseStorage.js';
@@ -21,8 +20,6 @@ import {
   updateStaffSchema,
   adminPaginationQuery,
 } from '../validations/schemas.js';
-
-dotenv.config();
 
 const router = express.Router();
 const upload = multer({
