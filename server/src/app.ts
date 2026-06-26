@@ -32,7 +32,7 @@ app.use(helmet());
 // Gzip-compress all API responses (reduces bandwidth ~70%)
 app.use(compression());
 
-app.get('/api/health', (req, res) => res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() }));
+app.get('/api/health', (_req, res) => res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() }));
 
 // Allow localhost:* and any private-network IP (192.168.x.x, 10.x.x.x, 172.16-31.x.x)
 // so the app works both on localhost and when accessed over the local network.
@@ -138,6 +138,7 @@ app.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
     if (error.errors) body.errors = error.errors;
     if (error.fieldErrors) body.fieldErrors = error.fieldErrors;
     if (error.exists !== undefined) body.exists = error.exists;
+    if (error.issues) body.issues = error.issues;
     return res.status(error.statusCode).json(body);
   }
 

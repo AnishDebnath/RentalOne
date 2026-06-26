@@ -4,7 +4,7 @@ import express, { Request, Response } from 'express';
 import multer from 'multer';
 import sharp from 'sharp';
 import supabase from '../db/supabase.js';
-import { deleteFile, getSignedUrl, uploadFile } from '../storage/cloudinary.js';
+import { deleteFile, uploadFile } from '../storage/cloudinary.js';
 import generateUniqueCode from '../utils/codeGenerator.js';
 import generateQrBase64 from '../utils/qrGenerator.js';
 import { NotFoundError, BadRequestError, AppError } from '../utils/errors.js';
@@ -14,6 +14,8 @@ import {
   createProductSchema,
   updateProductSchema,
   createStaffSchema,
+  adminPaginationQuery,
+  rentalIdParamSchema,
 } from '../validations/schemas.js';
 
 const router = express.Router();
@@ -30,7 +32,7 @@ const extractPublicId = (url: string | null): string | null => {
   return decodeURIComponent(path.split('.')[0]);
 };
 
-router.get('/staff', roleMiddleware(['admin', 'manager']), async (req: Request, res: Response) => {
+router.get('/staff', roleMiddleware(['admin', 'manager']), validate(adminPaginationQuery, 'query'), async (req: Request, res: Response) => {
   const limit = Math.min(Number(req.query.limit) || 20, 100);
   const offset = Number(req.query.offset) || 0;
 
@@ -143,7 +145,7 @@ router.get('/dashboard', roleMiddleware(['admin']), async (_req: Request, res: R
   });
 });
 
-router.get('/users', roleMiddleware(['admin']), async (req: Request, res: Response) => {
+router.get('/users', roleMiddleware(['admin']), validate(adminPaginationQuery, 'query'), async (req: Request, res: Response) => {
   const search = String(req.query.search || '').trim();
   const limit = Math.min(Number(req.query.limit) || 20, 100);
   const offset = Number(req.query.offset) || 0;
@@ -451,7 +453,7 @@ router.put('/products/:id', roleMiddleware(['admin']), upload.array('images', 8)
 });
 
 router.delete('/products/:id', roleMiddleware(['admin']), validateUuid('id'), async (req: Request, res: Response) => {
-  const { data: currentProduct, error: fetchError } = await supabase
+  const { data: currentProduct, error: _fetchError } = await supabase
     .from('products')
     .select('images')
     .eq('id', req.params.id)
@@ -472,7 +474,7 @@ router.delete('/products/:id', roleMiddleware(['admin']), validateUuid('id'), as
   return res.json({ message: 'Product deleted successfully.' });
 });
 
-router.get('/rentals/upcoming', roleMiddleware(['admin', 'manager', 'staff']), async (req: Request, res: Response) => {
+router.get('/rentals/upcoming', roleMiddleware(['admin', 'manager', 'staff']), validate(adminPaginationQuery, 'query'), async (req: Request, res: Response) => {
   const limit = Math.min(Number(req.query.limit) || 20, 100);
   const offset = Number(req.query.offset) || 0;
 
@@ -507,7 +509,7 @@ router.get('/rentals/upcoming', roleMiddleware(['admin', 'manager', 'staff']), a
   return res.json({ data: result, totalCount });
 });
 
-router.get('/rentals/active', roleMiddleware(['admin', 'manager', 'staff']), async (req: Request, res: Response) => {
+router.get('/rentals/active', roleMiddleware(['admin', 'manager', 'staff']), validate(adminPaginationQuery, 'query'), async (req: Request, res: Response) => {
   const limit = Math.min(Number(req.query.limit) || 20, 100);
   const offset = Number(req.query.offset) || 0;
 
@@ -537,7 +539,7 @@ router.get('/rentals/active', roleMiddleware(['admin', 'manager', 'staff']), asy
   return res.json({ data: result, totalCount });
 });
 
-router.get('/rentals/past', roleMiddleware(['admin', 'manager', 'staff']), async (req: Request, res: Response) => {
+router.get('/rentals/past', roleMiddleware(['admin', 'manager', 'staff']), validate(adminPaginationQuery, 'query'), async (req: Request, res: Response) => {
   const limit = Number(req.query.limit || 20);
   const offset = Number(req.query.offset || 0);
 
@@ -570,7 +572,7 @@ router.get('/rentals/past', roleMiddleware(['admin', 'manager', 'staff']), async
   });
 });
 
-router.get('/rentals/:id', roleMiddleware(['admin', 'manager', 'staff']), async (req: Request, res: Response) => {
+router.get('/rentals/:id', roleMiddleware(['admin', 'manager', 'staff']), validate(rentalIdParamSchema, 'params'), async (req: Request, res: Response) => {
   const id = req.params.id as string;
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
   console.log(`Rental lookup: id=${id} isUuid=${isUuid}`);

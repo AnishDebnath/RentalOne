@@ -3,11 +3,10 @@ import express, { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import supabase from '../db/supabase.js';
-import generateMemberId from '../utils/memberIdGenerator.js';
 import generateHouseId from '../utils/houseIdGenerator.js';
 import generateQrBase64 from '../utils/qrGenerator.js';
 import { validate, validateUuid } from '../validations/middleware.js';
-import { createHouseSchema } from '../validations/schemas.js';
+import { createHouseSchema, adminPaginationQuery, slugParamsSchema, houseCredentialsSchema, housePaymentSchema } from '../validations/schemas.js';
 
 const router = express.Router();
 
@@ -47,7 +46,7 @@ router.get('/stats', async (_req: Request, res: Response) => {
 });
 
 // 2. Get all production houses
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', validate(adminPaginationQuery, 'query'), async (req: Request, res: Response) => {
   const limit = Math.min(Number(req.query.limit) || 20, 100);
   const offset = Number(req.query.offset) || 0;
 
@@ -226,7 +225,7 @@ router.get('/:id', validateUuid('id'), async (req: Request, res: Response) => {
 });
 
 // 3.5 Get single house detail by Slug
-router.get('/slug/:slug', async (req: Request, res: Response) => {
+router.get('/slug/:slug', validate(slugParamsSchema, 'params'), async (req: Request, res: Response) => {
   const slug = req.params.slug as string;
   const name = slug.replace(/-/g, ' ');
 
@@ -279,11 +278,8 @@ router.get('/slug/:slug', async (req: Request, res: Response) => {
 });
 
 // 4. Update House Owner Credentials
-router.post('/:id/credentials', validateUuid('id'), async (req: Request, res: Response) => {
+router.post('/:id/credentials', validateUuid('id'), validate(houseCredentialsSchema), async (req: Request, res: Response) => {
   const { username, password } = req.body; // username will be mapped to email or a specific identifier
-  if (!password) {
-    throw new BadRequestError('Password is required.');
-  }
 
   // Fetch the house to get linked user_id
   const { data: house, error: fetchError } = await supabase
@@ -332,12 +328,8 @@ router.get('/:id/payments', validateUuid('id'), async (req: Request, res: Respon
 });
 
 // 6. Record a new payment for a house
-router.post('/:id/payments', validateUuid('id'), async (req: Request, res: Response) => {
+router.post('/:id/payments', validateUuid('id'), validate(housePaymentSchema), async (req: Request, res: Response) => {
   const { amount, paymentDate, paymentMode } = req.body;
-
-  if (!amount || !paymentDate || !paymentMode) {
-    throw new BadRequestError('Amount, payment date, and payment mode are required.');
-  }
 
   const { data: payment, error } = await supabase
     .from('house_payments')

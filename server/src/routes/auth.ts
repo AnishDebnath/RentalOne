@@ -12,11 +12,14 @@ import { processImage } from '../utils/imageProcessor.js';
 import generateQrBase64 from '../utils/qrGenerator.js';
 import generateMemberId from '../utils/memberIdGenerator.js';
 import authMiddleware from '../middleware/authMiddleware.js';
-import { validate } from '../validations/middleware.js';
+import { validate, validateUuid } from '../validations/middleware.js';
 import {
   signupSchema,
   loginSchema,
   checkExistsSchema,
+  createStaffSchema,
+  updateStaffSchema,
+  adminPaginationQuery,
 } from '../validations/schemas.js';
 
 dotenv.config();
@@ -438,7 +441,7 @@ router.post('/login', validate(loginSchema), async (req: Request, res: Response)
 
 // --- Staff Management Routes (admin only) ---
 
-router.get('/admin/staff', async (req: Request, res: Response) => {
+router.get('/admin/staff', validate(adminPaginationQuery, 'query'), async (req: Request, res: Response) => {
   const requesterRole = (req.user as any)?.role;
   if (requesterRole !== 'admin') {
     throw new ForbiddenError('Admin access required.');
@@ -457,21 +460,13 @@ router.get('/admin/staff', async (req: Request, res: Response) => {
   return res.json(data || []);
 });
 
-router.post('/admin/staff', async (req: Request, res: Response) => {
+router.post('/admin/staff', validate(createStaffSchema), async (req: Request, res: Response) => {
   const requesterRole = (req.user as any)?.role;
   if (requesterRole !== 'admin') {
     throw new ForbiddenError('Admin access required.');
   }
 
   const { username, password, phone, fullName, role } = req.body;
-
-  if (!username || !password || !fullName || !role) {
-    throw new BadRequestError('username, password, fullName and role are required.');
-  }
-
-  if (!['admin', 'staff'].includes(role)) {
-    throw new BadRequestError('Role must be admin or staff.');
-  }
 
   const cleanUsername = username.trim().toLowerCase();
   const cleanPhone = phone ? phone.replace(/\D/g, '') : null;
@@ -507,7 +502,7 @@ router.post('/admin/staff', async (req: Request, res: Response) => {
   return res.status(201).json(data);
 });
 
-router.patch('/admin/staff/:id', async (req: Request, res: Response) => {
+router.patch('/admin/staff/:id', validateUuid('id'), validate(updateStaffSchema), async (req: Request, res: Response) => {
   const requesterRole = (req.user as any)?.role;
   if (requesterRole !== 'admin') {
     throw new ForbiddenError('Admin access required.');
@@ -530,7 +525,7 @@ router.patch('/admin/staff/:id', async (req: Request, res: Response) => {
   return res.json(data);
 });
 
-router.delete('/admin/staff/:id', async (req: Request, res: Response) => {
+router.delete('/admin/staff/:id', validateUuid('id'), async (req: Request, res: Response) => {
   const requesterRole = (req.user as any)?.role;
   if (requesterRole !== 'admin') {
     throw new ForbiddenError('Admin access required.');

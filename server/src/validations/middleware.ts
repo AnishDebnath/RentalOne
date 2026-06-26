@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { z, ZodSchema } from 'zod';
+import { BadRequestError } from '../utils/errors.js';
 
 /**
  * Express middleware that validates a request property against a Zod schema.
@@ -9,19 +10,21 @@ import { z, ZodSchema } from 'zod';
  *                      Use 'query' or 'params' for those sources.
  *
  * On success, the parsed (and transformed) value replaces the original.
- * On failure, responds with 400 and the first validation error message.
+ * On failure, throws BadRequestError with Zod issues attached.
  */
 export const validate = (
     schema: ZodSchema,
     source: 'body' | 'query' | 'params' = 'body',
 ) => {
-    return (req: Request, res: Response, next: NextFunction) => {
+    return (req: Request, _res: Response, next: NextFunction) => {
         const result = schema.safeParse(req[source]);
 
         if (!result.success) {
             const firstIssue = (result.error as any).issues?.[0];
             const message = firstIssue?.message || 'Validation failed.';
-            return res.status(400).json({ message, issues: (result.error as any).issues });
+            const err = new BadRequestError(message);
+            (err as any).issues = (result.error as any).issues;
+            throw err;
         }
 
         // Replace with parsed (and transformed) data
@@ -35,11 +38,11 @@ export const validate = (
  * Usage: router.get('/:id', validateUuid('id'), handler)
  */
 export const validateUuid = (paramName: string) => {
-    return (req: Request, res: Response, next: NextFunction) => {
+    return (req: Request, _res: Response, next: NextFunction) => {
         const result = z.string().uuid(`Invalid ${paramName} — expected a UUID.`).safeParse(req.params[paramName]);
 
         if (!result.success) {
-            return res.status(400).json({ message: (result.error as any).issues?.[0]?.message || 'Invalid UUID.' });
+            throw new BadRequestError((result.error as any).issues?.[0]?.message || 'Invalid UUID.');
         }
 
         next();

@@ -18,7 +18,7 @@ interface UploadOptions {
 /**
  * Uploads a file to Cloudinary from a buffer.
  */
-export const uploadFile = async ({ buffer, key, mimetype, folder = 'Camera Rental House' }: UploadOptions): Promise<string> => {
+export const uploadFile = async ({ buffer, key, mimetype: _mimetype, folder = 'Camera Rental House' }: UploadOptions): Promise<string> => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
       {

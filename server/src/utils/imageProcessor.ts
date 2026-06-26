@@ -18,7 +18,7 @@ export const processImage = async (
     maxWidth = 1500,
     maxHeight = 1500,
     quality = 85,
-    maxSizeKB = 500,
+    // maxSizeKB = 500, — unused
   } = options;
 
   let pipeline = sharp(buffer);
@@ -46,7 +46,7 @@ export const processImage = async (
 
   // If still larger than maxSizeKB, reduce quality iteratively (but user said don't reduce quality too much)
   // We'll just do one pass with mozjpeg which is very efficient.
-  
+
   return {
     buffer: resultBuffer,
     mimetype: `image/${format === 'jpeg' ? 'jpeg' : 'png'}`,

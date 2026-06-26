@@ -5,7 +5,7 @@ import supabase from '../db/supabase.js';
 
 import generateRentalId from '../utils/rentalIdGenerator.js';
 import { validate, validateUuid } from '../validations/middleware.js';
-import { createRentalSchema } from '../validations/schemas.js';
+import { createRentalSchema, adminPaginationQuery, slugParamsSchema, updateRentalSchema } from '../validations/schemas.js';
 
 const router = express.Router();
 const DEFAULT_ASSISTANT_CREW_RATE = 0;
@@ -62,14 +62,6 @@ router.post('/', validate(createRentalSchema), async (req: Request, res: Respons
   });
 
   // Check if target user has partner role or is_house_owner set to true (is a production house)
-  const { data: userData, error: userDataError } = await supabase
-    .from('users')
-    .select('role, is_house_owner')
-    .eq('id', finalUserId)
-    .maybeSingle();
-
-  const isHouseBooking = !userDataError && (userData?.is_house_owner === true || userData?.role === 'partner');
-
   let rental = null;
   let rentalError = null;
 
@@ -121,7 +113,7 @@ router.post('/', validate(createRentalSchema), async (req: Request, res: Respons
   return res.status(201).json(rental);
 });
 
-router.get('/my', async (req: Request, res: Response) => {
+router.get('/my', validate(adminPaginationQuery, 'query'), async (req: Request, res: Response) => {
   const limit = Math.min(Number(req.query.limit) || 20, 100);
   const offset = Number(req.query.offset) || 0;
 
@@ -169,7 +161,7 @@ router.get('/house/:houseId', validateUuid('houseId'), async (req: Request, res:
 });
 
 // Fetch rentals for a specific production house (by slug)
-router.get('/house/slug/:slug', async (req: Request, res: Response) => {
+router.get('/house/slug/:slug', validate(slugParamsSchema, 'params'), async (req: Request, res: Response) => {
   const slug = req.params.slug as string;
   const name = slug.replace(/-/g, ' ');
   const limit = Math.min(Number(req.query.limit) || 20, 100);
@@ -198,7 +190,7 @@ router.get('/house/slug/:slug', async (req: Request, res: Response) => {
   return res.json({ data: data || [], totalCount });
 });
 
-router.patch('/:id', validateUuid('id'), async (req: Request, res: Response) => {
+router.patch('/:id', validateUuid('id'), validate(updateRentalSchema), async (req: Request, res: Response) => {
   const { id } = req.params;
   const { total_amount, products, crew_price, discount } = req.body;
 

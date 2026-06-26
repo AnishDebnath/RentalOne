@@ -4,7 +4,7 @@ import supabase from '../db/supabase.js';
 import { uploadFile, deleteFile } from '../storage/cloudinary.js';
 import { processImage } from '../utils/imageProcessor.js';
 import { validate } from '../validations/middleware.js';
-import { bulkReleaseSchema, bulkReturnSchema } from '../validations/schemas.js';
+import { bulkReleaseSchema, bulkReturnSchema, dateQuerySchema } from '../validations/schemas.js';
 
 const extractPublicId = (url: string | null): string | null => {
   if (!url) return null;
@@ -43,7 +43,6 @@ router.post('/bulk-release', validate(bulkReleaseSchema), async (req: Request, r
     throw new BadRequestError('Rental ID and array of Product IDs are required.');
   }
 
-  const staffId = (req.user as any)?.id || null;
   const staffName = (req.user as any)?.fullName || (req.user as any)?.username || null;
 
   // Fetch current rental to update products array
@@ -148,7 +147,6 @@ router.post('/bulk-return', validate(bulkReturnSchema), async (req: Request, res
     throw new BadRequestError('Rental ID and array of Product IDs are required.');
   }
 
-  const staffId = (req.user as any)?.id || null;
   const staffName = (req.user as any)?.fullName || (req.user as any)?.username || null;
 
   // Fetch current rental to update products array
@@ -203,7 +201,7 @@ router.post('/bulk-return', validate(bulkReturnSchema), async (req: Request, res
   });
 });
 
-router.get('/counts', async (req: Request, res: Response) => {
+router.get('/counts', validate(dateQuerySchema, 'query'), async (req: Request, res: Response) => {
   const filterDate = req.query.date as string;
 
   let upcomingQuery = supabase.from('rentals').select('id', { count: 'exact', head: true }).eq('status', 'confirmed');

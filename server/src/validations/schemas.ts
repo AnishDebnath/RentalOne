@@ -2,7 +2,19 @@ import { z } from 'zod';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
-export const uuidParam = z.string().uuid('Invalid UUID format.');
+export const adminPaginationQuery = z.object({
+    limit: z
+        .string()
+        .optional()
+        .transform((v) => Number(v || 20))
+        .pipe(z.number().int().min(1).max(100)),
+    offset: z
+        .string()
+        .optional()
+        .transform((v) => Number(v || 0))
+        .pipe(z.number().int().min(0)),
+    search: z.string().optional().default(''),
+});
 
 export const paginationQuery = z.object({
     limit: z
@@ -156,4 +168,48 @@ export const createStaffSchema = z.object({
         .pipe(z.string().length(10, 'Phone must be 10 digits.')),
     role: z.enum(['admin', 'manager', 'staff'], { message: 'Invalid role.' }),
     password: z.string().min(6, 'Password must be at least 6 characters.'),
+});
+
+export const updateStaffSchema = z.object({
+    fullName: z.string().min(1, 'Full name is required.').optional(),
+    phone: z
+        .string()
+        .optional()
+        .transform((v) => v?.replace(/\D/g, ''))
+        .pipe(z.string().length(10, 'Phone must be 10 digits.').optional()),
+    role: z.enum(['admin', 'manager', 'staff'], { message: 'Invalid role.' }).optional(),
+    isActive: z.boolean().optional(),
+    password: z.string().min(6, 'Password must be at least 6 characters.').optional(),
+});
+
+// ── Query / Misc ────────────────────────────────────────────────────────────
+
+export const dateQuerySchema = z.object({
+    date: z.string().optional(),
+});
+
+export const slugParamsSchema = z.object({
+    slug: z.string().min(1, 'Slug is required.'),
+});
+
+export const rentalIdParamSchema = z.object({
+    id: z.string().min(1, 'Rental ID is required.'),
+});
+
+export const houseCredentialsSchema = z.object({
+    username: z.string().min(1, 'Username is required.').optional(),
+    password: z.string().min(1, 'Password is required.'),
+});
+
+export const housePaymentSchema = z.object({
+    amount: z.union([z.string(), z.number()]).transform((v) => Number(v)).pipe(z.number().positive('Amount must be positive.')),
+    paymentDate: z.string().min(1, 'Payment date is required.'),
+    paymentMode: z.string().min(1, 'Payment mode is required.'),
+});
+
+export const updateRentalSchema = z.object({
+    total_amount: z.union([z.string(), z.number()]).transform((v) => Number(v)).pipe(z.number().min(0)).optional(),
+    products: z.array(z.any()).optional(),
+    crew_price: z.union([z.string(), z.number()]).transform((v) => Number(v)).pipe(z.number().min(0)).optional(),
+    discount: z.union([z.string(), z.number()]).transform((v) => Number(v)).pipe(z.number().min(0)).optional(),
 });
