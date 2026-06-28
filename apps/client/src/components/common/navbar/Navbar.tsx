@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect, Fragment, memo } from 'react';
 import { Search, ShoppingBag, User, ChevronDown, LogOut, Package, Heart, LayoutGrid, Camera, PackageSearch } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Popover, Transition } from '@headlessui/react';
@@ -213,4 +213,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default memo(Navbar);

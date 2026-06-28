@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, memo } from 'react';
 import {
   format,
   addMonths,
@@ -166,4 +166,4 @@ const CustomCalendar = ({ pickupDate, dropDate, onDateClick, readOnly = false }:
   );
 };
 
-export default CustomCalendar;
+export default memo(CustomCalendar);

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Box, CalendarRange, IndianRupee, Users } from 'lucide-react';
 
 const icons = {
@@ -18,9 +19,8 @@ const StatsCard = ({ item }) => {
           <Icon className="h-5 w-5" />
         </div>
         <span
-          className={`rounded-pill px-3 py-1 text-xs font-bold ${
-            isNegative ? 'bg-danger/10 text-danger' : 'bg-success/10 text-success'
-          }`}
+          className={`rounded-pill px-3 py-1 text-xs font-bold ${isNegative ? 'bg-danger/10 text-danger' : 'bg-success/10 text-success'
+            }`}
         >
           {item.change}
         </span>
@@ -32,4 +32,4 @@ const StatsCard = ({ item }) => {
   );
 };
 
-export default StatsCard;
+export default memo(StatsCard);

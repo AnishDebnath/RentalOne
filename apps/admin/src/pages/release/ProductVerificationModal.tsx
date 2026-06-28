@@ -19,7 +19,7 @@ const ProductVerificationModal = ({ product, onClose, onVerify, onSubstitute }: 
   const [manualError, setManualError] = useState<string | null>(null);
   const [substituteMode, setSubstituteMode] = useState<'scan' | null>(null);
   const scannerRef = useRef<Html5Qrcode | null>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerId = 'qr-reader-container';
   const lenis = useLenis();
 
@@ -113,14 +113,14 @@ const ProductVerificationModal = ({ product, onClose, onVerify, onSubstitute }: 
     try {
       let foundProduct = null;
       const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(scannedId);
-      
+
       if (isUUID) {
         try {
           const response = await axiosInstance.get(`/products/${scannedId}`);
           foundProduct = response.data;
         } catch (e) { /* ignore 404 and try search */ }
       }
-      
+
       if (!foundProduct) {
         const response = await axiosInstance.get('/products', { params: { search: scannedId, limit: 1 } });
         foundProduct = response.data.items?.[0];

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Camera, ScanLine } from 'lucide-react';
 
 const QRScanner = ({ title, description, onMockScan }) => (
@@ -24,4 +25,4 @@ const QRScanner = ({ title, description, onMockScan }) => (
   </div>
 );
 
-export default QRScanner;
+export default memo(QRScanner);

@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from 'react';
+import { memo, type PropsWithChildren } from 'react';
 
 type ModalProps = PropsWithChildren<{
   open: boolean;
@@ -20,4 +20,4 @@ const Modal = ({ children, open, title }: ModalProps) => {
   );
 };
 
-export default Modal;
+export default memo(Modal);

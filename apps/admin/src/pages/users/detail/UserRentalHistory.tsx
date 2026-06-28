@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { History, Search, ChevronRight, Calendar, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { optimizeImageUrl } from '@camera-rental-house/ui';
 
 type UserRentalHistoryProps = {
   rentals: any[];
@@ -141,7 +142,7 @@ const UserRentalHistory = ({ rentals = [] }: UserRentalHistoryProps) => {
                               </span>
                             ) : (
                               <span
-                                 className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest shadow-sm border
+                                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest shadow-sm border
                                 ${rental.status.toLowerCase() === 'returned'
                                     ? 'bg-emerald-50 text-emerald-600 border-emerald-100'
                                     : (rental.status.toLowerCase() === 'released' || rental.status.toLowerCase() === 'active')
@@ -209,8 +210,9 @@ const UserRentalHistory = ({ rentals = [] }: UserRentalHistoryProps) => {
                                       >
                                         {item.image ? (
                                           <img
-                                            src={item.image}
+                                            src={optimizeImageUrl(item.image)}
                                             alt={item.name}
+                                            loading="lazy"
                                             className="h-10 w-10 rounded-lg object-cover border border-line shadow-sm shrink-0"
                                           />
                                         ) : (
@@ -423,8 +425,9 @@ const UserRentalHistory = ({ rentals = [] }: UserRentalHistoryProps) => {
                               <div className="flex items-center gap-4 min-w-0 flex-1">
                                 {item.image ? (
                                   <img
-                                    src={item.image}
+                                    src={optimizeImageUrl(item.image)}
                                     alt={item.name}
+                                    loading="lazy"
                                     className="h-12 w-12 rounded-xl object-cover border border-line shadow-sm shrink-0"
                                   />
                                 ) : (

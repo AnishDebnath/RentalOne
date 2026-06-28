@@ -5,6 +5,7 @@ import { useFavourites } from '../../store/FavouritesContext';
 import formatCurrency from '../../utils/formatCurrency';
 import { BRAND_ICONS, CATEGORY_ICONS } from '@camera-rental-house/shared';
 
+import { memo } from 'react';
 import { LazyImage, useToast } from '@camera-rental-house/ui';
 
 const ProductCard = ({ product, hideCart = false }) => {
@@ -175,4 +176,4 @@ const ProductCard = ({ product, hideCart = false }) => {
   );
 };
 
-export default ProductCard;
+export default memo(ProductCard);

@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 const PrintLabel = ({ product }: any) => {
   const handlePrint = () => {
     const printWindow = window.open('', '_blank', 'width=400,height=400');
@@ -63,4 +65,4 @@ const PrintLabel = ({ product }: any) => {
   );
 };
 
-export default PrintLabel;
+export default memo(PrintLabel);

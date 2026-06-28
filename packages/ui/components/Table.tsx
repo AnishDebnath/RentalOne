@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from 'react';
+import { memo, type PropsWithChildren } from 'react';
 
 const Table = ({ children }: PropsWithChildren) => (
   <div className="overflow-hidden rounded-[24px] border border-line bg-white shadow-card">
@@ -8,4 +8,4 @@ const Table = ({ children }: PropsWithChildren) => (
   </div>
 );
 
-export default Table;
+export default memo(Table);

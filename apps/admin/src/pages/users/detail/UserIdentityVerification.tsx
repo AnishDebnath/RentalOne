@@ -1,5 +1,6 @@
 import React from 'react';
 import { IdCard, Hash, Image as ImageIcon } from 'lucide-react';
+import { optimizeImageUrl } from '@camera-rental-house/ui';
 
 type UserIdentityVerificationProps = {
   user: any;
@@ -16,11 +17,10 @@ const UserIdentityVerification = ({ user, isChanged }: UserIdentityVerificationP
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
         {/* Aadhaar Card */}
         <div
-          className={`rounded-card border p-4 flex flex-col gap-4 bg-white transition-all ${
-            isChanged('aadhaar_no') || isChanged('aadhaar_doc_url')
-              ? 'border-amber-400 ring-2 ring-amber-400/30'
-              : 'border-line'
-          }`}
+          className={`rounded-card border p-4 flex flex-col gap-4 bg-white transition-all ${isChanged('aadhaar_no') || isChanged('aadhaar_doc_url')
+            ? 'border-amber-400 ring-2 ring-amber-400/30'
+            : 'border-line'
+            }`}
         >
           <div className="flex items-center justify-between">
             <p className="text-sm font-bold text-ink">Aadhaar Card</p>
@@ -52,7 +52,7 @@ const UserIdentityVerification = ({ user, isChanged }: UserIdentityVerificationP
             </div>
             <div className="rounded-xl border-2 border-white shadow-sm overflow-hidden bg-slate-50">
               {user.aadhaar_signed_url ? (
-                <img src={user.aadhaar_signed_url} alt="Aadhaar" className="w-full object-contain" />
+                <img src={optimizeImageUrl(user.aadhaar_signed_url)} alt="Aadhaar" loading="lazy" className="w-full object-contain" />
               ) : (
                 <div className="flex aspect-video w-full flex-col items-center justify-center gap-2 text-slate-400">
                   <IdCard className="h-6 w-6 opacity-40" />
@@ -65,11 +65,10 @@ const UserIdentityVerification = ({ user, isChanged }: UserIdentityVerificationP
 
         {/* Voter ID */}
         <div
-          className={`rounded-card border p-4 flex flex-col gap-4 bg-white transition-all ${
-            isChanged('voter_no') || isChanged('voter_doc_url')
-              ? 'border-amber-400 ring-2 ring-amber-400/30'
-              : 'border-line'
-          }`}
+          className={`rounded-card border p-4 flex flex-col gap-4 bg-white transition-all ${isChanged('voter_no') || isChanged('voter_doc_url')
+            ? 'border-amber-400 ring-2 ring-amber-400/30'
+            : 'border-line'
+            }`}
         >
           <div className="flex items-center justify-between">
             <p className="text-sm font-bold text-ink">Voter ID</p>

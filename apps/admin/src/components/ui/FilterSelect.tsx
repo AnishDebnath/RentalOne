@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, memo } from 'react';
 import { ChevronDown } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -96,4 +96,4 @@ const FilterSelect = ({ options, value, onChange, placeholder }: FilterSelectPro
   );
 };
 
-export default FilterSelect;
+export default memo(FilterSelect);

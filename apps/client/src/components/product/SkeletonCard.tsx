@@ -1,10 +1,12 @@
+import { memo } from 'react';
+
 const SkeletonCard = () => (
   <article className="flex flex-col overflow-hidden rounded-[26px] bg-white border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] w-full animate-pulse">
     {/* Edge-to-edge floating Image Container */}
     <div className="p-2.5 pb-0">
       <div className="aspect-[5/4] rounded-[18px] bg-slate-100" />
     </div>
-    
+
     <div className="flex flex-1 flex-col justify-between p-3.5 pt-2.5">
       <div className="space-y-2">
         {/* Category & Brand with Logos placeholder */}
@@ -41,4 +43,4 @@ const SkeletonCard = () => (
   </article>
 );
 
-export default SkeletonCard;
+export default memo(SkeletonCard);

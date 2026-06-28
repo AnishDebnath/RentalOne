@@ -20,7 +20,7 @@ const UserVerificationModal = ({ user, onClose, onVerify }: Props) => {
   const [status, setStatus] = useState<'scanning' | 'success' | 'error' | 'timeout'>('scanning');
   const [manualId, setManualId] = useState('');
   const scannerRef = useRef<Html5Qrcode | null>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerId = 'user-qr-reader';
   const lenis = useLenis();
 

@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 const LoadingButton = ({
   children,
   loading = false,
@@ -6,9 +8,8 @@ const LoadingButton = ({
   ...props
 }) => (
   <button
-    className={`${
-      variant === 'secondary' ? 'secondary-button' : 'primary-button'
-    } w-full ${className}`}
+    className={`${variant === 'secondary' ? 'secondary-button' : 'primary-button'
+      } w-full ${className}`}
     disabled={loading || props.disabled}
     {...props}
   >
@@ -23,4 +24,4 @@ const LoadingButton = ({
   </button>
 );
 
-export default LoadingButton;
+export default memo(LoadingButton);

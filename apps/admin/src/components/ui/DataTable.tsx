@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 const DataTable = ({ columns, rows, renderMobileCard }) => (
   <>
     <div className="hidden overflow-x-auto rounded-[1rem] border border-line bg-white shadow-sm xl:block">
@@ -33,4 +35,4 @@ const DataTable = ({ columns, rows, renderMobileCard }) => (
   </>
 );
 
-export default DataTable;
+export default memo(DataTable);

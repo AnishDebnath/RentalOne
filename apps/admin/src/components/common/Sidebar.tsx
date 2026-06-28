@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import clsx from 'clsx';
 import {
   CalendarClock,
@@ -283,4 +283,4 @@ const Sidebar = ({ open, onClose }) => {
   );
 };
 
-export default Sidebar;
+export default memo(Sidebar);

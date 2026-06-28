@@ -8,7 +8,7 @@ export async function compressImage(input: File | string, { maxWidth = 1000, qua
   return new Promise((resolve) => {
     const isBase64 = typeof input === 'string';
     const img = new Image();
-    
+
     if (isBase64) {
       img.src = input;
     } else {
@@ -67,4 +67,23 @@ export async function compressImage(input: File | string, { maxWidth = 1000, qua
       resolve(input);
     };
   });
+}
+
+/**
+ * Optimizes image URL for better performance.
+ * Cloudinary URLs: adds f_auto (webp/avif), q_auto (perceptual quality).
+ * Falls back to original URL for non-Cloudinary sources.
+ */
+export function optimizeImageUrl(url: string, options?: { width?: number }): string {
+  if (!url) return url;
+
+  if (url.includes('res.cloudinary.com') && url.includes('/image/upload/')) {
+    let transforms = 'f_auto,q_auto';
+    if (options?.width) {
+      transforms += `,w_${options.width}`;
+    }
+    return url.replace('/image/upload/', `/image/upload/${transforms}/`);
+  }
+
+  return url;
 }

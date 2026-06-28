@@ -53,4 +53,4 @@ const ToastViewport = () => {
   );
 };
 
-export default ToastViewport;
+export default React.memo(ToastViewport);

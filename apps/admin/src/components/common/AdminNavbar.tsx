@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { Bell, Calendar, Handshake } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -112,4 +112,4 @@ const AdminNavbar = ({ onOpenSidebar }) => {
   );
 };
 
-export default AdminNavbar;
+export default memo(AdminNavbar);

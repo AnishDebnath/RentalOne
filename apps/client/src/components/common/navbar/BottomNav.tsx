@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../../../store/CartContext';
 import { useFavourites } from '../../../store/FavouritesContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 
 const tabs = [
   { label: 'Home', href: '/', Icon: House },
@@ -110,4 +110,4 @@ const BottomNav = () => {
   );
 };
 
-export default BottomNav;
+export default memo(BottomNav);

@@ -1,7 +1,7 @@
 import { Search, SlidersHorizontal } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FilterSelect from './FilterSelect';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 
 type ProductInventoryFiltersProps = {
   searchTerm: string;
@@ -139,4 +139,4 @@ const ProductInventoryFilters = ({
   );
 };
 
-export default ProductInventoryFilters;
+export default memo(ProductInventoryFilters);

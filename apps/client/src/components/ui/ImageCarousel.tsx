@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { optimizeImageUrl } from '@camera-rental-house/ui';
 
 const ImageCarousel = ({ images }) => {
   const [index, setIndex] = useState(0);
@@ -30,8 +31,9 @@ const ImageCarousel = ({ images }) => {
       <AnimatePresence initial={false} mode="wait">
         <motion.img
           key={index}
-          src={images[index]?.image_url}
+          src={optimizeImageUrl(images[index]?.image_url)}
           alt=""
+          loading="lazy"
           initial={{ opacity: 0, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
@@ -53,11 +55,10 @@ const ImageCarousel = ({ images }) => {
                 type="button"
                 onClick={() => setIndex(i)}
                 aria-label={`Go to slide ${i + 1}`}
-                className={`relative h-2 transition-all duration-500 rounded-full ${
-                  index === i 
-                    ? 'w-6 bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)]' 
-                    : 'w-2 bg-white/40 hover:bg-white/60'
-                }`}
+                className={`relative h-2 transition-all duration-500 rounded-full ${index === i
+                  ? 'w-6 bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)]'
+                  : 'w-2 bg-white/40 hover:bg-white/60'
+                  }`}
               >
                 {index === i && (
                   <span className="absolute inset-0 rounded-full bg-white animate-ping opacity-30" />
@@ -71,7 +72,7 @@ const ImageCarousel = ({ images }) => {
   );
 };
 
-export default ImageCarousel;
+export default memo(ImageCarousel);
 
 
 

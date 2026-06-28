@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, memo, type ReactNode } from 'react';
 import Lenis from 'lenis';
 
 const LenisContext = createContext<Lenis | null>(null);
@@ -9,7 +9,7 @@ interface Props {
   children: ReactNode;
 }
 
-export const SmoothScroll = ({ children }: Props) => {
+export const SmoothScroll = memo(({ children }: Props) => {
   const [lenis, setLenis] = useState<Lenis | null>(null);
 
   useEffect(() => {
@@ -44,4 +44,4 @@ export const SmoothScroll = ({ children }: Props) => {
       {children}
     </LenisContext.Provider>
   );
-};
+});

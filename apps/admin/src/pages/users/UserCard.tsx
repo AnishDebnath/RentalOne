@@ -1,6 +1,7 @@
 import { ShieldCheck, UserRoundCheck, Eye, Ban, Loader2, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import DataTable from '../../components/ui/DataTable';
+import { optimizeImageUrl } from '@camera-rental-house/ui';
 
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat('en-IN', {
@@ -23,8 +24,9 @@ const UserCard = ({ users }: UserCardProps) => (
           <div className="flex items-center gap-3">
             {row.avatar_url ? (
               <img
-                src={row.avatar_url}
+                src={optimizeImageUrl(row.avatar_url)}
                 alt={row.full_name}
+                loading="lazy"
                 className="h-10 w-10 shrink-0 rounded-xl object-cover shadow-sm border border-line"
               />
             ) : (
@@ -66,20 +68,19 @@ const UserCard = ({ users }: UserCardProps) => (
         render: (row) => {
           const hasOverdueRentals = (row.rentals || []).some((rental: any) => {
             const isReleased = rental.status === 'released' || rental.status === 'active';
-            const isOverdue = new Date().setHours(0,0,0,0) > new Date(rental.event_date || rental.return_date).setHours(0,0,0,0);
+            const isOverdue = new Date().setHours(0, 0, 0, 0) > new Date(rental.event_date || rental.return_date).setHours(0, 0, 0, 0);
             return isReleased && isOverdue;
           });
           return (
             <span
-              className={`inline-flex items-center gap-1.5 rounded-pill px-3 py-1.5 text-[10px] font-bold tracking-wider ${
-                hasOverdueRentals
-                  ? 'bg-red-50 text-red-600 border border-red-100'
-                  : row.is_blocked
+              className={`inline-flex items-center gap-1.5 rounded-pill px-3 py-1.5 text-[10px] font-bold tracking-wider ${hasOverdueRentals
+                ? 'bg-red-50 text-red-600 border border-red-100'
+                : row.is_blocked
                   ? 'bg-danger/10 text-danger'
                   : !row.is_verified
-                  ? 'bg-warning/10 text-warning'
-                  : 'bg-success/10 text-success'
-              }`}
+                    ? 'bg-warning/10 text-warning'
+                    : 'bg-success/10 text-success'
+                }`}
             >
               {hasOverdueRentals ? (
                 <div className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
@@ -93,10 +94,10 @@ const UserCard = ({ users }: UserCardProps) => (
               {hasOverdueRentals
                 ? 'Overdue'
                 : row.is_blocked
-                ? 'Blocked'
-                : !row.is_verified
-                ? 'Pending'
-                : 'Verified'}
+                  ? 'Blocked'
+                  : !row.is_verified
+                    ? 'Pending'
+                    : 'Verified'}
             </span>
           );
         },
@@ -119,7 +120,7 @@ const UserCard = ({ users }: UserCardProps) => (
     renderMobileCard={(row) => {
       const hasOverdueRentals = (row.rentals || []).some((rental: any) => {
         const isReleased = rental.status === 'released' || rental.status === 'active';
-        const isOverdue = new Date().setHours(0,0,0,0) > new Date(rental.event_date || rental.return_date).setHours(0,0,0,0);
+        const isOverdue = new Date().setHours(0, 0, 0, 0) > new Date(rental.event_date || rental.return_date).setHours(0, 0, 0, 0);
         return isReleased && isOverdue;
       });
 
@@ -128,21 +129,20 @@ const UserCard = ({ users }: UserCardProps) => (
           <div className="flex items-start gap-4">
             <div className="relative h-14 w-14 shrink-0">
               {row.avatar_url ? (
-                <img src={row.avatar_url} alt={row.full_name} className="h-full w-full rounded-2xl object-cover shadow-sm border border-line" />
+                <img src={optimizeImageUrl(row.avatar_url)} alt={row.full_name} loading="lazy" className="h-full w-full rounded-2xl object-cover shadow-sm border border-line" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 text-base font-black text-indigo-600 shadow-inner border border-white/50">
                   {row.full_name?.split(' ').map((part: string) => part[0]).slice(0, 2).join('')}
                 </div>
               )}
-              <div className={`absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white ${
-                hasOverdueRentals
-                  ? 'bg-red-500 text-white'
-                  : row.is_blocked
+              <div className={`absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-white ${hasOverdueRentals
+                ? 'bg-red-500 text-white'
+                : row.is_blocked
                   ? 'bg-danger text-white'
                   : !row.is_verified
-                  ? 'bg-warning text-white'
-                  : 'bg-success text-white'
-              }`}>
+                    ? 'bg-warning text-white'
+                    : 'bg-success text-white'
+                }`}>
                 {hasOverdueRentals ? (
                   <span className="flex h-2 w-2 rounded-full bg-white animate-pulse" />
                 ) : row.is_blocked ? (
@@ -161,46 +161,45 @@ const UserCard = ({ users }: UserCardProps) => (
                 <span className="inline-flex items-center rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-600">
                   ID: {row.member_id || '-'}
                 </span>
-                <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-[9px] font-black tracking-widest ${
-                  hasOverdueRentals
-                    ? 'bg-red-50 text-red-600 border border-red-100'
-                    : row.is_blocked
+                <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-[9px] font-black tracking-widest ${hasOverdueRentals
+                  ? 'bg-red-50 text-red-600 border border-red-100'
+                  : row.is_blocked
                     ? 'bg-danger/10 text-danger'
                     : !row.is_verified
-                    ? 'bg-warning/10 text-amber-600'
-                    : 'bg-success/10 text-emerald-700'
-                }`}>
+                      ? 'bg-warning/10 text-amber-600'
+                      : 'bg-success/10 text-emerald-700'
+                  }`}>
                   {hasOverdueRentals ? 'Overdue' : row.is_blocked ? 'Blocked' : !row.is_verified ? 'Pending Review' : 'Verified'}
                 </span>
               </div>
-            <div className="mt-2.5 flex items-center gap-1.5 text-[11px] font-bold text-tertiary">
-              <Phone className="h-3 w-3 text-sky-500 fill-sky-500/20" />
-              <span className="tracking-wide">{row.phone}</span>
+              <div className="mt-2.5 flex items-center gap-1.5 text-[11px] font-bold text-tertiary">
+                <Phone className="h-3 w-3 text-sky-500 fill-sky-500/20" />
+                <span className="tracking-wide">{row.phone}</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="mt-5 grid grid-cols-2 gap-3 rounded-xl bg-slate-50 p-4 border border-line/60">
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-muted">Total Rentals</p>
-            <p className="mt-1 text-sm font-black text-ink">{row.totalRentals} <span className="text-[10px] font-bold text-tertiary">Orders</span></p>
+          <div className="mt-5 grid grid-cols-2 gap-3 rounded-xl bg-slate-50 p-4 border border-line/60">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-muted">Total Rentals</p>
+              <p className="mt-1 text-sm font-black text-ink">{row.totalRentals} <span className="text-[10px] font-bold text-tertiary">Orders</span></p>
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-widest text-muted">Total Spent</p>
+              <p className="mt-1 text-sm font-black text-emerald-600">{formatCurrency(row.totalSpent)}</p>
+            </div>
           </div>
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-muted">Total Spent</p>
-            <p className="mt-1 text-sm font-black text-emerald-600">{formatCurrency(row.totalSpent)}</p>
-          </div>
-        </div>
 
-        <Link
-          to={`/users/${row.id}`}
-          className="mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-ink px-4 text-[13px] font-black text-white transition-all hover:bg-slate-800 active:scale-[0.98] shadow-md shadow-ink/10"
-        >
-          <Eye className="h-4 w-4" />
-          View Full Profile
-        </Link>
-      </article>
-    );
-  }}
+          <Link
+            to={`/users/${row.id}`}
+            className="mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-ink px-4 text-[13px] font-black text-white transition-all hover:bg-slate-800 active:scale-[0.98] shadow-md shadow-ink/10"
+          >
+            <Eye className="h-4 w-4" />
+            View Full Profile
+          </Link>
+        </article>
+      );
+    }}
   />
 );
 

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Search, SlidersHorizontal } from 'lucide-react';
 import { useTypewriter } from '../../hooks/useTypewriter';
 import clsx from 'clsx';
@@ -40,4 +41,4 @@ const SearchBar = ({ value, onChange, onFilterClick, isFilterOpen = false }) => 
 };
 
 
-export default SearchBar;
+export default memo(SearchBar);

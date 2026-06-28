@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
 
 const EmptyState = ({ title, message, actionLabel, actionTo, icon }) => (
@@ -15,4 +16,4 @@ const EmptyState = ({ title, message, actionLabel, actionTo, icon }) => (
   </div>
 );
 
-export default EmptyState;
+export default memo(EmptyState);

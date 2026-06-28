@@ -1,6 +1,6 @@
 import { AlertCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 import { createPortal } from 'react-dom';
 import { useLenis } from '@camera-rental-house/ui';
 
@@ -136,4 +136,4 @@ const ConfirmModal = ({
   );
 };
 
-export default ConfirmModal;
+export default memo(ConfirmModal);

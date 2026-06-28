@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
-import { ReactNode } from 'react';
+import { memo, type ReactNode } from 'react';
 
 interface Props {
   children: ReactNode;
 }
 
-export const PageTransition = ({ children }: Props) => {
+export const PageTransition = memo(({ children }: Props) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -16,4 +16,4 @@ export const PageTransition = ({ children }: Props) => {
       {children}
     </motion.div>
   );
-};
+});

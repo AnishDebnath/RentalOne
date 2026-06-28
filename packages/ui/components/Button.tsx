@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
+import { memo, type ButtonHTMLAttributes, type PropsWithChildren } from 'react';
 
 type ButtonProps = PropsWithChildren<
   ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -15,13 +15,12 @@ const Button = ({
   ...props
 }: ButtonProps) => (
   <button
-    className={`${variant === 'secondary' ? 'secondary-button' : 'primary-button'} ${
-      fullWidth ? 'w-full' : ''
-    } ${className}`.trim()}
+    className={`${variant === 'secondary' ? 'secondary-button' : 'primary-button'} ${fullWidth ? 'w-full' : ''
+      } ${className}`.trim()}
     {...props}
   >
     {children}
   </button>
 );
 
-export default Button;
+export default memo(Button);

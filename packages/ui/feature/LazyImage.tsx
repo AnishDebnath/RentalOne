@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { optimizeImageUrl } from '../utils/imageUtils';
 
 interface Props {
   src: string;
@@ -9,13 +10,14 @@ interface Props {
   aspectRatio?: string;
 }
 
-export const LazyImage = ({ 
-  src, 
-  alt, 
-  className = '', 
-  placeholderClassName = '', 
-  aspectRatio = 'aspect-square' 
+export const LazyImage = memo(({
+  src,
+  alt,
+  className = '',
+  placeholderClassName = '',
+  aspectRatio = 'aspect-square'
 }: Props) => {
+  const optimizedSrc = optimizeImageUrl(src);
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
@@ -32,7 +34,7 @@ export const LazyImage = ({
       </AnimatePresence>
 
       <motion.img
-        src={src}
+        src={optimizedSrc}
         alt={alt}
         loading="lazy"
         onLoad={() => setIsLoaded(true)}
@@ -46,4 +48,4 @@ export const LazyImage = ({
       />
     </div>
   );
-};
+});

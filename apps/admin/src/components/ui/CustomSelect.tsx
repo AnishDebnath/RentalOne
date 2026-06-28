@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, memo } from 'react';
 import { ChevronDown } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -85,4 +85,4 @@ const CustomSelect = ({ label, options, value, onChange, placeholder, required }
   );
 };
 
-export default CustomSelect;
+export default memo(CustomSelect);
