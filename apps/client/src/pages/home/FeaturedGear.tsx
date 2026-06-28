@@ -2,7 +2,7 @@ import { ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../../components/product/ProductCard';
-import SkeletonCard from '../../components/product/SkeletonCard';
+import { useStaggeredRender } from '../../hooks/useStaggeredRender';
 import axiosInstance from '../../api/axiosInstance';
 
 const FeaturedGear = () => {
@@ -14,7 +14,7 @@ const FeaturedGear = () => {
       try {
         const { data } = await axiosInstance.get('/products?limit=8&sort=most_rented');
         console.log('DEBUG: Full API response:', data);
-        
+
         // Bulletproof items extraction
         let items: any[] = [];
         if (Array.isArray(data)) {
@@ -26,12 +26,12 @@ const FeaturedGear = () => {
 
         const mappedProducts = items.map((p: any) => ({
           ...p,
-          images: Array.isArray(p.images) 
+          images: Array.isArray(p.images)
             ? p.images.map((url: string, i: number) => ({
-                id: String(i),
-                image_url: url,
-                display_order: i
-              }))
+              id: String(i),
+              image_url: url,
+              display_order: i
+            }))
             : []
         }));
         setProducts(mappedProducts);
@@ -44,26 +44,9 @@ const FeaturedGear = () => {
     fetchProducts();
   }, []);
 
-  if (loading) {
-    return (
-      <section className="app-shell space-y-4">
-        <div className="flex items-center justify-between px-4">
-          <div>
-            <h2 className="text-xl font-bold text-ink md:text-2xl">
-              Most Rented Gear
-            </h2>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, index) => (
-            <SkeletonCard key={index} />
-          ))}
-        </div>
-      </section>
-    );
-  }
+  const staggeredCount = useStaggeredRender(loading ? 0 : products.length);
 
-  if (products.length === 0) return null;
+  if (!loading && products.length === 0) return null;
 
   return (
     <section className="app-shell space-y-4">
@@ -83,7 +66,7 @@ const FeaturedGear = () => {
       </div>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
         {Array.isArray(products) && products.length > 0 ? (
-          products.map((product, index) => (
+          products.slice(0, staggeredCount).map((product, index) => (
             <div key={product.id || index} className={index >= 6 ? 'hidden lg:block' : 'block'}>
               <ProductCard product={product} hideCart={true} />
             </div>

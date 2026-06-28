@@ -2,10 +2,12 @@ import { Heart } from 'lucide-react';
 import EmptyState from '../../components/ui/EmptyState';
 import ProductCard from '../../components/product/ProductCard';
 import { useFavourites } from '../../store/FavouritesContext';
+import { useStaggeredRender } from '../../hooks/useStaggeredRender';
 import Footer from '../../components/common/footer/Footer';
 
 const Favourites = () => {
   const { favourites } = useFavourites();
+  const staggeredCount = useStaggeredRender(favourites.length);
 
   return (
     <div className="page-animate space-y-10 md:space-y-12">
@@ -21,7 +23,7 @@ const Favourites = () => {
           </div>
           {favourites.length ? (
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
-              {favourites.map((product) => <ProductCard key={product.id} product={product} />)}
+              {favourites.slice(0, staggeredCount).map((product) => <ProductCard key={product.id} product={product} />)}
             </div>
           ) : (
             <EmptyState

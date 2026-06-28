@@ -2,6 +2,7 @@ import { SearchX } from 'lucide-react';
 import ProductCard from '../../components/product/ProductCard';
 import SkeletonCard from '../../components/product/SkeletonCard';
 import EmptyState from '../../components/ui/EmptyState';
+import { useStaggeredRender } from '../../hooks/useStaggeredRender';
 
 interface CategoryProductsProps {
   loading: boolean;
@@ -11,6 +12,7 @@ interface CategoryProductsProps {
 }
 
 const CategoryProducts = ({ loading, filteredProducts, itemsToShow, setItemsToShow }: CategoryProductsProps) => {
+  const staggeredCount = useStaggeredRender(Math.min(filteredProducts.length, itemsToShow));
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between">
@@ -29,7 +31,7 @@ const CategoryProducts = ({ loading, filteredProducts, itemsToShow, setItemsToSh
       ) : filteredProducts.length ? (
         <>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-4">
-            {filteredProducts.slice(0, itemsToShow).map((product) => (
+            {filteredProducts.slice(0, itemsToShow).slice(0, staggeredCount).map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>

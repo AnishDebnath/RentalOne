@@ -16,7 +16,7 @@ export const useTypewriter = (phrases: string[] = DEFAULT_PHRASES) => {
 
   useEffect(() => {
     const currentPhrase = phrases[phraseIndex];
-    let timeout: NodeJS.Timeout;
+    let timeout: ReturnType<typeof setTimeout>;
 
     if (isTyping) {
       if (placeholderText.length < currentPhrase.length) {
