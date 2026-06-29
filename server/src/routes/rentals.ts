@@ -119,7 +119,7 @@ router.get('/my', validate(adminPaginationQuery, 'query'), async (req: Request, 
 
   const { data, count: totalCount, error } = await supabase
     .from('rentals')
-    .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, received_at, created_at', { count: 'exact' })
+    .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, released_at, received_at, created_at', { count: 'exact' })
     .eq('user_id', req.user.id)
     .order('created_at', { ascending: false })
     .range(offset, offset + limit - 1);
@@ -151,7 +151,7 @@ router.get('/house/:houseId', validateUuid('houseId'), async (req: Request, res:
   // 2. Fetch rentals for that user with pagination
   const { data, count: totalCount, error } = await supabase
     .from('rentals')
-    .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, received_at, created_at', { count: 'exact' })
+    .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, released_at, received_at, created_at', { count: 'exact' })
     .eq('user_id', house.user_id)
     .order('created_at', { ascending: false })
     .range(offset, offset + limit - 1);
@@ -182,7 +182,7 @@ router.get('/house/slug/:slug', validate(slugParamsSchema, 'params'), async (req
   // 2. Fetch rentals for that user with pagination
   const { data, count: totalCount, error } = await supabase
     .from('rentals')
-    .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, received_at, created_at', { count: 'exact' })
+    .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, released_at, received_at, created_at', { count: 'exact' })
     .eq('user_id', house.user_id)
     .order('created_at', { ascending: false })
     .range(offset, offset + limit - 1);

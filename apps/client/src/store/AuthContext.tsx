@@ -135,7 +135,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const refreshRentals = useCallback(async () => {
     try {
       const response = await axiosInstance.get('/rentals/my');
-      setRentals(response.data);
+      setRentals(response.data.data || []);
     } catch (error) {
       console.error('Failed to refresh rentals:', error);
     }

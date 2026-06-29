@@ -497,7 +497,7 @@ router.get('/rentals/upcoming', roleMiddleware(['admin', 'manager', 'staff']), v
 
   const { data: rentals, count: totalCount, error } = await supabase
     .from('rentals')
-    .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, received_at, created_at', { count: 'exact' })
+    .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, released_at, received_at, created_at', { count: 'exact' })
     .in('status', ['confirmed'])
     .order('pickup_date', { ascending: true })
     .range(offset, offset + limit - 1);
@@ -533,7 +533,7 @@ router.get('/rentals/active', roleMiddleware(['admin', 'manager', 'staff']), val
 
   const { data: rentals, count: totalCount, error } = await supabase
     .from('rentals')
-    .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, received_at, created_at', { count: 'exact' })
+    .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, released_at, received_at, created_at', { count: 'exact' })
     .eq('status', 'released')
     .order('created_at', { ascending: false })
     .range(offset, offset + limit - 1);
@@ -564,7 +564,7 @@ router.get('/rentals/past', roleMiddleware(['admin', 'manager', 'staff']), valid
 
   const { data: rentals, count, error } = await supabase
     .from('rentals')
-    .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, received_at, created_at', { count: 'exact' })
+    .select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, released_at, received_at, created_at', { count: 'exact' })
     .in('status', ['returned', 'cancelled', 'failed'])
     .order('created_at', { ascending: false })
     .range(offset, offset + limit - 1);
@@ -597,7 +597,7 @@ router.get('/rentals/:id', roleMiddleware(['admin', 'manager', 'staff']), valida
   const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
   console.log(`Rental lookup: id=${id} isUuid=${isUuid}`);
 
-  let rentalQuery = supabase.from('rentals').select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, received_at, created_at');
+  let rentalQuery = supabase.from('rentals').select('id, rental_no, user_id, pickup_date, event_date, total_amount, status, products, handover_proof_url, released_to_representative_name, returned_by_representative_name, assistant_crew_count, released_at, received_at, created_at');
   rentalQuery = isUuid ? rentalQuery.eq('id', id) : rentalQuery.eq('rental_no', id);
 
   const { data: rental, error } = await rentalQuery.maybeSingle();

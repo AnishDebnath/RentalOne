@@ -25,39 +25,96 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// ── Auth failure guards ───────────────────────────────────────────────
+// These prevent a request storm when the token is expired:
+// multiple parallel 401s → multiple refresh attempts → rate limit exhaustion.
+let isRefreshing = false;
+let isRedirectingToLogin = false;
+let failedQueue: Array<{
+  resolve: (token: string) => void;
+  reject: (err: any) => void;
+}> = [];
+
+const processQueue = (error: any, token: string | null = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token!);
+    }
+  });
+  failedQueue = [];
+};
+
+/**
+ * Clear ALL auth-related data from localStorage
+ */
+const clearAllAuthData = () => {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('camera_rental_house_user');
+};
+
+/**
+ * Redirect to the login page (bypassing the current route)
+ */
+const redirectToLogin = () => {
+  if (isRedirectingToLogin) return;
+  isRedirectingToLogin = true;
+
+  const currentPath = window.location.pathname + window.location.search;
+  const loginUrl = `/login?next=${encodeURIComponent(currentPath)}`;
+  window.location.replace(loginUrl);
+};
+
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    // Handle 401 (Unauthorized) - Expired Token
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-      try {
-        const response = await axiosInstance.post('/auth/refresh');
-        const { accessToken } = response.data;
-        localStorage.setItem('accessToken', accessToken);
-        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        // Refresh failed (refresh token expired) -> logout
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('camera_rental_house_user');
-        // Optional: redirect to login if we can access navigate or window.location
-        // window.location.href = '/login'; 
-      }
+    // Only handle 401 errors from API calls (not from the refresh endpoint itself)
+    if (error.response?.status !== 401 || originalRequest._isRefreshAttempt) {
+      return Promise.reject(error);
     }
 
-    const data = error.response?.data;
-    const message = data?.message || error.message || 'Network error occurred.';
+    // If we're already redirecting, don't queue anything
+    if (isRedirectingToLogin) {
+      return Promise.reject(error);
+    }
 
-    // Create a standard error object so .message always works
-    const enhancedError = new Error(message);
-    (enhancedError as any).fieldErrors = data?.fieldErrors;
-    (enhancedError as any).response = error.response;
-    (enhancedError as any).exists = data?.exists;
+    // If a refresh is already in progress, queue this request
+    if (isRefreshing) {
+      return new Promise((resolve, reject) => {
+        failedQueue.push({ resolve, reject });
+      }).then((token) => {
+        originalRequest.headers.Authorization = `Bearer ${token}`;
+        return axiosInstance(originalRequest);
+      });
+    }
 
-    return Promise.reject(enhancedError);
+    originalRequest._retry = true;
+    originalRequest._isRefreshAttempt = true;
+    isRefreshing = true;
+
+    try {
+      const response = await axios.post(
+        `${axiosInstance.defaults.baseURL}/auth/refresh`,
+        {},
+        { withCredentials: true }
+      );
+      const { accessToken } = response.data;
+      localStorage.setItem('accessToken', accessToken);
+      processQueue(null, accessToken);
+      originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+      return axiosInstance(originalRequest);
+    } catch (refreshError) {
+      clearAllAuthData();
+      processQueue(refreshError, null);
+      redirectToLogin();
+      // Return the original error so the caller can still handle it
+      return Promise.reject(error);
+    } finally {
+      isRefreshing = false;
+    }
   }
 );
 

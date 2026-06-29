@@ -635,7 +635,7 @@ router.patch(
     // 1. Fetch current user
     const { data: user, error: fetchError } = await supabase
       .from('users')
-      .select('id, member_id, full_name, phone, email, role, is_house_owner, aadhaar_no, aadhaar_doc_url, voter_no, voter_doc_url, facebook, instagram, youtube, avatar_url, user_qr_base64, is_verified, created_at, is_blocked, is_house_owner, changed_fields, aadhaar_signed_url')
+      .select('id, member_id, full_name, phone, email, role, is_house_owner, aadhaar_no, aadhaar_doc_url, voter_no, voter_doc_url, facebook, instagram, youtube, avatar_url, user_qr_base64, is_verified, created_at, is_blocked, changed_fields')
       .eq('id', userId)
       .single();
 
