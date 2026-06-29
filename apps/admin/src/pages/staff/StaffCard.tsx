@@ -16,7 +16,7 @@ const StaffCard = ({ staff }: StaffCardProps) => {
       <div className="flex items-center gap-4 mb-4 pb-4 border-b border-line/60">
         <div className="relative h-14 w-14 shrink-0">
           {staff.avatar_url ? (
-            <img src={staff.avatar_url} className="h-full w-full rounded-xl object-cover border-2 border-line shadow-sm" alt="Profile" />
+            <img src={staff.avatar_url} loading="lazy" className="h-full w-full rounded-xl object-cover border-2 border-line shadow-sm" alt="Profile" />
           ) : (
             <div className="flex h-full w-full items-center justify-center rounded-xl bg-slate-50 text-slate-400 border-2 border-line shadow-sm">
               <User className="h-7 w-7" />

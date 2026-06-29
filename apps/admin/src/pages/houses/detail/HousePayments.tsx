@@ -66,7 +66,7 @@ const HousePayments = ({ houseId, onRefresh }: HousePaymentsProps) => {
     try {
       setIsLoading(true);
       const res = await axiosInstance.get(`/admin/houses/${houseId}/payments`);
-      setPayments(res.data || []);
+      setPayments(res.data?.data || res.data || []);
     } catch (error) {
       addToast({ title: 'Error', message: 'Failed to fetch payments.', tone: 'error' });
     } finally {

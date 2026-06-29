@@ -49,7 +49,7 @@ const CustomSelect = ({ label, options, value, onChange, placeholder, required }
           <div className="flex items-center gap-2 overflow-hidden">
             {selectedOption ? (
               <>
-                <img src={selectedOption.image} alt="" className="h-6 w-6 rounded-md object-contain bg-slate-50 border border-line p-0.5" />
+                <img src={selectedOption.image} alt="" loading="lazy" className="h-6 w-6 rounded-md object-contain bg-slate-50 border border-line p-0.5" />
                 <span className="truncate text-base font-bold text-ink">{selectedOption.category}</span>
               </>
             ) : (
@@ -74,7 +74,7 @@ const CustomSelect = ({ label, options, value, onChange, placeholder, required }
                   value === option.category ? 'bg-primary/5 text-primary' : 'text-slate-600 hover:bg-slate-50 hover:text-ink'
                 )}
               >
-                <img src={option.image} alt="" className="h-8 w-8 rounded-lg object-contain bg-white border border-line p-1" />
+                <img src={option.image} alt="" loading="lazy" className="h-8 w-8 rounded-lg object-contain bg-white border border-line p-1" />
                 <span className="text-base font-bold">{option.category}</span>
               </button>
             ))}

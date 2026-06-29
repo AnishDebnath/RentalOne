@@ -109,7 +109,7 @@ export const BookingProductCard = ({
         {/* Image Section */}
         <div className="relative h-20 w-20 shrink-0">
           <div className="h-full w-full overflow-hidden rounded-xl border border-line bg-slate-50">
-            <img src={product.image} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" alt={product.name} />
+            <img src={product.image} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" alt={product.name} />
           </div>
         </div>
 

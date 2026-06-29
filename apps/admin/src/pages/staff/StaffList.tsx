@@ -1,5 +1,7 @@
+import { useState, useRef, useEffect } from 'react';
 import { Phone, User, Clock } from 'lucide-react';
 import DataTable from '../../components/ui/DataTable';
+import VirtualizedDataTable from '../../components/ui/VirtualizedDataTable';
 import StaffCard from './StaffCard';
 
 interface StaffListProps {
@@ -15,7 +17,7 @@ const StaffList = ({ staff = [] }: StaffListProps) => {
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 shrink-0">
             {row.avatar_url ? (
-              <img src={row.avatar_url} className="h-full w-full rounded-md object-cover border border-line" alt="Profile" />
+              <img src={row.avatar_url} loading="lazy" className="h-full w-full rounded-md object-cover border border-line" alt="Profile" />
             ) : (
               <div className="flex h-full w-full items-center justify-center rounded-md bg-slate-100 text-slate-400 border border-line">
                 <User className="h-5 w-5" />
@@ -116,10 +118,40 @@ const StaffList = ({ staff = [] }: StaffListProps) => {
 
   const renderMobileCard = (row: any) => <StaffCard key={row.id} staff={row} />;
 
+  const [visibleCount, setVisibleCount] = useState(0);
+  const hasStaggeredRef = useRef(false);
+
+  useEffect(() => {
+    if (hasStaggeredRef.current) {
+      setVisibleCount(staff.length);
+      return;
+    }
+    hasStaggeredRef.current = true;
+    setVisibleCount(1);
+    if (staff.length <= 1) return;
+    const targetTicks = Math.min(staff.length, 25);
+    const batchSize = Math.ceil(staff.length / targetTicks);
+    const delay = Math.max(60, Math.min(250, Math.floor(2000 / targetTicks)));
+    const timer = setInterval(() => {
+      setVisibleCount(prev => {
+        const next = Math.min(prev + batchSize, staff.length);
+        if (next >= staff.length) {
+          clearInterval(timer);
+          return staff.length;
+        }
+        return next;
+      });
+    }, delay);
+    return () => clearInterval(timer);
+  }, [staff.length]);
+
+  const TableComponent = staff.length > 150 ? VirtualizedDataTable : DataTable;
+
   return (
-    <DataTable
+    <TableComponent
       columns={columns}
       rows={staff}
+      visibleCount={visibleCount}
       renderMobileCard={renderMobileCard}
     />
   );

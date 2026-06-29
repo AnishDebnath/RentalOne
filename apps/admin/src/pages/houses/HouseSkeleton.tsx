@@ -46,19 +46,19 @@ const HouseSkeleton = () => {
                   <div className="h-3 bg-slate-200 rounded w-1/2" />
                 </div>
               </div>
-              
+
               {/* House ID */}
               <div className="h-6 w-20 bg-slate-200 rounded" />
-              
+
               {/* Contact */}
               <div className="h-4 w-28 bg-slate-200 rounded animate-pulse" />
-              
+
               {/* This Month */}
               <div className="h-4 w-20 bg-slate-200 rounded" />
-              
+
               {/* Due Amount */}
               <div className="h-4 w-20 bg-slate-200 rounded animate-pulse" />
-              
+
               {/* Status & Actions */}
               <div className="flex items-center gap-2 justify-self-end col-span-1 w-full justify-end">
                 <div className="h-9 w-20 bg-slate-200 rounded-lg shrink-0" />
@@ -84,7 +84,7 @@ const HouseSkeleton = () => {
                 </div>
               </div>
             </div>
-            
+
             {/* Business section */}
             <div className="grid grid-cols-2 gap-3 rounded-xl bg-slate-50 p-4 border border-line/60">
               <div className="space-y-1.5">

@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Phone, Package, Calendar, ChevronDown, ChevronUp, IndianRupee, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useVirtualizer } from '@tanstack/react-virtual';
 
 type Product = {
   id: string;
@@ -34,7 +35,7 @@ type RentalCardProps = {
   activeTab: 'upcoming' | 'active' | 'returning';
 };
 
-const RentalItem = ({ rental, activeTab, index, total }: { rental: Rental; activeTab: 'upcoming' | 'active' | 'returning'; index: number; total: number }) => {
+const RentalItem = ({ rental, activeTab, index, total, isVisible }: { rental: Rental; activeTab: 'upcoming' | 'active' | 'returning'; index: number; total: number; isVisible: boolean }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const statusLabels: Record<string, string> = {
@@ -80,9 +81,8 @@ const RentalItem = ({ rental, activeTab, index, total }: { rental: Rental; activ
   const isOverdueUnreturned = (rental.status.toLowerCase() === 'released' || rental.status.toLowerCase() === 'active') && new Date().setHours(0, 0, 0, 0) > new Date(rental.return_date).setHours(0, 0, 0, 0);
 
   return (
-    <motion.article
-      layout
-      className={`card-surface overflow-hidden transition-all duration-300 border ${isOverdueUnreturned ? 'border-red-200 bg-red-50/10' : isExpanded ? 'border-transparent shadow-cardHover' : 'border-line hover:border-transparent hover:shadow-cardHover'}`}
+    <article
+      className={`card-surface overflow-hidden border ${isVisible ? 'card-entrance' : 'card-hidden'} ${isOverdueUnreturned ? 'border-red-200 bg-red-50/10' : isExpanded ? 'border-transparent shadow-cardHover' : 'border-line hover:border-transparent hover:shadow-cardHover'}`}
     >
       <div
         className="cursor-pointer p-4 md:p-5"
@@ -123,7 +123,7 @@ const RentalItem = ({ rental, activeTab, index, total }: { rental: Rental; activ
           <div className="flex items-center gap-4 lg:w-[25%] lg:shrink-0">
             <div className="h-14 w-14 shrink-0 overflow-hidden rounded-xl border-2 border-white bg-slate-50 shadow-sm ring-1 ring-line/40">
               {rental.user_image ? (
-                <img src={rental.user_image} alt={rental.name} className="h-full w-full object-cover" />
+                <img src={rental.user_image} alt={rental.name} loading="lazy" className="h-full w-full object-cover" />
               ) : (
                 <User className="m-auto mt-3 h-7 w-7 text-muted" />
               )}
@@ -182,14 +182,14 @@ const RentalItem = ({ rental, activeTab, index, total }: { rental: Rental; activ
 
               {/* Return */}
               <div className={`flex flex-col items-center justify-center rounded-xl px-4 py-2 transition-colors ${rental.status.toLowerCase() === 'cancelled' ? 'bg-slate-50' :
-                (rental as any).received_at && new Date((rental as any).received_at).setHours(0,0,0,0) > new Date(rental.return_date).setHours(0,0,0,0) || (activeTab === 'active' && new Date().setHours(0,0,0,0) > new Date(rental.return_date).setHours(0,0,0,0)) ? 'bg-rose-50 shadow-sm ring-1 ring-rose-100/50' :
+                (rental as any).received_at && new Date((rental as any).received_at).setHours(0, 0, 0, 0) > new Date(rental.return_date).setHours(0, 0, 0, 0) || (activeTab === 'active' && new Date().setHours(0, 0, 0, 0) > new Date(rental.return_date).setHours(0, 0, 0, 0)) ? 'bg-rose-50 shadow-sm ring-1 ring-rose-100/50' :
                   rental.status.toLowerCase() === 'returned' || ((rental as any).received_at && new Date((rental as any).received_at) <= new Date(rental.return_date)) ? 'bg-emerald-50 shadow-sm ring-1 ring-emerald-100/50' :
                     activeTab === 'returning' ? 'bg-emerald-50 shadow-sm ring-1 ring-emerald-100/50' :
                       activeTab === 'active' ? 'bg-orange-50 shadow-sm ring-1 ring-orange-100/50' :
                         'bg-transparent'
                 }`}>
                 <span className={`text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 ${rental.status.toLowerCase() === 'cancelled' ? 'text-tertiary' :
-                  (rental as any).received_at && new Date((rental as any).received_at).setHours(0,0,0,0) > new Date(rental.return_date).setHours(0,0,0,0) || (activeTab === 'active' && new Date().setHours(0,0,0,0) > new Date(rental.return_date).setHours(0,0,0,0)) ? 'text-rose-600' :
+                  (rental as any).received_at && new Date((rental as any).received_at).setHours(0, 0, 0, 0) > new Date(rental.return_date).setHours(0, 0, 0, 0) || (activeTab === 'active' && new Date().setHours(0, 0, 0, 0) > new Date(rental.return_date).setHours(0, 0, 0, 0)) ? 'text-rose-600' :
                     rental.status.toLowerCase() === 'returned' || ((rental as any).received_at && new Date((rental as any).received_at) <= new Date(rental.return_date)) ? 'text-emerald-600' :
                       activeTab === 'returning' ? 'text-emerald-600' :
                         activeTab === 'active' ? 'text-orange-600' :
@@ -198,7 +198,7 @@ const RentalItem = ({ rental, activeTab, index, total }: { rental: Rental; activ
                   <Calendar className="h-3 w-3" /> Return
                 </span>
                 <span className={`mt-1 text-xs sm:text-sm font-bold ${rental.status.toLowerCase() === 'cancelled' ? 'text-ink' :
-                  (rental as any).received_at && new Date((rental as any).received_at).setHours(0,0,0,0) > new Date(rental.return_date).setHours(0,0,0,0) || (activeTab === 'active' && new Date().setHours(0,0,0,0) > new Date(rental.return_date).setHours(0,0,0,0)) ? 'text-rose-700 animate-pulse' :
+                  (rental as any).received_at && new Date((rental as any).received_at).setHours(0, 0, 0, 0) > new Date(rental.return_date).setHours(0, 0, 0, 0) || (activeTab === 'active' && new Date().setHours(0, 0, 0, 0) > new Date(rental.return_date).setHours(0, 0, 0, 0)) ? 'text-rose-700 animate-pulse' :
                     rental.status.toLowerCase() === 'returned' || ((rental as any).received_at && new Date((rental as any).received_at) <= new Date(rental.return_date)) ? 'text-emerald-700' :
                       activeTab === 'returning' ? 'text-emerald-700' :
                         activeTab === 'active' ? 'text-orange-700' :
@@ -275,7 +275,7 @@ const RentalItem = ({ rental, activeTab, index, total }: { rental: Rental; activ
                   <div key={product.id} className="flex items-center justify-between rounded-[1rem] bg-white p-3 shadow-sm border border-line/40 transition-hover hover:border-primary/30 gap-4">
                     <div className="flex items-center gap-3 min-w-0">
                       <div className="h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-line bg-slate-50">
-                        <img src={product.image} alt={product.name} className="h-full w-full object-cover" />
+                        <img src={product.image} alt={product.name} loading="lazy" className="h-full w-full object-cover" />
                       </div>
                       <div className="min-w-0">
                         <p className="text-sm font-bold text-ink line-clamp-2 leading-tight break-words">{product.name}</p>
@@ -344,6 +344,7 @@ const RentalItem = ({ rental, activeTab, index, total }: { rental: Rental; activ
                     <img
                       src={rental.handover_proof}
                       alt="Handover Proof"
+                      loading="lazy"
                       className="h-auto w-full object-contain transition-transform duration-700 group-hover/proof:scale-105"
                     />
                     <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-ink/10 to-transparent" />
@@ -371,7 +372,7 @@ const RentalItem = ({ rental, activeTab, index, total }: { rental: Rental; activ
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.article>
+    </article>
   );
 };
 
@@ -398,10 +399,87 @@ const RentalCard = ({ rentals, activeTab }: RentalCardProps) => {
     );
   }
 
+  const [visibleCount, setVisibleCount] = useState(0);
+  const hasStaggeredRef = useRef(false);
+
+  useEffect(() => {
+    if (hasStaggeredRef.current) {
+      setVisibleCount(rentals.length);
+      return;
+    }
+
+    hasStaggeredRef.current = true;
+    setVisibleCount(1);
+
+    if (rentals.length <= 1) return;
+
+    // Adaptive batching: ~25 ticks total, ~2s total time
+    // Large lists → batch many cards per tick
+    const targetTicks = Math.min(rentals.length, 25);
+    const batchSize = Math.ceil(rentals.length / targetTicks);
+    const delay = Math.max(60, Math.min(250, Math.floor(2000 / targetTicks)));
+
+    const timer = setInterval(() => {
+      setVisibleCount(prev => {
+        const next = Math.min(prev + batchSize, rentals.length);
+        if (next >= rentals.length) {
+          clearInterval(timer);
+          return rentals.length;
+        }
+        return next;
+      });
+    }, delay);
+
+    return () => clearInterval(timer);
+  }, [rentals.length]);
+
+  const parentRef = useRef(null);
+  const virtualize = rentals.length > 150;
+
+  const virtualizer = useVirtualizer({
+    count: virtualize ? Math.min(visibleCount, rentals.length) : 0,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 200,
+    overscan: 5,
+  });
+
+  if (virtualize) {
+    return (
+      <div
+        ref={parentRef}
+        style={{ overflow: 'auto', maxHeight: 'calc(100vh - 280px)' }}
+        className="space-y-0"
+      >
+        <div style={{ height: virtualizer.getTotalSize(), position: 'relative', width: '100%' }}>
+          {virtualizer.getVirtualItems().map((virtualItem) => {
+            const rental = rentals[virtualItem.index];
+            const idx = virtualItem.index;
+            return (
+              <div
+                key={rental.id}
+                data-index={idx}
+                ref={virtualizer.measureElement}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  transform: `translateY(${virtualItem.start}px)`,
+                }}
+              >
+                <RentalItem rental={rental} activeTab={activeTab} index={idx + 1} total={rentals.length} isVisible={idx < visibleCount} />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
       {rentals.map((rental, idx) => (
-        <RentalItem key={rental.id} rental={rental} activeTab={activeTab} index={idx + 1} total={rentals.length} />
+        <RentalItem key={rental.id} rental={rental} activeTab={activeTab} index={idx + 1} total={rentals.length} isVisible={idx < visibleCount} />
       ))}
     </div>
   );

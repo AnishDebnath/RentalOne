@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import CategoryHeader from './CategoryHeader';
 import CategoryProducts from './CategoryProducts';
@@ -7,6 +7,7 @@ import Footer from '../../components/common/footer/Footer';
 import axiosInstance from '../../api/axiosInstance';
 import useDebounce from '../../hooks/useDebounce';
 import usePullToRefresh from '../../hooks/usePullToRefresh';
+import { sessionCache } from '@camera-rental-house/utils';
 import { format } from 'date-fns';
 
 import { useCart } from '../../store/CartContext';
@@ -15,8 +16,6 @@ const Category = () => {
   const [params, setParams] = useSearchParams();
   const initialSearch = params.get('q') || '';
   const [search, setSearch] = useState(initialSearch);
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [itemsToShow, setItemsToShow] = useState(12);
   const { pickupDate, dropDate, setPickupDate, setDropDate } = useCart();
@@ -64,42 +63,97 @@ const Category = () => {
     }
   }, [params, setParams, pickupDate]);
 
-  const refresh = async () => {
-    setLoading(true);
-    try {
-      const { data } = await axiosInstance.get('/products', {
-        params: {
-          category: activeCategory,
-          brand: activeBrand,
-          search: debouncedSearch,
-          limit: itemsToShow,
-          ...(pickupDate && dropDate ? {
-            pickup_date: format(pickupDate, 'yyyy-MM-dd'),
-            drop_date: format(dropDate, 'yyyy-MM-dd'),
-          } : {})
-        }
-      });
-      
-      const mappedProducts = (data.items || []).map((p: any) => ({
-        ...p,
-        images: (p.images || []).map((url: string, i: number) => ({
-          id: String(i),
-          image_url: url,
-          display_order: i
-        }))
-      }));
-      setProducts(mappedProducts);
-    } catch (err) {
-      console.error('Failed to fetch category products:', err);
-    } finally {
-      setLoading(false);
+  const CACHE_KEY = 'category_products';
+
+  const retryTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const retryCountRef = useRef(0);
+
+  // Hydrate from cache immediately on mount
+  const initialCached = useRef(sessionCache.get<any[]>(CACHE_KEY));
+  const [products, setProducts] = useState<any[]>(initialCached.current || []);
+  const [loading, setLoading] = useState(!initialCached.current);
+
+  const doFetch = useCallback(async () => {
+    const { data } = await axiosInstance.get('/products', {
+      params: {
+        category: activeCategory,
+        brand: activeBrand,
+        search: debouncedSearch,
+        limit: itemsToShow,
+        ...(pickupDate && dropDate ? {
+          pickup_date: format(pickupDate, 'yyyy-MM-dd'),
+          drop_date: format(dropDate, 'yyyy-MM-dd'),
+        } : {})
+      }
+    });
+    const mappedProducts = (data.items || []).map((p: any) => ({
+      ...p,
+      images: (p.images || []).map((url: string, i: number) => ({
+        id: String(i),
+        image_url: url,
+        display_order: i
+      }))
+    }));
+    setProducts(mappedProducts);
+    sessionCache.set(CACHE_KEY, mappedProducts);
+    retryCountRef.current = 0; // reset on success
+  }, [activeCategory, activeBrand, debouncedSearch, itemsToShow, pickupDate, dropDate]);
+
+  const refresh = useCallback(async () => {
+    // Clear any pending retry
+    if (retryTimerRef.current) {
+      clearTimeout(retryTimerRef.current);
+      retryTimerRef.current = null;
     }
-  };
+    retryCountRef.current = 0;
+
+    // Only show loading if no cached data
+    const hasCached = !!sessionCache.get<any[]>(CACHE_KEY);
+    if (!hasCached) {
+      setLoading(true);
+    }
+
+    const attempt = async () => {
+      try {
+        await doFetch();
+        setLoading(false);
+      } catch (err) {
+        console.error('Failed to fetch category products:', err);
+        retryCountRef.current++;
+
+        // If we have cached data, show it immediately and keep retrying
+        const cached = sessionCache.get<any[]>(CACHE_KEY);
+        if (cached) {
+          setProducts(cached);
+          setLoading(false);
+          // Retry in background regardless of count — cache keeps UI alive
+          retryTimerRef.current = setTimeout(attempt, 2000);
+          return;
+        }
+
+        // No cached data: give up after 3 attempts (~6s), don't keep user waiting
+        if (retryCountRef.current >= 3) {
+          setLoading(false);
+          return;
+        }
+
+        retryTimerRef.current = setTimeout(attempt, 2000);
+      }
+    };
+
+    await attempt();
+  }, [doFetch]);
 
   const pullDistance = usePullToRefresh(refresh);
 
   useEffect(() => {
     refresh();
+    return () => {
+      if (retryTimerRef.current) {
+        clearTimeout(retryTimerRef.current);
+        retryTimerRef.current = null;
+      }
+    };
   }, [activeCategory, activeBrand, debouncedSearch, itemsToShow, pickupDate, dropDate]);
 
   const isDesktop = typeof window !== 'undefined' ? window.innerWidth >= 1024 : true;

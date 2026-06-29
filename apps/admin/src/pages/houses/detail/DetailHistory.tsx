@@ -277,7 +277,7 @@ const DetailHistory = ({ rentals, expandedOrderId, setExpandedOrderId, onRefresh
                             </div>
                             <div className="w-[14%] px-6 py-5">
                               <div className="flex justify-center">
-                                {(rental.status.toLowerCase() === 'released' || rental.status.toLowerCase() === 'active') && new Date().setHours(0,0,0,0) > new Date(rental.event_date).setHours(0,0,0,0) ? (
+                                {(rental.status.toLowerCase() === 'released' || rental.status.toLowerCase() === 'active') && new Date().setHours(0, 0, 0, 0) > new Date(rental.event_date).setHours(0, 0, 0, 0) ? (
                                   <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest shadow-sm border bg-red-50 text-red-600 border-red-100">
                                     <div className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
                                     Overdue
@@ -320,7 +320,7 @@ const DetailHistory = ({ rentals, expandedOrderId, setExpandedOrderId, onRefresh
                                         return (
                                           <div key={idx} className="px-4 py-3.5 flex items-center gap-4 hover:bg-slate-50/30 transition-colors">
                                             {item.image ? (
-                                              <img src={item.image} alt={item.name} className="h-10 w-10 rounded-lg object-cover border border-line shadow-sm shrink-0" />
+                                              <img src={item.image} alt={item.name} loading="lazy" className="h-10 w-10 rounded-lg object-cover border border-line shadow-sm shrink-0" />
                                             ) : (
                                               <div className="h-10 w-10 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
                                                 <ImageIcon className="h-5 w-5 text-slate-300" />
@@ -544,7 +544,7 @@ const DetailHistory = ({ rentals, expandedOrderId, setExpandedOrderId, onRefresh
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
                             <span className="text-sm font-black tracking-tight text-ink uppercase">{rental.rental_no || rental.id.slice(0, 8)}</span>
-                            {(rental.status.toLowerCase() === 'released' || rental.status.toLowerCase() === 'active') && new Date().setHours(0,0,0,0) > new Date(rental.event_date).setHours(0,0,0,0) ? (
+                            {(rental.status.toLowerCase() === 'released' || rental.status.toLowerCase() === 'active') && new Date().setHours(0, 0, 0, 0) > new Date(rental.event_date).setHours(0, 0, 0, 0) ? (
                               <span className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest shadow-sm border bg-red-50 text-red-600 border-red-100">
                                 <div className="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse" />
                                 Overdue
@@ -622,7 +622,7 @@ const DetailHistory = ({ rentals, expandedOrderId, setExpandedOrderId, onRefresh
                                   <div key={idx} className="group/item relative p-4 rounded-2xl border border-line/40 bg-white shadow-sm hover:border-primary/30 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                                     <div className="flex items-center gap-4 min-w-0 flex-1">
                                       {item.image ? (
-                                        <img src={item.image} alt={item.name} className="h-12 w-12 rounded-xl object-cover border border-line shadow-sm shrink-0" />
+                                        <img src={item.image} alt={item.name} loading="lazy" className="h-12 w-12 rounded-xl object-cover border border-line shadow-sm shrink-0" />
                                       ) : (
                                         <div className="h-12 w-12 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
                                           <ImageIcon className="h-6 w-6 text-slate-300" />

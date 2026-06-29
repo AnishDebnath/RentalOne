@@ -15,7 +15,7 @@ const Staff = () => {
     try {
       const response = await axiosInstance.get('/admin/staff');
       const rolePriority: Record<string, number> = { admin: 0, manager: 1, staff: 2 };
-      const sortedStaff = (response.data || []).sort((a: any, b: any) => {
+      const sortedStaff = (response.data?.data || response.data || []).sort((a: any, b: any) => {
         const priorityA = rolePriority[a.role] ?? 99;
         const priorityB = rolePriority[b.role] ?? 99;
         return priorityA - priorityB;

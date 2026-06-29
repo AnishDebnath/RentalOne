@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import StatsCard from '../components/ui/StatsCard';
 import { adminRentals, adminStats, adminUsers } from '../data/mockAdmin';
 import { getAuthRole } from '@camera-rental-house/shared';
@@ -220,6 +221,7 @@ const Dashboard = () => {
   const visibleShortcuts = isStaff ? shortcuts.slice(1, 3) : shortcuts;
   const topCustomers = [...adminUsers].sort((a, b) => b.totalSpent - a.totalSpent).slice(0, 3);
 
+
   return (
     <div className="admin-shell space-y-5 py-6">
       <section className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
@@ -263,7 +265,13 @@ const Dashboard = () => {
         <div className="min-w-0 space-y-5">
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {adminStats.map((item) => (
-              <StatsCard key={item.label} item={item} />
+              <motion.div
+                key={item.label}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <StatsCard item={item} />
+              </motion.div>
             ))}
           </div>
 

@@ -1,6 +1,8 @@
+import { useState, useRef, useEffect } from 'react';
 import { Loader2, Pencil, Trash2, QrCode } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import DataTable from '../../components/ui/DataTable';
+import VirtualizedDataTable from '../../components/ui/VirtualizedDataTable';
 import { BRAND_ICONS, CATEGORY_ICONS } from '@camera-rental-house/shared';
 
 type ProductCardProps = {
@@ -20,6 +22,38 @@ const ProductCard = ({
   handleDelete,
   formatCurrency,
 }: ProductCardProps) => {
+  const [visibleCount, setVisibleCount] = useState(0);
+  const hasStaggeredRef = useRef(false);
+
+  useEffect(() => {
+    if (hasStaggeredRef.current) {
+      setVisibleCount(rows.length);
+      return;
+    }
+
+    hasStaggeredRef.current = true;
+    setVisibleCount(1);
+
+    if (rows.length <= 1) return;
+
+    const targetTicks = Math.min(rows.length, 25);
+    const batchSize = Math.ceil(rows.length / targetTicks);
+    const delay = Math.max(60, Math.min(250, Math.floor(2000 / targetTicks)));
+
+    const timer = setInterval(() => {
+      setVisibleCount(prev => {
+        const next = Math.min(prev + batchSize, rows.length);
+        if (next >= rows.length) {
+          clearInterval(timer);
+          return rows.length;
+        }
+        return next;
+      });
+    }, delay);
+
+    return () => clearInterval(timer);
+  }, [rows.length]);
+
   if (isLoading && rows.length === 0) {
     return (
       <div className="flex h-64 items-center justify-center rounded-card bg-white/50 border border-line">
@@ -28,15 +62,18 @@ const ProductCard = ({
     );
   }
 
+  const TableComponent = rows.length > 150 ? VirtualizedDataTable : DataTable;
+
   return (
-    <DataTable
+    <TableComponent
       columns={[
         {
           key: 'name',
           label: 'Product',
+          className: 'w-[28%]',
           render: (row) => (
             <div className="flex items-center gap-2 py-1 max-w-[240px]">
-              <img src={row.image} alt={row.name} className="h-12 w-12 shrink-0 rounded-xl object-cover border border-line" />
+              <img src={row.image} alt={row.name} loading="lazy" className="h-12 w-12 shrink-0 rounded-xl object-cover border border-line" />
               <p className="font-bold text-ink leading-snug line-clamp-2 min-h-[2.5rem]">{row.name}</p>
             </div>
           ),
@@ -44,6 +81,7 @@ const ProductCard = ({
         {
           key: 'unique_code',
           label: 'Product Code',
+          className: 'w-[18%]',
           render: (row) => (
             <div className="flex flex-col gap-1">
               <span className="font-mono text-sm font-bold text-primary"><span className="text-tertiary">ID:</span> {row.unique_code}</span>
@@ -63,16 +101,17 @@ const ProductCard = ({
         {
           key: 'category_brand',
           label: 'Category',
+          className: 'w-[20%]',
           render: (row) => (
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-50 border border-line p-1">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-slate-50 border border-line p-1">
                   {CATEGORY_ICONS[row.category] && <img src={CATEGORY_ICONS[row.category]} alt="" className="h-full w-full object-contain" />}
                 </div>
                 <span className="text-sm font-medium text-ink">{row.category}</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-md bg-white border border-line p-1">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-white border border-line p-1">
                   {BRAND_ICONS[row.brand] && <img src={BRAND_ICONS[row.brand]} alt="" className="h-full w-full object-contain" />}
                 </div>
                 <span className="text-sm font-bold text-ink">{row.brand}</span>
@@ -83,6 +122,7 @@ const ProductCard = ({
         {
           key: 'status',
           label: 'Status',
+          className: 'w-[12%]',
           render: (row) => {
             const status = row.booking_status || (row.available_quantity > 0 ? 'available' : 'out_of_stock');
             const badgeClass =
@@ -121,11 +161,13 @@ const ProductCard = ({
         {
           key: 'price_per_day',
           label: 'Price / Day',
+          className: 'w-[10%]',
           render: (row) => <span className="font-bold text-ink">{formatCurrency(row.price_per_day)}</span>,
         },
         {
           key: 'actions',
           label: 'Actions',
+          className: 'w-[12%]',
           render: (row) => (
             <div className="flex items-center gap-2">
               <Link
@@ -146,11 +188,12 @@ const ProductCard = ({
         },
       ]}
       rows={rows}
+      visibleCount={visibleCount}
       renderMobileCard={(row) => (
         <article key={row.id} className="card-surface p-4 flex flex-col gap-4">
           <div className="flex gap-3 items-center">
             <div className="w-28 h-28 sm:w-32 sm:h-32 shrink-0 border border-line rounded-card overflow-hidden bg-slate-50">
-              <img src={row.image} alt={row.name} className="h-full w-full object-cover" />
+              <img src={row.image} alt={row.name} loading="lazy" className="h-full w-full object-cover" />
             </div>
             <div className="min-w-0 flex-1 flex flex-col py-0.5">
               <div className="flex flex-col gap-1.5">

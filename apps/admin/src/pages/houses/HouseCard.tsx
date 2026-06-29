@@ -1,6 +1,8 @@
+import { useState, useRef, useEffect } from 'react';
 import { Building2, PlusCircle, ChevronRight, Wallet, TrendingUp, ShieldCheck, Loader2, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import DataTable from '../../components/ui/DataTable';
+import VirtualizedDataTable from '../../components/ui/VirtualizedDataTable';
 import HouseSkeleton from './HouseSkeleton';
 
 const slugify = (text: string) => text.toLowerCase().replace(/ /g, '-').replace(/[^\w-]/g, '');
@@ -131,11 +133,41 @@ const HouseCard = ({ houses, isLoading }: HouseCardProps) => {
     },
   ];
 
+  const [visibleCount, setVisibleCount] = useState(0);
+  const hasStaggeredRef = useRef(false);
+
+  useEffect(() => {
+    if (hasStaggeredRef.current) {
+      setVisibleCount(houses.length);
+      return;
+    }
+    hasStaggeredRef.current = true;
+    setVisibleCount(1);
+    if (houses.length <= 1) return;
+    const targetTicks = Math.min(houses.length, 25);
+    const batchSize = Math.ceil(houses.length / targetTicks);
+    const delay = Math.max(60, Math.min(250, Math.floor(2000 / targetTicks)));
+    const timer = setInterval(() => {
+      setVisibleCount(prev => {
+        const next = Math.min(prev + batchSize, houses.length);
+        if (next >= houses.length) {
+          clearInterval(timer);
+          return houses.length;
+        }
+        return next;
+      });
+    }, delay);
+    return () => clearInterval(timer);
+  }, [houses.length]);
+
+  const TableComponent = houses.length > 150 ? VirtualizedDataTable : DataTable;
+
   return (
     <div className="card-surface overflow-hidden">
-      <DataTable
+      <TableComponent
         columns={columns}
         rows={houses}
+        visibleCount={visibleCount}
         renderMobileCard={(row) => (
           <article key={row.id} className="relative rounded-2xl border border-line bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
             <div className="flex items-start gap-4">

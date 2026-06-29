@@ -235,7 +235,7 @@ export default function ProductForm() {
             {/* Existing Images */}
             {isEditMode && existingImages.map((url, index) => (
               <div key={url} className={`relative aspect-square rounded-card overflow-hidden border ${removeImageUrls.includes(url) ? 'opacity-40 grayscale border-danger' : 'border-line'}`}>
-                <img src={url} alt="" className="h-full w-full object-cover" />
+                <img src={url} alt="" loading="lazy" className="h-full w-full object-cover" />
                 {index === 0 && !removeImageUrls.includes(url) && (
                   <span className="absolute bottom-2 left-2 rounded-full bg-primary/80 px-2 py-0.5 text-xs font-bold text-white backdrop-blur-sm">Primary</span>
                 )}
@@ -252,7 +252,7 @@ export default function ProductForm() {
             {/* New Previews */}
             {newPreviews.map((preview, index) => (
               <div key={preview} className="relative aspect-square rounded-card overflow-hidden border border-line">
-                <img src={preview} alt="" className="h-full w-full object-cover" />
+                <img src={preview} alt="" loading="lazy" className="h-full w-full object-cover" />
                 {!isEditMode && index === 0 && (
                   <span className="absolute bottom-2 left-2 rounded-full bg-primary/80 px-2 py-0.5 text-xs font-bold text-white backdrop-blur-sm">Primary</span>
                 )}

@@ -9,7 +9,7 @@
     "server"
   ],
   "scripts": {
-    "dev": "npx concurrently \"npm run dev:server\" \"npm run dev:client\" \"npm run dev:admin\"",
+    "dev": "npx concurrently \"npm run dev:client\" \"npm run dev:admin\"",
     "dev:client": "npm --workspace apps/client run dev",
     "dev:admin": "npm --workspace apps/admin run dev",
     "dev:server": "npm --workspace server run dev",

@@ -27,7 +27,7 @@ const RentalHistory = () => {
       setLoading(true);
       try {
         const response = await axiosInstance.get('/admin/rentals/past');
-        const data = response.data.items || response.data;
+        const data = response.data?.data || response.data?.items || [];
         setRawRentals(data);
       } catch (error) {
         console.error('Failed to fetch rental history:', error);
@@ -73,8 +73,8 @@ const RentalHistory = () => {
     let list = allHistory;
 
     if (filterDate) {
-      list = list.filter(r => 
-        toLocalDate(r.pickup) === filterDate || 
+      list = list.filter(r =>
+        toLocalDate(r.pickup) === filterDate ||
         toLocalDate(r.return_date) === filterDate
       );
     }
@@ -116,7 +116,7 @@ const RentalHistory = () => {
               />
             </div>
 
-            <CustomDatePicker 
+            <CustomDatePicker
               selectedDate={filterDate || todayStr}
               onChange={setFilterDate}
             />

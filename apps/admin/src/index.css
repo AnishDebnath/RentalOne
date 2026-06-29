@@ -40,9 +40,11 @@ body {
   .custom-scrollbar::-webkit-scrollbar {
     @apply w-1;
   }
+
   .custom-scrollbar::-webkit-scrollbar-track {
     @apply bg-transparent;
   }
+
   .custom-scrollbar::-webkit-scrollbar-thumb {
     @apply rounded-full bg-slate-200 hover:bg-slate-300 transition-colors;
   }
@@ -52,7 +54,42 @@ body {
     -ms-overflow-style: none;
     scroll-behavior: smooth;
   }
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+}
+
+@keyframes card-entrance {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-hidden {
+  opacity: 0;
+}
+
+.card-entrance {
+  animation: card-entrance 0.35s ease-out both;
+}
+
+.card-entrance-row {
+  animation: fade-in 0.35s ease-out both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }

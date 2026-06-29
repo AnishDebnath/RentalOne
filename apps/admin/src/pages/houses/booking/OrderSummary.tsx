@@ -107,7 +107,7 @@ export const OrderSummary = ({ cart, removeFromCart, handleProcessBooking, start
                       className="group flex items-center gap-3.5 rounded-2xl border border-line bg-white p-3 transition-all hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5"
                     >
                       <div className="h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-line bg-slate-50 shadow-sm">
-                        <img src={item.image} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" alt={item.name} />
+                        <img src={item.image} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" alt={item.name} />
                       </div>
 
                       <div className="flex-1 min-w-0 py-0.5">

@@ -46,7 +46,7 @@ const FilterSelect = ({ options, value, onChange, placeholder }: FilterSelectPro
           {selectedOption ? (
             <>
               {selectedOption.image ? (
-                <img src={selectedOption.image} alt="" className="h-6 w-6 rounded-md object-contain bg-slate-50 border border-line/60 p-0.5" />
+                <img src={selectedOption.image} alt="" loading="lazy" className="h-6 w-6 rounded-md object-contain bg-slate-50 border border-line/60 p-0.5" />
               ) : selectedOption.icon ? (
                 <div className="flex h-6 w-6 items-center justify-center rounded-md bg-slate-50 border border-line/60">
                   {selectedOption.icon}
@@ -77,7 +77,7 @@ const FilterSelect = ({ options, value, onChange, placeholder }: FilterSelectPro
               )}
             >
               {option.image ? (
-                <img src={option.image} alt="" className="h-7 w-7 rounded-md object-contain bg-slate-50 border border-line/60 p-1" />
+                <img src={option.image} alt="" loading="lazy" className="h-7 w-7 rounded-md object-contain bg-slate-50 border border-line/60 p-1" />
               ) : option.icon ? (
                 <div className="flex h-7 w-7 items-center justify-center rounded-md bg-slate-50 border border-line/60">
                   {option.icon}

@@ -24,6 +24,7 @@ const UserDetailHeader = ({ user, blocked, verified, activeTab, setActiveTab }: 
               <img
                 src={user.avatar_url}
                 alt={user.full_name}
+                loading="lazy"
                 className="h-full w-full rounded-xl object-cover border-2 border-white shadow-md"
               />
             ) : (

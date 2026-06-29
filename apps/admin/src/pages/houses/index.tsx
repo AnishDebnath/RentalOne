@@ -23,7 +23,7 @@ const ProductionHouses = () => {
         axiosInstance.get('/admin/houses'),
         axiosInstance.get('/admin/houses/stats')
       ]);
-      setHouses(housesRes.data || []);
+      setHouses(housesRes.data?.data || []);
       setStats(statsRes.data);
     } catch (error) {
       addToast({ title: 'Error', message: 'Failed to fetch production houses.', tone: 'error' });

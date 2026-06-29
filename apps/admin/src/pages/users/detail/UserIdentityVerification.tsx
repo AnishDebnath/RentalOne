@@ -100,7 +100,7 @@ const UserIdentityVerification = ({ user, isChanged }: UserIdentityVerificationP
             </div>
             <div className="rounded-xl border-2 border-white shadow-sm overflow-hidden bg-slate-50">
               {user.voter_signed_url ? (
-                <img src={user.voter_signed_url} alt="Voter card" className="w-full object-contain" />
+                <img src={optimizeImageUrl(user.voter_signed_url)} alt="Voter card" loading="lazy" className="w-full object-contain" />
               ) : (
                 <div className="flex aspect-video w-full flex-col items-center justify-center gap-2 text-slate-400">
                   <IdCard className="h-6 w-6 opacity-40" />

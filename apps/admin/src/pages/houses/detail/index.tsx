@@ -31,9 +31,9 @@ const HouseDetailPage = () => {
         axiosInstance.get(`/admin/houses/slug/${slug}`),
         axiosInstance.get(`/rentals/house/slug/${slug}`)
       ]);
-      
+
       setHouse(detailRes.data);
-      setHouseRentals(rentalsRes.data || []);
+      setHouseRentals(rentalsRes.data?.data || rentalsRes.data || []);
 
       if (detailRes.data.users?.email) {
         setCredentials(prev => ({ ...prev, username: detailRes.data.users.email }));
@@ -115,7 +115,7 @@ const HouseDetailPage = () => {
 
   const hasOverdueRentals = houseRentals.some((rental: any) => {
     const isReleased = rental.status.toLowerCase() === 'released' || rental.status.toLowerCase() === 'active';
-    const isOverdue = new Date().setHours(0,0,0,0) > new Date(rental.event_date || rental.return_date).setHours(0,0,0,0);
+    const isOverdue = new Date().setHours(0, 0, 0, 0) > new Date(rental.event_date || rental.return_date).setHours(0, 0, 0, 0);
     return isReleased && isOverdue;
   });
 

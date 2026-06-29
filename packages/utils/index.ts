@@ -2,6 +2,8 @@
  * Shared utility functions for the Camera Rental House platform.
  */
 
+export { sessionCache } from './sessionCache.js';
+
 export const formatCurrency = (amount: number): string => {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',

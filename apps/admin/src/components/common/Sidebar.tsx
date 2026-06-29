@@ -162,7 +162,7 @@ const Sidebar = ({ open, onClose }) => {
       >
         <div className="mb-8 flex items-center justify-between px-2">
           <Link to="/" onClick={onClose} className="flex items-center">
-            <img src={logo} alt="Camera Rental House" className="h-12 w-auto object-contain" />
+            <img src={logo} alt="Camera Rental House" loading="lazy" className="h-12 w-auto object-contain" />
           </Link>
           <button
             type="button"
@@ -178,7 +178,7 @@ const Sidebar = ({ open, onClose }) => {
           <div className="relative h-11 w-11 shrink-0">
             <div className="flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-rose-100 to-sky-100 text-sm font-bold text-ink border border-white/40">
               {staffProfile?.avatar_url || user?.avatarUrl ? (
-                <img src={staffProfile?.avatar_url || user?.avatarUrl} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                <img src={staffProfile?.avatar_url || user?.avatarUrl} loading="lazy" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
               ) : (
                 (staffProfile?.full_name || user?.fullName || user?.full_name)?.charAt(0) || 'A'
               )}

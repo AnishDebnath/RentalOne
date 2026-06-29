@@ -19,7 +19,7 @@ const Users = () => {
     const fetchUsers = async () => {
       try {
         const response = await axiosInstance.get('/admin/users');
-        setUsers(response.data);
+        setUsers(response.data?.data || response.data || []);
       } catch (error) {
         addToast({ title: 'Error', message: 'Failed to fetch users', tone: 'error' });
       } finally {

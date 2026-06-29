@@ -18,7 +18,7 @@ const Rentals = () => {
   const [loading, setLoading] = useState(true);
   const [upcomingRentals, setUpcomingRentals] = useState<any[]>([]);
   const [activeRentals, setActiveRentals] = useState<any[]>([]);
-  
+
   // Default to today's date (YYYY-MM-DD)
   const todayStr = useMemo(() => {
     const today = new Date();
@@ -34,8 +34,8 @@ const Rentals = () => {
           axiosInstance.get('/admin/rentals/upcoming'),
           axiosInstance.get('/admin/rentals/active')
         ]);
-        setUpcomingRentals(upRes.data.items || upRes.data);
-        setActiveRentals(actRes.data.items || actRes.data);
+        setUpcomingRentals(upRes.data?.data || upRes.data?.items || []);
+        setActiveRentals(actRes.data?.data || actRes.data?.items || []);
       } catch (error) {
         console.error('Failed to fetch rentals:', error);
       } finally {
@@ -55,7 +55,7 @@ const Rentals = () => {
   const mapRental = (r: any) => {
     const rental = r.rentals ? r.rentals : r;
     const users = r.users || rental.users || {};
-    
+
     return {
       id: rental.rental_no || rental.id.split('-')[0].toUpperCase(),
       name: users.full_name || 'Guest',
@@ -98,8 +98,8 @@ const Rentals = () => {
 
     if (searchQuery) {
       const lowerQuery = searchQuery.toLowerCase();
-      list = list.filter((r) => 
-        r.name.toLowerCase().includes(lowerQuery) || 
+      list = list.filter((r) =>
+        r.name.toLowerCase().includes(lowerQuery) ||
         r.id.toLowerCase().includes(lowerQuery)
       );
     }
@@ -132,7 +132,7 @@ const Rentals = () => {
     const [y, m, d] = filterDate.split('-');
     const dateObj = new Date(Number(y), Number(m) - 1, Number(d));
     const formatted = dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    
+
     if (filterDate === todayStr) return `Today, ${formatted}`;
     return formatted;
   }, [filterDate, todayStr]);
@@ -145,13 +145,13 @@ const Rentals = () => {
         <RentalSkeleton />
       ) : (
         <div className="space-y-6">
-          <RentalTabs 
-            activeTab={activeTab} 
+          <RentalTabs
+            activeTab={activeTab}
             setActiveTab={(tab: any) => {
               setActiveTab(tab);
               setSearchQuery('');
-            }} 
-            counts={counts} 
+            }}
+            counts={counts}
           />
 
           {/* Toolbar: Search + Date Filter */}
@@ -173,18 +173,18 @@ const Rentals = () => {
               {activeTab !== 'active' && (
                 <div className="flex w-full items-center gap-2 sm:w-auto">
                   <div className="flex flex-1 items-center justify-between gap-1 rounded-xl border border-line bg-slate-50/50 p-1 sm:justify-start">
-                    <button 
+                    <button
                       onClick={() => shiftDate(-1)}
                       className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-muted hover:bg-white hover:text-ink hover:shadow-sm transition-all"
                     >
                       <ChevronLeft className="h-5 w-5" />
                     </button>
-                    
+
                     <span className="flex-1 text-center text-sm font-bold text-ink select-none px-2 sm:min-w-[110px]">
                       {displayDate}
                     </span>
 
-                    <button 
+                    <button
                       onClick={() => shiftDate(1)}
                       className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-muted hover:bg-white hover:text-ink hover:shadow-sm transition-all"
                     >
@@ -192,7 +192,7 @@ const Rentals = () => {
                     </button>
                   </div>
 
-                  <CustomDatePicker 
+                  <CustomDatePicker
                     selectedDate={filterDate}
                     onChange={setFilterDate}
                   />
@@ -201,8 +201,8 @@ const Rentals = () => {
             </div>
           </section>
 
-          <RentalCard 
-            rentals={filteredRentals} 
+          <RentalCard
+            rentals={filteredRentals}
             activeTab={activeTab}
           />
         </div>

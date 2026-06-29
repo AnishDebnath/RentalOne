@@ -46,10 +46,14 @@ const checkExistsLimiter = rateLimit({
   },
 });
 
+// Use sameSite: 'none' so the refresh cookie is sent on cross-origin requests
+// (admin app on :5174 requests refresh from server on :5000).
+// The secure flag is required for SameSite=None; on localhost (Chrome) secure cookies
+// are accepted over HTTP because it's treated as a secure context.
 const refreshCookieOptions: any = {
   httpOnly: true,
-  sameSite: 'lax',
-  secure: process.env.NODE_ENV === 'production',
+  sameSite: 'none',
+  secure: true,
   maxAge: 1000 * 60 * 60 * 24 * 7,
 };
 

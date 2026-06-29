@@ -1,9 +1,7 @@
 import dotenv from 'dotenv';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.join(__dirname, '../.env') });
+dotenv.config({ path: path.resolve('server/.env') });
 
 import crypto from 'crypto';
 import cookieParser from 'cookie-parser';
@@ -147,18 +145,30 @@ app.use('/api/manage', authMiddleware, roleMiddleware(['admin', 'manager', 'staf
 app.use('/api/admin', authMiddleware, adminRoutes);
 app.use('/api/admin/houses', authMiddleware, roleMiddleware(['admin', 'manager', 'staff']), houseRoutes);
 
-app.use((error: any, _req: Request, res: Response, _next: NextFunction) => {
-  console.error('SERVER ERROR:', error);
-
-  // Custom AppError → use its statusCode + message (already user-friendly)
-  // Also pass through any extra properties (e.g. validation `errors` array)
-  if (error?.statusCode) {
+app.use((error: any, req: Request, res: Response, _next: NextFunction) => {
+  // Expected client errors (4xx with statusCode) → log quiet, return correct code
+  if (error?.statusCode && error.statusCode < 500) {
     const body: any = { message: error.message };
     if (error.errors) body.errors = error.errors;
     if (error.fieldErrors) body.fieldErrors = error.fieldErrors;
     if (error.exists !== undefined) body.exists = error.exists;
     if (error.issues) body.issues = error.issues;
+    if (error.statusCode >= 400) {
+      console.warn(`[${error.statusCode}] ${req.method} ${req.path}: ${error.message}`);
+    }
     return res.status(error.statusCode).json(body);
+  }
+
+  // Actual server error → log loud, return generic 500
+  console.error('SERVER ERROR:', error);
+  console.error(`  ${req.method} ${req.path}`);
+  if ((error as any)?.stack) {
+    console.error(`  Stack: ${(error as any).stack?.split('\n').slice(0, 3).join(' → ')}`);
+  }
+
+  // Custom AppError with statusCode >= 500 → use its statusCode
+  if (error?.statusCode) {
+    return res.status(error.statusCode).json({ message: error.message });
   }
 
   // Map common PostgreSQL/Supabase error codes to user-friendly messages
