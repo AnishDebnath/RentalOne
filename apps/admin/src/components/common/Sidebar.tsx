@@ -18,7 +18,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { getAuthRole, getAuthUser, clearAdminSession, resolveAuthAppUrl } from '@camera-rental-house/shared';
 import axiosInstance from '../../api/axiosInstance';
 import logo from '@camera-rental-house/ui/assets/rentalone-logo.png';
-import { useLenis } from '@camera-rental-house/ui';
+import { useLenis, Watermark } from '@camera-rental-house/ui';
 
 const authAppUrl = resolveAuthAppUrl(import.meta.env.VITE_CLIENT_APP_URL || import.meta.env.VITE_AUTH_APP_URL);
 
@@ -276,6 +276,7 @@ const Sidebar = ({ open, onClose }) => {
               </div>
               <span>Sign Out</span>
             </button>
+            <Watermark variant="sidebar" />
           </div>
         </div>
       </aside>
