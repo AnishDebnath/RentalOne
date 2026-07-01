@@ -11,3 +11,4 @@ export * from './feature/LazyImage';
 export * from './feature/SmoothScroll';
 export * from './feature/ErrorBoundary';
 export * from './utils/imageUtils';
+export * from './components/Watermark';

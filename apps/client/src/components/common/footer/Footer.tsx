@@ -1,5 +1,5 @@
 import { Instagram, Facebook, Youtube, Send, Camera, Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
-import { useToast } from '@camera-rental-house/ui';
+import { useToast, Watermark } from '@camera-rental-house/ui';
 import { logo } from '@camera-rental-house/shared';
 
 const Footer = () => {
@@ -83,6 +83,7 @@ const Footer = () => {
         <div className="mt-8 border-t border-line pt-4 text-xs text-tertiary">
           © 2026 Camera Rental House. All rights reserved.
         </div>
+        <Watermark />
       </div>
     </footer>
   );
