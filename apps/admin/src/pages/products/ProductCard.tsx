@@ -101,20 +101,20 @@ const ProductCard = ({
         {
           key: 'category_brand',
           label: 'Category',
-          className: 'w-[20%]',
+          className: 'w-[14%]',
           render: (row) => (
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
                 <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-slate-50 border border-line p-1">
                   {CATEGORY_ICONS[row.category] && <img src={CATEGORY_ICONS[row.category]} alt="" className="h-full w-full object-contain" />}
                 </div>
-                <span className="text-sm font-medium text-ink">{row.category}</span>
+                <span className="text-sm font-medium text-ink truncate">{row.category}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-white border border-line p-1">
                   {BRAND_ICONS[row.brand] && <img src={BRAND_ICONS[row.brand]} alt="" className="h-full w-full object-contain" />}
                 </div>
-                <span className="text-sm font-bold text-ink">{row.brand}</span>
+                <span className="text-sm font-bold text-ink truncate">{row.brand}</span>
               </div>
             </div>
           )

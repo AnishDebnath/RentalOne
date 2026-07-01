@@ -28,7 +28,7 @@ const VirtualizedDataTable = ({ columns, rows, renderMobileCard, visibleCount = 
             >
                 <div style={{ height: virtualizer.getTotalSize(), position: 'relative', width: '100%' }}>
                     {/* Sticky header */}
-                    <div className="sticky top-0 z-10 flex items-center border-b border-line bg-white/95 px-2 backdrop-blur-sm">
+                    <div className="sticky top-0 z-10 flex items-center border-b border-line bg-white/95 px-4 backdrop-blur-sm">
                         {columns.map((col) => (
                             <div
                                 key={col.key}
@@ -45,7 +45,7 @@ const VirtualizedDataTable = ({ columns, rows, renderMobileCard, visibleCount = 
                         return (
                             <div
                                 key={row.id}
-                                className="flex items-center border-b border-line/60 px-2 text-sm font-medium text-muted transition hover:bg-primary-light/70"
+                                className="flex items-center border-b border-line/60 px-4 text-sm font-medium text-muted transition hover:bg-primary-light/70"
                                 style={{
                                     position: 'absolute',
                                     top: 0,

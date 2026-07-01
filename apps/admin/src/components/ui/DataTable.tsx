@@ -14,7 +14,7 @@ const DataTable = ({ columns, rows, renderMobileCard, visibleCount = 0 }) => {
               {columns.map((column) => (
                 <th
                   key={column.key}
-                  className={`px-2 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-tertiary ${column.className || ''}`}
+                  className={`px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-tertiary ${column.className || ''}`}
                 >
                   {column.label}
                 </th>
@@ -25,7 +25,7 @@ const DataTable = ({ columns, rows, renderMobileCard, visibleCount = 0 }) => {
             {data.map((row, idx) => (
               <tr key={row.id} className={`transition hover:bg-primary-light/70 ${idx < count ? 'card-entrance-row' : 'card-hidden'}`}>
                 {columns.map((column) => (
-                  <td key={column.key} className={`px-2 py-3 text-sm font-medium text-muted ${column.className || ''}`}>
+                  <td key={column.key} className={`px-4 py-3 text-sm font-medium text-muted ${column.className || ''}`}>
                     {column.render ? column.render(row) : row[column.key]}
                   </td>
                 ))}
