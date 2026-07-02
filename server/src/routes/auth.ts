@@ -9,6 +9,7 @@ import supabase from '../db/supabase.js';
 import { uploadFile as uploadToCloudinary } from '../storage/cloudinary.js';
 import { uploadToSupabase } from '../storage/supabaseStorage.js';
 import { processImage } from '../utils/imageProcessor.js';
+import { loginBucket } from '../utils/tokenBucket.js';
 import generateQrBase64 from '../utils/qrGenerator.js';
 import generateMemberId from '../utils/memberIdGenerator.js';
 import authMiddleware from '../middleware/authMiddleware.js';
@@ -349,6 +350,20 @@ router.post('/login', validate(loginSchema), async (req: Request, res: Response)
   const isPhoneIdentifier = /^\d{10}$/.test(normalizedPhone);
   const isMemberIdentifier = /^(CRH|HSE)-\d{4}-[A-Z0-9]{4,}$/.test(upperIdentifier);
 
+  // ── Token bucket rate limit: consume 1 token per attempt ──────────
+  const bucketResult = loginBucket.consume(cleanIdentifier || normalizedPhone);
+  if (!bucketResult.allowed) {
+    const retryAfterSec = Math.ceil(bucketResult.retryAfterMs / 1000);
+    const minutes = Math.ceil(retryAfterSec / 60);
+    const msg = minutes > 1
+      ? `Too many login attempts. Try again in ${minutes} min.`
+      : `Too many login attempts. Try again in ${retryAfterSec} sec.`;
+    const err = new AppError(429, msg);
+    (err as any).remainingAttempts = 0;
+    (err as any).retryAfterMs = bucketResult.retryAfterMs;
+    throw err;
+  }
+
   // 1. Try to find in staff_accounts (by username or phone)
   let staffQuery = supabase.from('staff_accounts').select('id, username, full_name, phone, role, is_active, avatar_url, password_hash');
   if (isPhoneIdentifier) {
@@ -372,6 +387,9 @@ router.post('/login', validate(loginSchema), async (req: Request, res: Response)
         .update({ last_login_at: new Date().toISOString() })
         .eq('id', staff.id);
 
+      // Successful login → reset bucket
+      loginBucket.reset(cleanIdentifier || normalizedPhone);
+
       const tokens = issueTokens(res, {
         id: staff.id,
         username: staff.username,
@@ -390,7 +408,8 @@ router.post('/login', validate(loginSchema), async (req: Request, res: Response)
           role: staff.role,
         },
         accessToken: tokens.accessToken,
-        redirectTo: '/admin', // Frontend handles sub-routes like /admin/rentals for staff
+        redirectTo: '/admin',
+        remainingAttempts: 5,
       });
     }
   }
@@ -413,12 +432,16 @@ router.post('/login', validate(loginSchema), async (req: Request, res: Response)
   }
 
   if (!user) {
-    throw new UnauthorizedError('Invalid credentials. User not found.');
+    const err = new UnauthorizedError('Invalid credentials. User not found.');
+    (err as any).remainingAttempts = bucketResult.remaining;
+    throw err;
   }
 
   // Check for block before password compare to avoid bcrypt crash on bad hash
   if (user.is_blocked) {
-    throw new ForbiddenError('This account has been blocked.');
+    const err = new ForbiddenError('This account has been blocked.');
+    (err as any).remainingAttempts = bucketResult.remaining;
+    throw err;
   }
 
   let isValidUser = false;
@@ -426,11 +449,18 @@ router.post('/login', validate(loginSchema), async (req: Request, res: Response)
     isValidUser = await bcrypt.compare(password, user.password_hash);
   } catch {
     console.error('bcrypt compare failed for user:', user.id);
-    throw new UnauthorizedError('Invalid credentials.');
+    const err = new UnauthorizedError('Invalid credentials.');
+    (err as any).remainingAttempts = bucketResult.remaining;
+    throw err;
   }
   if (!isValidUser) {
-    throw new UnauthorizedError('Invalid credentials. Incorrect password.');
+    const err = new UnauthorizedError('Invalid credentials. Incorrect password.');
+    (err as any).remainingAttempts = bucketResult.remaining;
+    throw err;
   }
+
+  // Successful login → reset bucket
+  loginBucket.reset(cleanIdentifier || normalizedPhone);
 
   const tokens = issueTokens(res, {
     id: user.id,
@@ -454,6 +484,7 @@ router.post('/login', validate(loginSchema), async (req: Request, res: Response)
       createdAt: user.created_at,
     },
     redirectTo: '/',
+    remainingAttempts: 5,
   });
 });
 

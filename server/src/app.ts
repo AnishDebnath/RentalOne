@@ -20,6 +20,7 @@ import houseRoutes from './routes/houses.js';
 import authMiddleware from './middleware/authMiddleware.js';
 import roleMiddleware from './middleware/roleMiddleware.js';
 import { startMaintenanceWorker, stopMaintenanceWorker } from './utils/maintenance.js';
+import { loginBucket } from './utils/tokenBucket.js';
 
 const app = express();
 
@@ -111,7 +112,7 @@ const generalLimiter = rateLimit({
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 50,
+  max: 500,
   standardHeaders: true,
   skip: (req) => req.url === '/check-exists',
   message: (req: any, res: Response) => {
@@ -153,6 +154,8 @@ app.use((error: any, req: Request, res: Response, _next: NextFunction) => {
     if (error.fieldErrors) body.fieldErrors = error.fieldErrors;
     if (error.exists !== undefined) body.exists = error.exists;
     if (error.issues) body.issues = error.issues;
+    if (error.remainingAttempts !== undefined) body.remainingAttempts = error.remainingAttempts;
+    if (error.retryAfterMs !== undefined) body.retryAfterMs = error.retryAfterMs;
     if (error.statusCode >= 400) {
       console.warn(`[${error.statusCode}] ${req.method} ${req.path}: ${error.message}`);
     }
@@ -234,6 +237,9 @@ const server = app.listen(port, '0.0.0.0', () => {
 
   // Start background maintenance worker
   startMaintenanceWorker();
+
+  // Periodically purge stale token buckets (every 10 min)
+  setInterval(() => loginBucket.cleanup(), 10 * 60 * 1000).unref();
 });
 server.timeout = 300000;
 server.keepAliveTimeout = 300000;

@@ -75,6 +75,11 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    // Don't intercept 401 on auth endpoints — login returns 401 for bad creds, not expired token
+    if (originalRequest.url?.includes('/auth/')) {
+      return Promise.reject(error);
+    }
+
     // If we're already redirecting, don't queue anything
     if (isRedirectingToLogin) {
       return Promise.reject(error);

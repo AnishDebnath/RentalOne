@@ -1,4 +1,4 @@
-import { Camera, Eye, EyeOff, Lock, User, ArrowRight, ArrowLeft, AlertCircle } from 'lucide-react';
+import { Camera, Eye, EyeOff, Lock, User, ArrowRight, ArrowLeft, AlertCircle, Timer } from 'lucide-react';
 import { type FormEvent, useState, useEffect, useRef, useMemo } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import LoadingButton from '../components/ui/LoadingButton';
@@ -24,6 +24,9 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ identifier: '', password: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [remainingAttempts, setRemainingAttempts] = useState<number | null>(null);
+  const [retryUntil, setRetryUntil] = useState<number | null>(null);
+  const [countdown, setCountdown] = useState<string>('');
 
   const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
   const isClearingSession = searchParams.get('clear_session') === 'true';
@@ -51,6 +54,33 @@ const Login = () => {
     }
   }, [hasJustLoggedOut, addToast, navigate]);
 
+  // 3. Countdown timer when rate-limited
+  useEffect(() => {
+    if (retryUntil === null) {
+      setCountdown('');
+      return;
+    }
+
+    const tick = () => {
+      const left = Math.max(0, retryUntil - Date.now());
+      if (left <= 0) {
+        setCountdown('');
+        setRetryUntil(null);
+        setRemainingAttempts(null);
+        setErrors({});
+        return;
+      }
+      const totalSec = Math.ceil(left / 1000);
+      const min = Math.floor(totalSec / 60);
+      const sec = totalSec % 60;
+      setCountdown(`${min}:${sec.toString().padStart(2, '0')}`);
+    };
+
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [retryUntil]);
+
   const validate = () => {
     const identifier = form.identifier.trim();
     if (!identifier) return "Email, phone number, or user ID is required";
@@ -73,11 +103,15 @@ const Login = () => {
     if (/^\d+$/.test(val)) val = val.slice(0, 10);
     setForm((prev) => ({ ...prev, identifier: val }));
     if (errors.identifier || errors.general) setErrors({});
+    if (remainingAttempts !== null) setRemainingAttempts(null);
+    if (retryUntil !== null) setRetryUntil(null);
   };
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, password: event.target.value }));
     if (errors.password || errors.general) setErrors({});
+    if (remainingAttempts !== null) setRemainingAttempts(null);
+    if (retryUntil !== null) setRetryUntil(null);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -95,6 +129,8 @@ const Login = () => {
 
     setErrors({});
     setLoading(true);
+    setRemainingAttempts(null);
+    setRetryUntil(null);
 
     try {
       const requestedNext = searchParams.get('next');
@@ -108,7 +144,7 @@ const Login = () => {
         try {
           const targetUrl = new URL(adminAppUrl, window.location.origin);
           const currentUrl = new URL(window.location.href);
-          
+
           // If it's the same origin, it's ONLY a loop if it's NOT pointing to /admin
           if (targetUrl.origin === currentUrl.origin && !targetUrl.pathname.startsWith('/admin')) {
             console.error('CRITICAL: VITE_ADMIN_APP_URL points to the client app root. Redirect aborted.');
@@ -140,9 +176,24 @@ const Login = () => {
       // Regular User redirect to Account or requested path
       navigate(resolveClientNextPath(requestedNext));
     } catch (error: any) {
-      const message = error.message || "Invalid credentials. Please check your email, phone, or user ID and password.";
+      const serverData = error?.response?.data;
+      const message = serverData?.message || error.message || "Invalid credentials. Please check your email, phone, or user ID and password.";
       setErrors({ general: message });
-      addToast({ title: 'Login Failed', message, tone: 'error' });
+      const remaining = serverData?.remainingAttempts ?? null;
+      setRemainingAttempts(remaining);
+
+      // Show toast for normal errors, skip for rate-limit (handled by inline timer)
+      if (remaining !== 0) {
+        addToast({ title: 'Login Failed', message, tone: 'error' });
+      }
+
+      // Start countdown timer when rate-limited
+      const retryMs = serverData?.retryAfterMs;
+      if (remaining === 0 && retryMs > 0) {
+        setRetryUntil(Date.now() + retryMs);
+      } else {
+        setRetryUntil(null);
+      }
     } finally {
       setLoading(false);
     }
@@ -199,8 +250,10 @@ const Login = () => {
                 <input
                   value={form.identifier}
                   onChange={handleIdentifierChange}
+                  disabled={remainingAttempts === 0}
                   className={clsx(
                     "w-full h-11 px-4 rounded-xl bg-white/50 border outline-none transition-all focus:ring-4 focus:ring-primary/5 placeholder:text-slate-400 text-sm",
+                    remainingAttempts === 0 && "opacity-50 cursor-not-allowed",
                     errors.identifier || (errors.general && (errors.general.includes('Email') || errors.general.includes('Phone') || errors.general.includes('found')))
                       ? "border-red-400 focus:border-red-500"
                       : "border-slate-200 focus:border-primary/50"
@@ -222,8 +275,10 @@ const Login = () => {
                   type={showPassword ? 'text' : 'password'}
                   value={form.password}
                   onChange={handlePasswordChange}
+                  disabled={remainingAttempts === 0}
                   className={clsx(
                     "w-full h-11 pl-4 pr-11 rounded-xl bg-white/50 border outline-none transition-all focus:ring-4 focus:ring-primary/5 placeholder:text-slate-400 text-sm",
+                    remainingAttempts === 0 && "opacity-50 cursor-not-allowed",
                     errors.password || (errors.general && errors.general.includes('Password'))
                       ? "border-red-400 focus:border-red-500"
                       : "border-slate-200 focus:border-primary/50"
@@ -241,7 +296,40 @@ const Login = () => {
             </div>
 
             <div className="pt-2">
-              {errors.general && (
+              {remainingAttempts !== null && remainingAttempts <= 3 && (
+                <div className={clsx(
+                  "mb-4 p-4 rounded-xl border flex items-center gap-3 animate-in fade-in slide-in-from-bottom-2",
+                  remainingAttempts === 0
+                    ? "bg-red-50 border-red-200"
+                    : "bg-amber-50 border-amber-200"
+                )}>
+                  <Timer className={clsx(
+                    "h-5 w-5 shrink-0",
+                    remainingAttempts === 0 ? "text-red-500" : "text-amber-500"
+                  )} />
+                  <div className="flex-1">
+                    {remainingAttempts === 0 ? (
+                      <p className="text-xs font-bold text-red-700 leading-tight">
+                        Too many login attempts{countdown ? <>.</> : ''}{' '}
+                        {countdown ? (
+                          <span className="font-semibold text-red-600 tabular-nums">
+                            Try again in {countdown}
+                          </span>
+                        ) : (
+                          <span className="font-semibold text-red-600">
+                            Please wait.
+                          </span>
+                        )}
+                      </p>
+                    ) : (
+                      <p className="text-xs font-bold text-amber-800 leading-tight">
+                        Only {remainingAttempts} attempt{remainingAttempts === 1 ? '' : 's'} left
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+              {errors.general && remainingAttempts !== 0 && (
                 <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-100 flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
                   <AlertCircle className="h-4 w-4 text-red-500 shrink-0" />
                   <div className="text-xs font-bold text-red-600 leading-tight">
