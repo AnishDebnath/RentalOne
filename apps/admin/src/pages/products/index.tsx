@@ -57,25 +57,25 @@ const Products = () => {
 
   const statusOptions = [
     { label: 'All Status', value: 'all' },
-    { 
-      label: 'In Stock', 
-      value: 'in_stock', 
-      icon: <CheckCircle2 className="h-3 w-3 text-emerald-500" /> 
+    {
+      label: 'In Stock',
+      value: 'in_stock',
+      icon: <CheckCircle2 className="h-3 w-3 text-emerald-500" />
     },
-    { 
-      label: 'On Rent', 
-      value: 'on_rent', 
-      icon: <Clock className="h-3 w-3 text-amber-500" /> 
+    {
+      label: 'On Rent',
+      value: 'on_rent',
+      icon: <Clock className="h-3 w-3 text-amber-500" />
     },
-    { 
-      label: 'Out of Stock', 
-      value: 'out_of_stock', 
-      icon: <AlertCircle className="h-3 w-3 text-rose-500" /> 
+    {
+      label: 'Out of Stock',
+      value: 'out_of_stock',
+      icon: <AlertCircle className="h-3 w-3 text-rose-500" />
     },
-    { 
-      label: 'Booked', 
-      value: 'booked', 
-      icon: <Clock className="h-3 w-3 text-sky-500" /> 
+    {
+      label: 'Booked',
+      value: 'booked',
+      icon: <Clock className="h-3 w-3 text-sky-500" />
     }
   ];
 
@@ -151,14 +151,14 @@ const Products = () => {
       <div className="space-y-6">
         {!isLoading || rows.length > 0 ? (
           <>
-            <ProductStats 
+            <ProductStats
               totalItems={rows.length}
               rentedItems={rows.filter(r => r.booking_status === 'on_rent').length}
               inStockItems={rows.filter(r => r.booking_status === 'available').length}
               outOfStockItems={rows.filter(r => r.booking_status === 'out_of_stock').length}
             />
 
-            <ProductInventoryFilters 
+            <ProductInventoryFilters
               searchTerm={searchTerm}
               setSearchTerm={setSearchTerm}
               showFilters={showFilters}
@@ -174,7 +174,7 @@ const Products = () => {
               statusOptions={statusOptions}
             />
 
-            <ProductCard 
+            <ProductCard
               rows={rows}
               isLoading={isLoading}
               loadingQrId={loadingQrId}
@@ -189,9 +189,9 @@ const Products = () => {
       </div>
 
       {selectedQrProduct && (
-        <QRLabelModal 
-          product={selectedQrProduct} 
-          onClose={() => setSelectedQrProduct(null)} 
+        <QRLabelModal
+          product={selectedQrProduct}
+          onClose={() => setSelectedQrProduct(null)}
         />
       )}
 

@@ -224,7 +224,7 @@ router.get('/:id', validateUuid('id'), async (req: Request, res: Response) => {
 
   const { data, error } = await supabase
     .from('products')
-    .select('id, name, brand, category, price_per_day, unique_code, available_quantity, images, created_at')
+    .select('id, name, brand, category, price_per_day, unique_code, available_quantity, images, created_at, qr_base64')
     .eq('id', req.params.id)
     .maybeSingle();
 
