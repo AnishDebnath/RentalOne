@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "esbuild src/index.ts --bundle --platform=node --format=cjs --external:express --external:@supabase/supabase-js --external:jsonwebtoken --external:bcryptjs --external:cookie-parser --external:cors --external:multer --external:sharp --external:cloudinary --external:dotenv --external:qrcode --external:@aws-sdk/client-s3 --external:@aws-sdk/s3-request-presigner --external:helmet --external:compression --external:express-rate-limit --external:zod --outfile=dist/index.cjs",
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --external:express --external:@supabase/supabase-js --external:jsonwebtoken --external:bcryptjs --external:cookie-parser --external:cors --external:multer --external:sharp --external:cloudinary --external:dotenv --external:qrcode --external:@aws-sdk/client-s3 --external:@aws-sdk/s3-request-presigner --external:helmet --external:compression --external:express-rate-limit --external:zod --outfile=dist/index.js",
     "prestart": "npm run build",
-    "start": "node dist/index.cjs"
+    "start": "node dist/index.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.782.0",
