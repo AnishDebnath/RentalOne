@@ -138,7 +138,7 @@ const UserDetailPage = () => {
 
   const hasOverdueRentals = (user?.rentals || []).some((rental: any) => {
     const isReleased = rental.status === 'released' || rental.status === 'active';
-    const isOverdue = new Date().setHours(0,0,0,0) > new Date(rental.event_date || rental.return_date).setHours(0,0,0,0);
+    const isOverdue = new Date().setHours(0, 0, 0, 0) > new Date(rental.event_date || rental.return_date).setHours(0, 0, 0, 0);
     return isReleased && isOverdue;
   });
 
@@ -209,11 +209,10 @@ const UserDetailPage = () => {
                   type="button"
                   onClick={() => setConfirmType('block')}
                   disabled={isUpdating}
-                  className={`pill-button border ${
-                    blocked
+                  className={`pill-button border ${blocked
                       ? 'border-success/20 bg-success/10 text-success hover:bg-success'
                       : 'border-warning/20 bg-warning/10 text-warning hover:bg-warning'
-                  } hover:text-white disabled:opacity-50`}
+                    } hover:text-white disabled:opacity-50`}
                 >
                   {blocked ? 'Unblock User' : 'Block User'}
                 </button>
@@ -252,28 +251,28 @@ const UserDetailPage = () => {
           confirmType === 'delete'
             ? 'Delete User?'
             : confirmType === 'block'
-            ? blocked
-              ? 'Unblock User?'
-              : 'Block User?'
-            : 'Verify User?'
+              ? blocked
+                ? 'Unblock User?'
+                : 'Block User?'
+              : 'Verify User?'
         }
         message={
           confirmType === 'delete'
             ? 'This action is permanent and will remove all user data and rental history. Are you sure?'
             : confirmType === 'block'
-            ? blocked
-              ? 'This will allow the user to log in and rent gear again.'
-              : 'This will prevent the user from logging in or placing new rentals.'
-            : 'This will mark the user as verified and allow them to rent gear. Have you verified their documents?'
+              ? blocked
+                ? 'This will allow the user to log in and rent gear again.'
+                : 'This will prevent the user from logging in or placing new rentals.'
+              : 'This will mark the user as verified and allow them to rent gear. Have you verified their documents?'
         }
         confirmLabel={
           confirmType === 'delete'
             ? 'Delete Permanently'
             : confirmType === 'block'
-            ? blocked
-              ? 'Unblock'
-              : 'Block User'
-            : 'Verify & Accept'
+              ? blocked
+                ? 'Unblock'
+                : 'Block User'
+              : 'Verify & Accept'
         }
       />
     </div>

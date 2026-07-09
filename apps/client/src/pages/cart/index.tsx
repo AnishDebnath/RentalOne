@@ -161,8 +161,8 @@ const Cart = () => {
                         onClick={() => navigate('/checkout')}
                         disabled={hasUnavailableItems || hasDifferentDates}
                         className={`primary-button group flex-[1.5] py-4 shadow-xl ring-1 ring-white/20 transition-all ${hasUnavailableItems || hasDifferentDates
-                            ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none ring-0'
-                            : 'shadow-primary/20'
+                          ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none ring-0'
+                          : 'shadow-primary/20'
                           }`}
                       >
                         {hasUnavailableItems ? 'Remove Unavailable Items' : 'Proceed to Rent'}

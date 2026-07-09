@@ -16,31 +16,31 @@ interface AccountDetailsTabProps {
   errors?: Record<string, string>;
 }
 
-const AccountDetailsTab = ({ 
-  draft, 
-  editing, 
-  loading, 
+const AccountDetailsTab = ({
+  draft,
+  editing,
+  loading,
   hasActiveRentals,
   activeRentals = [],
-  onSetEditing, 
-  onDraftChange, 
+  onSetEditing,
+  onDraftChange,
   onSave,
   errors = {}
 }: AccountDetailsTabProps) => {
   const { addToast } = useToast();
   const aadhaarInputRef = useRef<HTMLInputElement>(null);
   const voterInputRef = useRef<HTMLInputElement>(null);
-  
+
   const [compressing, setCompressing] = useState<Record<string, boolean>>({
     aadhaar: false,
     voter: false
   });
-  
+
   const hasOverdueUnreturned = activeRentals.some(rental => {
     const isReleased = (rental.products || []).some(
       (item: any) => item.status === 'released'
     );
-    const isOverdue = new Date().setHours(0,0,0,0) > new Date(rental.event_date).setHours(0,0,0,0);
+    const isOverdue = new Date().setHours(0, 0, 0, 0) > new Date(rental.event_date).setHours(0, 0, 0, 0);
     return isReleased && isOverdue;
   });
 
@@ -83,14 +83,14 @@ const AccountDetailsTab = ({
       // 1. Show immediate preview (as base64 or blob URL)
       const previewUrl = URL.createObjectURL(file);
       onDraftChange(`${key}Url`, previewUrl); // Temporarily update URL for preview
-      
+
       // 2. Compress the image
       const compressed = await compressImage(file);
-      
+
       // 3. Update the draft with the (compressed) file object
       // The updateProfile function should handle FormData if it sees File objects
       onDraftChange(key, compressed as any);
-      
+
       // Update preview with compressed version
       const compressedUrl = URL.createObjectURL(compressed);
       onDraftChange(`${key}Url`, compressedUrl);
@@ -103,11 +103,11 @@ const AccountDetailsTab = ({
       setCompressing(prev => ({ ...prev, [typeKey]: false }));
     }
   };
-  
+
   const ErrorMessage = () => {
     const errorValues = Object.values(errors);
     if (errorValues.length === 0) return null;
-    
+
     const displayMessage = errors.general || errorValues[0];
 
     return (
@@ -163,11 +163,10 @@ const AccountDetailsTab = ({
           type="button"
           disabled={hasActiveRentals}
           onClick={() => onSetEditing((c: any) => !c)}
-          className={`flex h-[2.25rem] md:h-[2.5rem] w-fit items-center justify-center rounded-xl px-4 md:px-5 text-[10px] md:text-xs font-bold uppercase tracking-[0.1em] transition-all duration-300 shadow-sm disabled:opacity-50 ${
-            editing 
-              ? 'bg-danger/10 text-danger hover:bg-danger/20 border border-danger/20' 
+          className={`flex h-[2.25rem] md:h-[2.5rem] w-fit items-center justify-center rounded-xl px-4 md:px-5 text-[10px] md:text-xs font-bold uppercase tracking-[0.1em] transition-all duration-300 shadow-sm disabled:opacity-50 ${editing
+              ? 'bg-danger/10 text-danger hover:bg-danger/20 border border-danger/20'
               : 'bg-white text-ink hover:text-primary hover:shadow-md border border-white/60'
-          }`}
+            }`}
         >
           {editing ? (
             <><X className="mr-1.5 h-3.5 w-3.5 md:h-4 md:w-4" /> Cancel</>
@@ -179,11 +178,11 @@ const AccountDetailsTab = ({
 
       <div className="rounded-[2.5rem] border border-white bg-white/50 p-5 backdrop-blur-2xl md:p-8 shadow-sm">
         <ErrorMessage />
-        
+
         <div className="flex flex-col gap-12 pt-2 md:pt-4">
           {sections.map((section, index) => (
-            <div 
-              key={section.title} 
+            <div
+              key={section.title}
               className="flex flex-col gap-5"
             >
               {/* Top Row: Context */}
@@ -195,12 +194,12 @@ const AccountDetailsTab = ({
                   <h3 className="text-lg font-bold tracking-tight text-ink">{section.title}</h3>
                 </div>
                 <p className="text-sm font-medium leading-relaxed text-muted/70">
-                  {index === 0 ? "Update your fundamental contact details and name." 
-                   : index === 1 ? "Ensure your identity documents are accurate." 
-                   : "Link your profiles to build trust within the community."}
+                  {index === 0 ? "Update your fundamental contact details and name."
+                    : index === 1 ? "Ensure your identity documents are accurate."
+                      : "Link your profiles to build trust within the community."}
                 </p>
               </div>
-              
+
               {/* Downside Details: Fields */}
               <div className="w-full pt-1">
                 {section.title === 'Identity Verification' ? (
@@ -209,9 +208,9 @@ const AccountDetailsTab = ({
                       const label = key === 'aadhaarNo' ? 'Aadhaar Card' : 'Voter ID';
                       const docUrl = key === 'aadhaarNo' ? draft.aadhaarDocUrl : draft.voterDocUrl;
                       const value = (draft as any)[key] || '';
-                      
+
                       return (
-                      <div key={key} className="flex flex-col bg-white/60 rounded-[1.2rem] border border-white shadow-sm overflow-hidden">
+                        <div key={key} className="flex flex-col bg-white/60 rounded-[1.2rem] border border-white shadow-sm overflow-hidden">
                           <div className="flex items-center justify-between px-5 pt-5 pb-1">
                             <h4 className="text-sm font-bold text-ink">{label}</h4>
                             <span className="text-[9px] font-bold text-tertiary uppercase tracking-widest px-2 py-0.5 rounded border border-black/5 bg-white">Document</span>
@@ -225,11 +224,10 @@ const AccountDetailsTab = ({
                                   Document Number
                                 </label>
                               </div>
-                              <div className={`h-11 overflow-hidden rounded-xl transition-all shadow-sm flex items-center px-4 border ${
-                                editing 
-                                  ? (errors[key] ? 'bg-white border-danger/40 ring-2 ring-danger/5' : 'bg-white border-black/15 focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/10') 
+                              <div className={`h-11 overflow-hidden rounded-xl transition-all shadow-sm flex items-center px-4 border ${editing
+                                  ? (errors[key] ? 'bg-white border-danger/40 ring-2 ring-danger/5' : 'bg-white border-black/15 focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/10')
                                   : 'bg-white/40 border-black/5 opacity-90'
-                              }`}>
+                                }`}>
                                 <input
                                   disabled={!editing}
                                   type="text"
@@ -243,9 +241,8 @@ const AccountDetailsTab = ({
                                     }
                                     onDraftChange(key, val);
                                   }}
-                                  className={`w-full bg-transparent border-none p-0 text-sm font-semibold focus:ring-0 ${
-                                     editing ? 'text-ink placeholder:text-muted/40' : 'text-ink/90 cursor-default'
-                                  }`}
+                                  className={`w-full bg-transparent border-none p-0 text-sm font-semibold focus:ring-0 ${editing ? 'text-ink placeholder:text-muted/40' : 'text-ink/90 cursor-default'
+                                    }`}
                                   placeholder={editing ? "Enter number" : "Not provided"}
                                 />
                               </div>
@@ -253,14 +250,14 @@ const AccountDetailsTab = ({
                                 <p className="text-[10px] font-bold text-danger ml-1 mt-1">{errors[key]}</p>
                               )}
                             </div>
-                            
+
                             <div className="w-full">
                               <p className="mb-1.5 text-[10px] font-bold tracking-[0.1em] text-tertiary uppercase ml-1">Digital Copy</p>
                               <div className="group/img relative w-full overflow-hidden rounded-xl border-2 border-white shadow-sm bg-slate-50">
                                 {docUrl ? (
-                                  <img 
-                                    src={docUrl} 
-                                    alt={label} 
+                                  <img
+                                    src={docUrl}
+                                    alt={label}
                                     className="w-full h-auto object-contain"
                                   />
                                 ) : (
@@ -269,7 +266,7 @@ const AccountDetailsTab = ({
                                     <span className="text-[9px] font-bold uppercase tracking-widest opacity-60">No File</span>
                                   </div>
                                 )}
-                                
+
                                 {editing && (
                                   <div className={`absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px] transition-all ${compressing[key === 'aadhaarNo' ? 'aadhaar' : 'voter'] ? 'opacity-100' : 'opacity-0 group-hover/img:opacity-100'}`}>
                                     {compressing[key === 'aadhaarNo' ? 'aadhaar' : 'voter'] ? (
@@ -278,7 +275,7 @@ const AccountDetailsTab = ({
                                         <span className="text-[10px] font-bold uppercase tracking-widest">Optimizing...</span>
                                       </div>
                                     ) : (
-                                      <button 
+                                      <button
                                         type="button"
                                         onClick={() => (key === 'aadhaarNo' ? aadhaarInputRef : voterInputRef).current?.click()}
                                         className="flex text-[10px] uppercase tracking-widest font-bold text-ink shadow-sm items-center gap-1.5 bg-white hover:bg-slate-50 px-4 py-2 rounded-lg transition-colors"
@@ -289,11 +286,11 @@ const AccountDetailsTab = ({
                                   </div>
                                 )}
                               </div>
-                              <input 
+                              <input
                                 ref={key === 'aadhaarNo' ? aadhaarInputRef : voterInputRef}
-                                type="file" 
-                                accept="image/*" 
-                                className="hidden" 
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
                                 onChange={(e) => handleFileChange(key === 'aadhaarNo' ? 'aadhaarDoc' : 'voterDoc', e.target.files?.[0] || null)}
                               />
                             </div>
@@ -315,11 +312,10 @@ const AccountDetailsTab = ({
                               {label as string}
                             </label>
                           </div>
-                          <div className={`h-11 overflow-hidden rounded-xl transition-all shadow-sm flex items-center px-4 border ${
-                            editing 
-                              ? (errors[key] ? 'bg-white border-danger/40 ring-2 ring-danger/5' : 'bg-white border-black/15 focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/10') 
+                          <div className={`h-11 overflow-hidden rounded-xl transition-all shadow-sm flex items-center px-4 border ${editing
+                              ? (errors[key] ? 'bg-white border-danger/40 ring-2 ring-danger/5' : 'bg-white border-black/15 focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-primary/10')
                               : 'bg-white/40 border-black/5 opacity-90'
-                          }`}>
+                            }`}>
                             <input
                               disabled={!editing}
                               type={type}
@@ -331,9 +327,8 @@ const AccountDetailsTab = ({
                                 }
                                 onDraftChange(key, val);
                               }}
-                              className={`w-full bg-transparent border-none p-0 text-sm font-semibold focus:ring-0 ${
-                                 editing ? 'text-ink placeholder:text-muted/40' : 'text-ink/90 cursor-default'
-                              }`}
+                              className={`w-full bg-transparent border-none p-0 text-sm font-semibold focus:ring-0 ${editing ? 'text-ink placeholder:text-muted/40' : 'text-ink/90 cursor-default'
+                                }`}
                               placeholder={editing ? `Add ${label.toLowerCase()}` : 'Not provided'}
                             />
                           </div>

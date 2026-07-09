@@ -117,14 +117,12 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
       {/* Row 5b: Selected Dates (Only if selected) */}
       {hasDatesSelected && pickupDate && dropDate && (
         <div className="flex flex-col sm:flex-row gap-3 pt-1">
-          <div className={`flex-1 flex items-center gap-3 rounded-2xl border p-3 shadow-sm transition-all ${
-            status === 'booked' 
-              ? 'border-amber-500/30 bg-amber-500/5' 
+          <div className={`flex-1 flex items-center gap-3 rounded-2xl border p-3 shadow-sm transition-all ${status === 'booked'
+              ? 'border-amber-500/30 bg-amber-500/5'
               : 'border-line bg-card/10'
-          }`}>
-            <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
-              status === 'booked' ? 'bg-amber-500/10 text-amber-600' : 'bg-primary/5 text-primary'
             }`}>
+            <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${status === 'booked' ? 'bg-amber-500/10 text-amber-600' : 'bg-primary/5 text-primary'
+              }`}>
               <Calendar className="h-4.5 w-4.5" />
             </div>
             <div className="space-y-0.5">
@@ -133,14 +131,12 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
             </div>
           </div>
 
-          <div className={`flex-1 flex items-center gap-3 rounded-2xl border p-3 shadow-sm transition-all ${
-            status === 'booked' 
-              ? 'border-amber-500/30 bg-amber-500/5' 
+          <div className={`flex-1 flex items-center gap-3 rounded-2xl border p-3 shadow-sm transition-all ${status === 'booked'
+              ? 'border-amber-500/30 bg-amber-500/5'
               : 'border-line bg-card/10'
-          }`}>
-            <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
-              status === 'booked' ? 'bg-amber-500/10 text-amber-600' : 'bg-primary/5 text-primary'
             }`}>
+            <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${status === 'booked' ? 'bg-amber-500/10 text-amber-600' : 'bg-primary/5 text-primary'
+              }`}>
               <Calendar className="h-4.5 w-4.5" />
             </div>
             <div className="space-y-0.5">

@@ -72,16 +72,15 @@ const ProductActions = ({
             onClick={handleActionClick}
             disabled={isDisabled}
             className={`relative z-10 flex h-12 flex-1 items-center justify-center gap-3 rounded-full transition-all active:scale-[0.98]
-              ${
-                status === 'out_of_stock'
-                  ? 'bg-danger/10 text-danger border border-danger/20 cursor-not-allowed font-bold'
-                  : (status === 'booked' || status === 'on_rent')
-                    ? 'bg-amber-500/10 text-amber-600 border border-amber-500/20 cursor-not-allowed font-bold'
-                    : status === 'select_dates'
-                      ? 'bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 cursor-pointer font-bold'
-                      : inCart
-                        ? 'bg-success/10 text-success border border-success/20 hover:bg-success/20 shadow-sm font-bold'
-                        : 'bg-primary shadow-lg shadow-primary/25 hover:bg-primary-hover hover:translate-y-[-1px] hover:shadow-xl hover:shadow-primary/20 font-black text-white'
+              ${status === 'out_of_stock'
+                ? 'bg-danger/10 text-danger border border-danger/20 cursor-not-allowed font-bold'
+                : (status === 'booked' || status === 'on_rent')
+                  ? 'bg-amber-500/10 text-amber-600 border border-amber-500/20 cursor-not-allowed font-bold'
+                  : status === 'select_dates'
+                    ? 'bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 cursor-pointer font-bold'
+                    : inCart
+                      ? 'bg-success/10 text-success border border-success/20 hover:bg-success/20 shadow-sm font-bold'
+                      : 'bg-primary shadow-lg shadow-primary/25 hover:bg-primary-hover hover:translate-y-[-1px] hover:shadow-xl hover:shadow-primary/20 font-black text-white'
               }`}
           >
             {status === 'out_of_stock' ? (
@@ -139,16 +138,15 @@ const ProductActions = ({
               onClick={handleActionClick}
               disabled={isDisabled}
               className={`relative z-10 flex h-12 flex-1 items-center justify-center gap-3 rounded-full transition-all active:scale-[0.98]
-                ${
-                  status === 'out_of_stock'
-                    ? 'bg-danger/10 text-danger border border-danger/20 cursor-not-allowed font-bold'
-                    : (status === 'booked' || status === 'on_rent')
-                      ? 'bg-amber-500/10 text-amber-600 border border-amber-500/20 cursor-not-allowed font-bold'
-                      : status === 'select_dates'
-                        ? 'bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 cursor-pointer font-bold'
-                        : inCart
-                          ? 'bg-success/10 text-success border border-success/20 hover:bg-success/20 shadow-sm font-bold'
-                          : 'bg-primary shadow-md shadow-primary/30 hover:bg-primary-hover font-black text-white'
+                ${status === 'out_of_stock'
+                  ? 'bg-danger/10 text-danger border border-danger/20 cursor-not-allowed font-bold'
+                  : (status === 'booked' || status === 'on_rent')
+                    ? 'bg-amber-500/10 text-amber-600 border border-amber-500/20 cursor-not-allowed font-bold'
+                    : status === 'select_dates'
+                      ? 'bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 cursor-pointer font-bold'
+                      : inCart
+                        ? 'bg-success/10 text-success border border-success/20 hover:bg-success/20 shadow-sm font-bold'
+                        : 'bg-primary shadow-md shadow-primary/30 hover:bg-primary-hover font-black text-white'
                 }`}
             >
               {status === 'out_of_stock' ? (

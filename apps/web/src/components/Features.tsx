@@ -5,7 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { 
+import {
   Sparkles,
   LayoutDashboard,
   LayoutGrid,
@@ -36,7 +36,7 @@ function ControlPanelMockup() {
       {/* Left Sidebar Mockup Container */}
       <div className="w-14 sm:w-16 bg-white rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgba(0,0,0,0.02)] py-4 flex flex-col items-center gap-3 shrink-0">
         {/* Logo Icon */}
-        <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-primary to-primary-hover flex items-center justify-center shadow-md shadow-primary/20 mb-1">
+        <div className="w-8 h-8 rounded-xl bg-linear-to-tr from-primary to-primary-hover flex items-center justify-center shadow-md shadow-primary/20 mb-1">
           <Sparkles className="w-4 h-4 text-white" />
         </div>
 
@@ -159,26 +159,26 @@ function ControlPanelMockup() {
 // --- CARD 02 SUPPORT COMPONENTS ---
 function SmartInventoryMockup() {
   return (
-    <div className="relative w-full flex-1 min-h-[260px] flex items-center justify-center select-none overflow-hidden pb-6">
+    <div className="relative w-full flex-1 min-h-65 flex items-center justify-center select-none overflow-hidden pb-6">
       {/* Background concentric orbital paths */}
-      <div className="absolute w-[220px] h-[220px] rounded-full border border-dashed border-slate-300/60 flex items-center justify-center">
-        <div className="absolute w-[150px] h-[150px] rounded-full border border-dashed border-slate-200 flex items-center justify-center" />
+      <div className="absolute w-55 h-55 rounded-full border border-dashed border-slate-300/60 flex items-center justify-center">
+        <div className="absolute w-37.5 h-37.5 rounded-full border border-dashed border-slate-200 flex items-center justify-center" />
       </div>
 
       {/* Orbiting tiny active nodes on the rings */}
-      <motion.div 
+      <motion.div
         animate={{ rotate: 360 }}
         transition={{ duration: 16, repeat: Infinity, ease: "linear" }}
-        className="absolute w-[220px] h-[220px] pointer-events-none"
+        className="absolute w-55 h-55 pointer-events-none"
       >
         <span className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" />
         <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400/40" />
       </motion.div>
 
-      <motion.div 
+      <motion.div
         animate={{ rotate: -360 }}
         transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-        className="absolute w-[150px] h-[150px] pointer-events-none"
+        className="absolute w-37.5 h-37.5 pointer-events-none"
       >
         <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-400" />
         <span className="absolute right-0 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-300/60" />
@@ -188,7 +188,7 @@ function SmartInventoryMockup() {
       <div className="relative flex items-center justify-center z-10">
         {/* Soft white circular pedestal with elegant shadows */}
         <div className="absolute w-24 h-24 rounded-full bg-white border border-slate-100 shadow-[0_12px_24px_-8px_rgba(0,0,0,0.06)] flex items-center justify-center backdrop-blur-xs">
-          <div className="w-18 h-18 rounded-full bg-gradient-to-b from-slate-50 to-white border border-slate-50 shadow-inner" />
+          <div className="w-18 h-18 rounded-full bg-linear-to-b from-slate-50 to-white border border-slate-50 shadow-inner" />
         </div>
 
         {/* Isometric 3D Cube SVG */}
@@ -315,7 +315,7 @@ function RentalBookingMockup() {
             92% UTILITY RATE
           </span>
         </div>
-        
+
         <div className="bg-slate-50/50 border border-slate-100 rounded-xl p-2 sm:p-2.5 flex flex-col gap-1.5">
           {/* Segmented Progress Track with pulse effects */}
           <div className="h-1.5 rounded-full bg-slate-100 flex overflow-hidden">
@@ -341,36 +341,32 @@ function RentalBookingMockup() {
         {cards.map((card, idx) => {
           const CardIcon = card.icon;
           const isActive = idx === activeCard;
-          
+
           return (
             <div key={idx} className="contents">
-              <div 
-                className={`flex-1 bg-white border rounded-xl p-1.5 sm:p-2 flex flex-col items-center text-center transition-all duration-300 ${
-                  isActive 
-                    ? 'border-slate-200 shadow-md scale-[1.04]' 
+              <div
+                className={`flex-1 bg-white border rounded-xl p-1.5 sm:p-2 flex flex-col items-center text-center transition-all duration-300 ${isActive
+                    ? 'border-slate-200 shadow-md scale-[1.04]'
                     : 'border-slate-100 hover:border-slate-200 hover:shadow-2xs opacity-80'
-                } cursor-pointer`}
+                  } cursor-pointer`}
               >
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mb-1 transition-all duration-300 ${
-                  isActive ? card.activeColorClass : card.baseColorClass
-                }`}>
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mb-1 transition-all duration-300 ${isActive ? card.activeColorClass : card.baseColorClass
+                  }`}>
                   <CardIcon className={`w-4 h-4 ${card.iconFill || ''}`} />
                 </div>
                 <span className={`text-xs font-black leading-none transition-colors duration-300 ${isActive ? 'text-slate-900' : 'text-slate-600'}`}>
                   {card.count}
                 </span>
-                <span className={`text-[8px] font-extrabold uppercase tracking-wider font-mono mt-1 transition-colors duration-300 ${
-                  isActive ? 'text-slate-800' : 'text-slate-400'
-                }`}>
+                <span className={`text-[8px] font-extrabold uppercase tracking-wider font-mono mt-1 transition-colors duration-300 ${isActive ? 'text-slate-800' : 'text-slate-400'
+                  }`}>
                   {card.label}
                 </span>
               </div>
-              
+
               {/* Chevron Connector if not the last card */}
               {idx < cards.length - 1 && (
-                <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-colors duration-300 ${
-                  activeCard === idx || activeCard === idx + 1 ? 'text-primary/70' : 'text-slate-200'
-                }`} />
+                <ChevronRight className={`w-3.5 h-3.5 shrink-0 transition-colors duration-300 ${activeCard === idx || activeCard === idx + 1 ? 'text-primary/70' : 'text-slate-200'
+                  }`} />
               )}
             </div>
           );
@@ -383,7 +379,7 @@ function RentalBookingMockup() {
 // --- CARD 04 SUPPORT COMPONENTS ---
 function CustomerBusinessMockup() {
   return (
-    <div className="relative w-full h-[200px] flex flex-col items-center justify-center select-none overflow-hidden mt-1 pb-1">
+    <div className="relative w-full h-50 flex flex-col items-center justify-center select-none overflow-hidden mt-1 pb-1">
       {/* Network background vector connections */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 300 180" preserveAspectRatio="none">
         <defs>
@@ -392,71 +388,71 @@ function CustomerBusinessMockup() {
             <stop offset="100%" stopColor="#3b82f6" />
           </linearGradient>
         </defs>
- 
+
         {/* Dashed connection curves */}
         <path d="M 150 90 Q 100 45, 55 40" fill="none" stroke="#f1f5f9" strokeWidth="1.75" />
         <path d="M 150 90 Q 200 45, 245 40" fill="none" stroke="#f1f5f9" strokeWidth="1.75" />
         <path d="M 150 90 Q 105 135, 60 140" fill="none" stroke="#f1f5f9" strokeWidth="1.75" />
         <path d="M 150 90 Q 195 135, 240 140" fill="none" stroke="#f1f5f9" strokeWidth="1.75" />
- 
+
         {/* Animated connection line flows */}
-        <motion.path 
-          d="M 150 90 Q 100 45, 55 40" 
-          fill="none" 
-          stroke="url(#flow-gradient)" 
-          strokeWidth="1.5" 
+        <motion.path
+          d="M 150 90 Q 100 45, 55 40"
+          fill="none"
+          stroke="url(#flow-gradient)"
+          strokeWidth="1.5"
           strokeDasharray="4 8"
           animate={{ strokeDashoffset: [0, -24] }}
           transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
         />
-        <motion.path 
-          d="M 150 90 Q 200 45, 245 40" 
-          fill="none" 
-          stroke="url(#flow-gradient)" 
-          strokeWidth="1.5" 
+        <motion.path
+          d="M 150 90 Q 200 45, 245 40"
+          fill="none"
+          stroke="url(#flow-gradient)"
+          strokeWidth="1.5"
           strokeDasharray="4 8"
           animate={{ strokeDashoffset: [0, 24] }}
           transition={{ duration: 4.5, repeat: Infinity, ease: "linear" }}
         />
-        <motion.path 
-          d="M 150 90 Q 105 135, 60 140" 
-          fill="none" 
-          stroke="url(#flow-gradient)" 
-          strokeWidth="1.5" 
+        <motion.path
+          d="M 150 90 Q 105 135, 60 140"
+          fill="none"
+          stroke="url(#flow-gradient)"
+          strokeWidth="1.5"
           strokeDasharray="4 8"
           animate={{ strokeDashoffset: [0, -20] }}
           transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
         />
-        <motion.path 
-          d="M 150 90 Q 195 135, 240 140" 
-          fill="none" 
-          stroke="url(#flow-gradient)" 
-          strokeWidth="1.5" 
+        <motion.path
+          d="M 150 90 Q 195 135, 240 140"
+          fill="none"
+          stroke="url(#flow-gradient)"
+          strokeWidth="1.5"
           strokeDasharray="4 8"
           animate={{ strokeDashoffset: [0, 20] }}
           transition={{ duration: 3.8, repeat: Infinity, ease: "linear" }}
         />
       </svg>
- 
+
       {/* Central Node with background glowing wave-pulse */}
       <div className="relative z-20">
         <motion.div
           animate={{ scale: [0.95, 1.15, 0.95], opacity: [0.3, 0.1, 0.3] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute inset-x-[-12px] inset-y-[-12px] rounded-full bg-primary/35 blur-md -z-10"
+          className="absolute -inset-x-3 -inset-y-3 rounded-full bg-primary/35 blur-md -z-10"
         />
         <motion.div
           animate={{ scale: [1, 1.05, 1] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          className="w-12 h-12 rounded-full bg-gradient-to-tr from-primary to-primary-hover text-white flex items-center justify-center shadow-md shadow-primary/20 border-3 border-white shrink-0 cursor-pointer"
+          className="w-12 h-12 rounded-full bg-linear-to-tr from-primary to-primary-hover text-white flex items-center justify-center shadow-md shadow-primary/20 border-3 border-white shrink-0 cursor-pointer"
         >
           <Users className="w-5 h-5" />
         </motion.div>
       </div>
- 
+
       {/* Outer Orbiting Micro-Cards */}
       {/* 1. Apex Build - Top Left */}
-      <motion.div 
+      <motion.div
         animate={{ y: [0, -4, 0] }}
         transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
         className="absolute top-[8%] left-[1.5%] sm:left-[3.5%] bg-white border border-slate-100 rounded-xl p-1.5 sm:p-2 flex items-center gap-2 shadow-[0_6px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-slate-200 transition-all cursor-pointer z-10"
@@ -469,9 +465,9 @@ function CustomerBusinessMockup() {
           <span className="text-[8px] font-bold text-blue-500 font-mono uppercase tracking-wider mt-0.5">Active</span>
         </div>
       </motion.div>
- 
+
       {/* 2. Summit Group - Top Right */}
-      <motion.div 
+      <motion.div
         animate={{ y: [2, -2, 2] }}
         transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
         className="absolute top-[8%] right-[1.5%] sm:right-[3.5%] bg-white border border-slate-100 rounded-xl p-1.5 sm:p-2 flex items-center gap-2 shadow-[0_6px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-slate-200 transition-all cursor-pointer z-10"
@@ -484,9 +480,9 @@ function CustomerBusinessMockup() {
           <span className="text-[8px] font-bold text-primary font-mono uppercase tracking-wider mt-0.5">$48.5k</span>
         </div>
       </motion.div>
- 
+
       {/* 3. Nova Logistics - Bottom Left */}
-      <motion.div 
+      <motion.div
         animate={{ y: [-2, 2, -2] }}
         transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
         className="absolute bottom-[8%] left-[2%] sm:left-[4.5%] bg-white border border-slate-100 rounded-xl p-1.5 sm:p-2 flex items-center gap-2 shadow-[0_6px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-slate-200 transition-all cursor-pointer z-10"
@@ -499,9 +495,9 @@ function CustomerBusinessMockup() {
           <span className="text-[8px] font-bold text-emerald-500 font-mono uppercase tracking-wider mt-0.5">Partner</span>
         </div>
       </motion.div>
- 
+
       {/* 4. Stellar Co. - Bottom Right */}
-      <motion.div 
+      <motion.div
         animate={{ y: [1, -3, 1] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.9 }}
         className="absolute bottom-[8%] right-[2%] sm:right-[4.5%] bg-white border border-slate-100 rounded-xl p-1.5 sm:p-2 flex items-center gap-2 shadow-[0_6px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-md hover:border-slate-200 transition-all cursor-pointer z-10"
@@ -546,15 +542,14 @@ function SecureTrackingMockup() {
         {steps.map((step, idx) => {
           const StepIcon = step.icon;
           const isActive = idx === activeStep;
-          
+
           return (
             <div key={idx} className="flex flex-col items-center text-center z-10">
-              <div 
-                className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-2xs transition-all duration-300 ${
-                  isActive 
-                    ? `${step.colorClass} border-2 scale-105 shadow-xs` 
+              <div
+                className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-2xs transition-all duration-300 ${isActive
+                    ? `${step.colorClass} border-2 scale-105 shadow-xs`
                     : 'bg-white text-slate-400 border border-slate-100 hover:border-slate-200 hover:text-slate-500'
-                } cursor-pointer`}
+                  } cursor-pointer`}
               >
                 <StepIcon className="w-5 h-5" />
               </div>
@@ -578,7 +573,7 @@ function SecureTrackingMockup() {
             SECURE
           </span>
         </div>
-        
+
         <div className="flex items-center justify-between bg-white border border-slate-100 rounded-lg p-2.5 shadow-2xs">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-primary-light border border-primary-light/50 text-primary flex items-center justify-center font-extrabold text-[10px] font-mono shrink-0">
@@ -603,9 +598,9 @@ export default function Features() {
   return (
     <section id="product" className="py-24 bg-transparent relative">
       {/* Background radial gradient glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[600px] pointer-events-none -z-10 overflow-hidden">
-        <div className="absolute top-[20%] left-[20%] w-[500px] h-[500px] rounded-full bg-primary-light/45 blur-[130px]" />
-        <div className="absolute bottom-[20%] right-[10%] w-[450px] h-[450px] rounded-full bg-secondary-light/35 blur-[120px]" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-7xl h-150 pointer-events-none -z-10 overflow-hidden">
+        <div className="absolute top-[20%] left-[20%] w-125 h-125 rounded-full bg-primary-light/45 blur-[130px]" />
+        <div className="absolute bottom-[20%] right-[10%] w-112.5 h-112.5 rounded-full bg-secondary-light/35 blur-[120px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6">
@@ -614,7 +609,7 @@ export default function Features() {
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-light border border-primary-light text-xs font-semibold text-primary font-mono tracking-tight uppercase mb-4">
             <Sparkles className="w-3.5 h-3.5" /> Rental Business Software
           </div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -622,9 +617,9 @@ export default function Features() {
             transition={{ delay: 0.1 }}
             className="font-display text-4xl sm:text-5xl font-black tracking-tight text-slate-950 mb-4"
           >
-            The complete platform to <span className="block sm:inline bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">manage your rentals</span>
+            The complete platform to <span className="block sm:inline bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">manage your rentals</span>
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -636,20 +631,20 @@ export default function Features() {
           </motion.p>
         </div>        {/* Bento Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-12">
-          
+
           {/* 1. CENTRALIZED CONTROL PANEL (Row 1, Left) */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="group relative overflow-hidden bg-white border border-slate-200/50 rounded-3xl shadow-[0_4px_24px_-8px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-slate-300/60 transition-all duration-300 flex flex-col justify-between min-h-[420px]"
+            className="group relative overflow-hidden bg-white border border-slate-200/50 rounded-3xl shadow-[0_4px_24px_-8px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-slate-300/60 transition-all duration-300 flex flex-col justify-between min-h-105"
           >
             <div className="p-6 md:p-8 pb-3 flex flex-col gap-1.5">
               <div className="flex items-center gap-2">
                 <LayoutGrid className="w-5 h-5 text-primary shrink-0" />
                 <h3 className="text-[16px] sm:text-[18px] font-bold text-slate-900 tracking-tight">
-                   Business Dashboard
+                  Business Dashboard
                 </h3>
               </div>
               <p className="text-slate-500 text-xs sm:text-[13px] leading-relaxed font-medium mt-0.5">
@@ -667,7 +662,7 @@ export default function Features() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="group relative overflow-hidden bg-white border border-slate-200/50 rounded-3xl shadow-[0_4px_24px_-8px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-slate-300/60 transition-all duration-300 flex flex-col justify-between min-h-[420px]"
+            className="group relative overflow-hidden bg-white border border-slate-200/50 rounded-3xl shadow-[0_4px_24px_-8px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-slate-300/60 transition-all duration-300 flex flex-col justify-between min-h-105"
           >
             <div className="p-6 md:p-8 pb-3 flex flex-col gap-1.5">
               <div className="flex items-center gap-2">
@@ -689,14 +684,14 @@ export default function Features() {
 
         {/* Bento Grid Row 2 (3 columns - equal width) */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-          
+
           {/* 3. INTERACTIVE RENTAL LOGS */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="group relative overflow-hidden bg-white border border-slate-200/50 rounded-3xl shadow-[0_4px_24px_-8px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-slate-300/60 transition-all duration-300 flex flex-col justify-between min-h-[360px]"
+            className="group relative overflow-hidden bg-white border border-slate-200/50 rounded-3xl shadow-[0_4px_24px_-8px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-slate-300/60 transition-all duration-300 flex flex-col justify-between min-h-90"
           >
             <div className="p-6 md:p-8 pb-3 flex flex-col gap-1.5">
               <div className="flex items-center gap-2">
@@ -722,7 +717,7 @@ export default function Features() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="group relative overflow-hidden bg-white border border-slate-200/50 rounded-3xl shadow-[0_4px_24px_-8px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-slate-300/60 transition-all duration-300 flex flex-col justify-between min-h-[360px]"
+            className="group relative overflow-hidden bg-white border border-slate-200/50 rounded-3xl shadow-[0_4px_24px_-8px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-slate-300/60 transition-all duration-300 flex flex-col justify-between min-h-90"
           >
             <div className="p-6 md:p-8 pb-3 flex flex-col gap-1.5">
               <div className="flex items-center gap-2">
@@ -748,7 +743,7 @@ export default function Features() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="group relative overflow-hidden bg-white border border-slate-200/50 rounded-3xl shadow-[0_4px_24px_-8px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-slate-300/60 transition-all duration-300 flex flex-col justify-between min-h-[360px]"
+            className="group relative overflow-hidden bg-white border border-slate-200/50 rounded-3xl shadow-[0_4px_24px_-8px_rgba(0,0,0,0.03)] hover:shadow-xl hover:border-slate-300/60 transition-all duration-300 flex flex-col justify-between min-h-90"
           >
             <div className="p-6 md:p-8 pb-3 flex flex-col gap-1.5">
               <div className="flex items-center gap-2">

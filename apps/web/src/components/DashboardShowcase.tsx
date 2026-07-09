@@ -5,7 +5,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
+import {
   DollarSign, Box, Calendar, Clock, AlertCircle, ArrowUpRight, Check,
   QrCode, User, Plus, Bell, RefreshCw, Sparkles, Sliders, ChevronRight,
   ShieldAlert, Send, FileSignature, CheckCircle2, Star
@@ -80,7 +80,7 @@ export default function DashboardShowcase() {
 
   const verifyReturnAsset = (id: string) => {
     // Locate the booking and change its status to 'Returned'
-    setBookingList(prev => 
+    setBookingList(prev =>
       prev.map(b => b.id === id ? { ...b, status: 'Returned' as const } : b)
     );
     // Decrease active rentals, decrease upcoming returns
@@ -98,17 +98,17 @@ export default function DashboardShowcase() {
 
   return (
     <section id="showcase" className="py-24 bg-transparent relative">
-      <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] rounded-full bg-primary-light/40 blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute top-1/3 right-1/4 w-125 h-125 rounded-full bg-primary-light/40 blur-[140px] pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-6">
-        
+
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center mb-16">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-light border border-primary-light text-xs font-semibold text-primary font-mono tracking-tight uppercase mb-4">
             <Sliders className="w-3.5 h-3.5" /> Interactive Sandbox
           </div>
           <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 mb-4">
-            Experience the <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent font-display">Live CRM Dashboard</span>
+            Experience the <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent font-display">Live CRM Dashboard</span>
           </h2>
           <p className="text-slate-500 text-sm sm:text-base">
             This is a fully-operational interactive replica of the RentalOne ERP command station. Feel free to click around, trigger simulated orders, scan returns, and toggle system states.
@@ -121,7 +121,7 @@ export default function DashboardShowcase() {
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           className="max-w-6xl mx-auto bg-slate-950 border border-slate-800 rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden font-sans relative"
         >
-          
+
           {/* Top Panel Brand Bar */}
           <div className="bg-slate-950 px-6 py-4 border-b border-slate-900 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -141,33 +141,29 @@ export default function DashboardShowcase() {
             <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800/80">
               <button
                 onClick={() => setActiveTab('overview')}
-                className={`text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-all ${
-                  activeTab === 'overview' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
-                }`}
+                className={`text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-all ${activeTab === 'overview' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
+                  }`}
               >
                 Overview
               </button>
               <button
                 onClick={() => setActiveTab('fleet')}
-                className={`text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-all ${
-                  activeTab === 'fleet' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
-                }`}
+                className={`text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-all ${activeTab === 'fleet' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
+                  }`}
               >
                 Fleet (Inventory)
               </button>
               <button
                 onClick={() => setActiveTab('bookings')}
-                className={`text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-all ${
-                  activeTab === 'bookings' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
-                }`}
+                className={`text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-all ${activeTab === 'bookings' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
+                  }`}
               >
                 Active Bookings
               </button>
               <button
                 onClick={() => setActiveTab('customers')}
-                className={`text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-all ${
-                  activeTab === 'customers' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
-                }`}
+                className={`text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-all ${activeTab === 'customers' ? 'bg-primary text-white' : 'text-slate-400 hover:text-white'
+                  }`}
               >
                 Customer Directory
               </button>
@@ -189,9 +185,9 @@ export default function DashboardShowcase() {
           </div>
 
           {/* Interactive view container */}
-          <div className="p-6 md:p-8 min-h-[480px]">
+          <div className="p-6 md:p-8 min-h-120">
             <AnimatePresence mode="wait">
-              
+
               {/* Tab 1: OVERVIEW */}
               {activeTab === 'overview' && (
                 <motion.div
@@ -204,7 +200,7 @@ export default function DashboardShowcase() {
                 >
                   {/* KPI Row */}
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                                         {/* KPI 1 */}
+                    {/* KPI 1 */}
                     <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800/80 relative overflow-hidden group">
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-xs font-semibold text-slate-400">Total Monthly Yield</span>
@@ -213,7 +209,7 @@ export default function DashboardShowcase() {
                       <div className="text-xl sm:text-2xl font-bold text-white font-display">
                         ${totalRevenue.toLocaleString()}
                       </div>
-                      <span className="text-[10px] text-emerald-400 mt-1 block flex items-center gap-1">
+                      <span className="text-[10px] text-emerald-400 mt-1 flex items-center gap-1">
                         <Check className="w-3 h-3" /> ↑ 18.2% vs last month
                       </span>
                     </div>
@@ -241,7 +237,7 @@ export default function DashboardShowcase() {
                       <div className="text-xl sm:text-2xl font-bold text-white font-display">
                         {upcomingReturnsCount} <span className="text-xs text-slate-500 font-normal">returns</span>
                       </div>
-                      <span className="text-[10px] text-amber-400 mt-1 block flex items-center gap-1">
+                      <span className="text-[10px] text-amber-400 mt-1 flex items-center gap-1">
                         <AlertCircle className="w-3 h-3" /> 2 due back today
                       </span>
                     </div>
@@ -255,7 +251,7 @@ export default function DashboardShowcase() {
                       <div className="text-xl sm:text-2xl font-bold text-white font-display">
                         100% <span className="text-xs text-slate-500 font-normal">secured</span>
                       </div>
-                      <span className="text-[10px] text-emerald-400 mt-1 block flex items-center gap-1">
+                      <span className="text-[10px] text-emerald-400 mt-1 flex items-center gap-1">
                         <CheckCircle2 className="w-3 h-3" /> Zero unresolved damage logs
                       </span>
                     </div>
@@ -263,10 +259,10 @@ export default function DashboardShowcase() {
 
                   {/* Main Grid: Charts & Activity logs */}
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    
+
                     {/* Left: Interactive SVGs (Bar & Pie) */}
                     <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                      
+
                       {/* Pie Chart: Utilization Structure */}
                       <div className="p-5 bg-slate-900/60 rounded-xl border border-slate-800/80 flex flex-col justify-between">
                         <div>
@@ -278,13 +274,13 @@ export default function DashboardShowcase() {
                         <div className="my-4 flex items-center justify-center gap-6">
                           <svg className="w-28 h-28 shrink-0 overflow-visible" viewBox="0 0 100 100">
                             {/* Segment 1: Machinery (45%) */}
-                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#003188" strokeWidth="20" strokeDasharray="113.1 251.3" strokeDashoffset="0" className="transition-all hover:stroke-[22] duration-200 cursor-pointer" />
+                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#003188" strokeWidth="20" strokeDasharray="113.1 251.3" strokeDashoffset="0" className="transition-all hover:stroke-22 duration-200 cursor-pointer" />
                             {/* Segment 2: Rigging (25%) */}
-                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#021166" strokeWidth="20" strokeDasharray="62.8 251.3" strokeDashoffset="-113.1" className="transition-all hover:stroke-[22] duration-200 cursor-pointer" />
+                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#021166" strokeWidth="20" strokeDasharray="62.8 251.3" strokeDashoffset="-113.1" className="transition-all hover:stroke-22 duration-200 cursor-pointer" />
                             {/* Segment 3: Power Systems (15%) */}
-                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#FD5B0F" strokeWidth="20" strokeDasharray="37.7 251.3" strokeDashoffset="-175.9" className="transition-all hover:stroke-[22] duration-200 cursor-pointer" />
+                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#FD5B0F" strokeWidth="20" strokeDasharray="37.7 251.3" strokeDashoffset="-175.9" className="transition-all hover:stroke-22 duration-200 cursor-pointer" />
                             {/* Segment 4: Other (15%) */}
-                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#FD3D02" strokeWidth="20" strokeDasharray="37.7 251.3" strokeDashoffset="-213.6" className="transition-all hover:stroke-[22] duration-200 cursor-pointer" />
+                            <circle cx="50" cy="50" r="40" fill="transparent" stroke="#FD3D02" strokeWidth="20" strokeDasharray="37.7 251.3" strokeDashoffset="-213.6" className="transition-all hover:stroke-22 duration-200 cursor-pointer" />
                             <circle cx="50" cy="50" r="18" fill="#090d16" />
                           </svg>
 
@@ -464,11 +460,10 @@ export default function DashboardShowcase() {
                           </div>
 
                           <div>
-                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                              book.status === 'Active Out' ? 'bg-primary-light/10 text-primary border border-primary-light/20' :
-                              book.status === 'Pending Prep' ? 'bg-amber-950 text-amber-400 border border-amber-900/40' :
-                              'bg-emerald-950 text-emerald-400 border border-emerald-900/40'
-                            }`}>
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${book.status === 'Active Out' ? 'bg-primary-light/10 text-primary border border-primary-light/20' :
+                                book.status === 'Pending Prep' ? 'bg-amber-950 text-amber-400 border border-amber-900/40' :
+                                  'bg-emerald-950 text-emerald-400 border border-emerald-900/40'
+                              }`}>
                               {book.status}
                             </span>
                           </div>

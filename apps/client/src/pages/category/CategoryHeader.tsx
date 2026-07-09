@@ -116,8 +116,8 @@ const CategoryHeader = ({
         className={clsx(
           'w-full z-[200] transition-all duration-500',
           isFixed
-            ? showFilters 
-              ? 'fixed top-0 left-0 right-0 py-3' 
+            ? showFilters
+              ? 'fixed top-0 left-0 right-0 py-3'
               : 'fixed top-0 left-0 right-0 bg-white/30 backdrop-blur-[40px] border-b border-white/60 shadow-[0_10px_40px_rgba(31,_38,_135,_0.05)] py-3'
             : 'relative bg-transparent pb-2'
         )}

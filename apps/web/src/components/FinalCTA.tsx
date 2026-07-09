@@ -5,10 +5,10 @@
 
 import { useState, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Check, 
-  X, 
-  Calendar, 
+import {
+  Check,
+  X,
+  Calendar,
   HelpCircle,
   Sparkle,
   Sparkles,
@@ -55,20 +55,20 @@ export default function FinalCTA() {
 
   return (
     <section id="cta" className="py-16 bg-transparent px-4 sm:px-6 relative overflow-hidden flex flex-col items-center">
-      
+
       {/* Outer Banner Wrapper matching the elegant, premium website theme */}
       <div className="w-full max-w-5xl rounded-3xl bg-white border border-slate-100 p-8 sm:p-12 md:py-16 md:px-12 shadow-[0_8px_30px_rgb(0,0,0,0.02)] relative overflow-hidden flex flex-col items-center text-center">
-        
+
         {/* Subtle decorative dot pattern background texture */}
-        <div className="absolute inset-0 opacity-[0.15] pointer-events-none bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px]" />
-        
+        <div className="absolute inset-0 opacity-[0.15] pointer-events-none bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] bg-size-[16px_16px]" />
+
         {/* Atmospheric ambient radiant glow matching theme flow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[250px] rounded-full bg-gradient-to-b from-primary/5 to-secondary/0 blur-[80px] pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-125 h-62.5 rounded-full bg-linear-to-b from-primary/5 to-secondary/0 blur-[80px] pointer-events-none" />
 
         {/* ========================================================= */}
         {/* RESTORED PRODUCT-SPECIFIC SIDE LAYOUT CARDS (No borders, no animation) */}
         {/* ========================================================= */}
-        
+
         {/* CARD 1 (Top Left): Camera Gear Booking */}
         <div className="absolute left-6 top-8 hidden xl:flex flex-col bg-white shadow-md rounded-2xl p-4 w-48 text-left pointer-events-none select-none z-10 transition-all duration-300 hover:shadow-lg">
           <div className="flex items-center gap-2 mb-3">
@@ -100,7 +100,7 @@ export default function FinalCTA() {
           </div>
           <span className="text-[13px] font-extrabold text-slate-800 font-display block">Vehicle Dispatch</span>
           <span className="text-[10px] font-medium text-slate-400 block mt-0.5">Route: Event Hub</span>
-          
+
           <div className="mt-3 space-y-1">
             <div className="flex justify-between items-center text-[9px] font-bold text-slate-500">
               <span>On-Route Delivery</span>
@@ -142,7 +142,7 @@ export default function FinalCTA() {
             <span className="text-lg font-black text-slate-900 font-display">98.4%</span>
             <span className="text-[8px] text-emerald-600 bg-emerald-50 font-bold px-1.5 py-0.5 rounded ml-1">On-Time</span>
           </div>
-          
+
           {/* Mini elegant bar graph represent weekly check-ins */}
           <div className="h-10 flex items-end gap-1.5 px-0.5">
             <div className="flex-1 bg-slate-100 rounded-t-sm h-[75%] transition-all duration-300"></div>
@@ -162,24 +162,24 @@ export default function FinalCTA() {
         {/* CENTERED CTA MAIN CONTENT BLOCK                          */}
         {/* ========================================================= */}
         <div className="relative z-10 max-w-2xl mx-auto flex flex-col items-center">
-          
+
           {/* Elegant top badge */}
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-light text-primary border border-primary-light/50 text-[11px] font-bold tracking-tight mb-5 shadow-3xs">
             <Sparkle className="w-3.5 h-3.5 fill-primary-light" />
             <span>Get Started Now</span>
           </div>
 
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             className="font-display text-3xl sm:text-4xl font-black tracking-tight text-slate-900 mb-4 leading-tight"
           >
-            Ready to Scale Your <br className="hidden sm:inline" /> <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">Rental Business?</span>
+            Ready to Scale Your <br className="hidden sm:inline" /> <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">Rental Business?</span>
           </motion.h2>
 
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -190,7 +190,7 @@ export default function FinalCTA() {
           </motion.p>
 
           {/* CTA buttons matching the first buttons style & requested colors */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -204,7 +204,7 @@ export default function FinalCTA() {
               Book Free Demo
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
-            
+
             <button
               onClick={() => {
                 const target = document.querySelector('#plan-structure');
@@ -225,7 +225,7 @@ export default function FinalCTA() {
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            
+
             {/* Dark glass backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -242,9 +242,9 @@ export default function FinalCTA() {
               exit={{ opacity: 0, scale: 0.95, y: 15 }}
               className="bg-white border border-slate-200 shadow-2xl rounded-3xl w-full max-w-lg overflow-hidden relative z-10"
             >
-              
+
               {/* Header block with modern accent gradient */}
-              <div className="bg-gradient-to-r from-primary-light to-secondary-light px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+              <div className="bg-linear-to-r from-primary-light to-secondary-light px-6 py-5 border-b border-slate-100 flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center text-white">
                     <Sparkles className="w-4 h-4 fill-white/10" />
@@ -271,7 +271,7 @@ export default function FinalCTA() {
               <div className="p-6 text-left">
                 {!isSubmitted ? (
                   <form onSubmit={handleBookingSubmit} className="space-y-4">
-                    
+
                     <div>
                       <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400 mb-1.5">
                         Your Name
@@ -356,7 +356,7 @@ export default function FinalCTA() {
                       Book My Demonstration
                       <Calendar className="w-4 h-4 text-primary-light" />
                     </button>
-                    
+
                     <p className="text-[10px] text-center text-slate-400 leading-normal max-w-sm mx-auto">
                       By submitting you agree to receive coordinates to join an exclusive, direct Walkthrough of RentalOne services.
                     </p>
@@ -368,13 +368,13 @@ export default function FinalCTA() {
                     className="text-center py-8 flex flex-col items-center justify-center gap-4"
                   >
                     <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 mb-2 shadow-inner">
-                      <Check className="w-6 h-6 stroke-[3]" />
+                      <Check className="w-6 h-6 stroke-3" />
                     </div>
-                    
+
                     <h3 className="text-xl font-black text-slate-950 font-display">
                       Walkthrough Booked!
                     </h3>
-                    
+
                     <p className="text-slate-500 text-xs sm:text-sm max-w-sm mx-auto leading-relaxed font-medium">
                       Thank you, <strong>{formData.name}</strong>. An onboarding specialist from our <strong>{formData.useCase}</strong> logistics division will reach out at <strong>{formData.email}</strong> shortly to coordinate your private tour.
                     </p>
