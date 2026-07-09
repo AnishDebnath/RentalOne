@@ -1,5 +1,5 @@
 # Build Stage
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 ARG VITE_API_URL
 ARG VITE_ADMIN_APP_URL
 ARG VITE_CLIENT_APP_URL
@@ -12,7 +12,7 @@ RUN npm ci
 RUN npm run build --workspace apps/client
 
 # Production Stage
-FROM node:22-alpine
+FROM node:24-alpine
 RUN npm install -g serve
 WORKDIR /app
 COPY --from=builder /app/apps/client/dist ./dist
