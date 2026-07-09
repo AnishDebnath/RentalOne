@@ -4,7 +4,7 @@ import EmptyState from '../../components/ui/EmptyState';
 import { useCart } from '../../store/CartContext';
 import formatCurrency from '../../utils/formatCurrency';
 import Footer from '../../components/common/footer/Footer';
-import { BRAND_ICONS, CATEGORY_ICONS } from '@camera-rental-house/shared';
+import { BRAND_ICONS, CATEGORY_ICONS } from '@rentalone/shared';
 import { format, parseISO } from 'date-fns';
 
 const Cart = () => {

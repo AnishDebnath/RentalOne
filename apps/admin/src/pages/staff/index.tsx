@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
-import { useToast } from '@camera-rental-house/ui';
+import { useToast } from '@rentalone/ui';
 import StaffHeader from './StaffHeader';
 import StaffList from './StaffList';
 import StaffSkeleton from './StaffSkeleton';

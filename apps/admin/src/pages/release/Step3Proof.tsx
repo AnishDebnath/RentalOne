@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { Camera, ShieldCheck, RefreshCw } from 'lucide-react';
-import { compressImage } from '@camera-rental-house/ui';
+import { compressImage } from '@rentalone/ui';
 
 interface Props {
   photo: string | null;

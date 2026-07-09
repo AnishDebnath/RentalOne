@@ -2,7 +2,7 @@ import { UserRound, Pencil, X, IdCard, ExternalLink, User as UserIcon, Phone, Ma
 import { useRef, useState } from 'react';
 import LoadingButton from '../../components/ui/LoadingButton';
 import { User } from '../../store/AuthContext';
-import { compressImage, useToast } from '@camera-rental-house/ui';
+import { compressImage, useToast } from '@rentalone/ui';
 
 interface AccountDetailsTabProps {
   draft: User;

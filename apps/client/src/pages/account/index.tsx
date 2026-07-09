@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Camera, PackageSearch, UserRound } from 'lucide-react';
 import { useAuth } from '../../store/AuthContext';
-import { useToast } from '@camera-rental-house/ui';
-import { useLenis } from '@camera-rental-house/ui';
-import { resolveAuthAppUrl } from '@camera-rental-house/shared';
+import { useToast, useLenis } from '@rentalone/ui';
+import { resolveAuthAppUrl } from '@rentalone/shared';
 
 import AccountHeader from './AccountHeader';
 import AccountTabs from './AccountTabs';

@@ -1,5 +1,5 @@
 {
-  "name": "@camera-rental-house/client",
+  "name": "@rentalone/client",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -9,9 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@camera-rental-house/shared": "file:../../packages/shared",
-    "@camera-rental-house/types": "file:../../packages/types",
-    "@camera-rental-house/ui": "file:../../packages/ui",
+    "@rentalone/shared": "file:../../packages/shared",
+    "@rentalone/types": "file:../../packages/types",
+    "@rentalone/ui": "file:../../packages/ui",
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.2.0",
     "axios": "^1.8.4",

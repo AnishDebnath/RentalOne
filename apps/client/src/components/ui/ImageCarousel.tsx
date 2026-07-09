@@ -1,6 +1,6 @@
 import { useState, useEffect, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { optimizeImageUrl } from '@camera-rental-house/ui';
+import { optimizeImageUrl } from '@rentalone/ui';
 
 const ImageCarousel = ({ images }) => {
   const [index, setIndex] = useState(0);

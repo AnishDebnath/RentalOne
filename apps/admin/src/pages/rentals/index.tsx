@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Search, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import axiosInstance from '../../api/axiosInstance';
-import { getAuthRole } from '@camera-rental-house/shared';
+import { getAuthRole } from '@rentalone/shared';
 
 // Modular Components
 import RentalHeader from './RentalHeader';

@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import formatCurrency from '../../utils/formatCurrency';
 import { useCart } from '../../store/CartContext';
 
-import { BRAND_ICONS, CATEGORY_ICONS } from '@camera-rental-house/shared';
+import { BRAND_ICONS, CATEGORY_ICONS } from '@rentalone/shared';
 
 interface ProductInfoProps {
   product: any;

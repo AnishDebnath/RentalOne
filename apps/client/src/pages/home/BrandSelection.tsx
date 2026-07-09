@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import { BRANDS_LIST as BrandsList } from '@camera-rental-house/shared';
+import { BRANDS_LIST as BrandsList } from '@rentalone/shared';
 import { LayoutGrid } from 'lucide-react';
 
-import { LazyImage } from '@camera-rental-house/ui';
+import { LazyImage } from '@rentalone/ui';
 
 const BrandSelection = () => {
   return (

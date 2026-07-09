@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { sessionCache } from '@camera-rental-house/utils';
+import { sessionCache } from '@rentalone/utils';
 
 interface RetryConfig {
   /** Maximum retry attempts before giving up. Default: Infinity (retry forever) */

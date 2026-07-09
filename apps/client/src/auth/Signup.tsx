@@ -4,7 +4,7 @@ import { useLocation, useNavigate, Link } from 'react-router-dom';
 import LoadingButton from '../components/ui/LoadingButton';
 import clsx from 'clsx';
 import { useAuth } from '../store/AuthContext';
-import { useToast, compressImage } from '@camera-rental-house/ui';
+import { useToast, compressImage } from '@rentalone/ui';
 import axiosInstance from '../api/axiosInstance';
 
 type UploadKey = 'aadhaarDoc' | 'voterDoc' | 'selfie';

@@ -7,8 +7,8 @@ import { useAuth } from '../store/AuthContext';
 import {
   resolveAdminAppUrl,
   resolveClientAppUrl,
-} from '@camera-rental-house/shared';
-import { useToast } from '@camera-rental-house/ui';
+} from '@rentalone/shared';
+import { useToast } from '@rentalone/ui';
 
 const adminAppUrl = resolveAdminAppUrl(import.meta.env.VITE_ADMIN_APP_URL);
 const clientAppUrl = resolveClientAppUrl(import.meta.env.VITE_CLIENT_APP_URL);

@@ -4,7 +4,7 @@ import { X } from 'lucide-react';
 import { Transition } from '@headlessui/react';
 import clsx from 'clsx';
 import FilterChips from './FilterChips';
-import { useLenis } from '@camera-rental-house/ui';
+import { useLenis } from '@rentalone/ui';
 import DateRangePicker from './DateRangePicker';
 
 interface CategoryHeaderProps {

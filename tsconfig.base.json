@@ -7,25 +7,25 @@
     "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
-      "@camera-rental-house/shared": [
+      "@rentalone/shared": [
         "packages/shared/index.ts"
       ],
-      "@camera-rental-house/shared/*": [
+      "@rentalone/shared/*": [
         "packages/shared/*"
       ],
-      "@camera-rental-house/database": [
+      "@rentalone/database": [
         "server/src/db/supabase.ts"
       ],
-      "@camera-rental-house/cloud-storage/*": [
+      "@rentalone/cloud-storage/*": [
         "server/src/storage/*"
       ],
-      "@camera-rental-house/types": [
+      "@rentalone/types": [
         "packages/types/index.ts"
       ],
-      "@camera-rental-house/ui": [
+      "@rentalone/ui": [
         "packages/ui/index.ts"
       ],
-      "@camera-rental-house/utils": [
+      "@rentalone/utils": [
         "packages/utils/index.ts"
       ]
     }

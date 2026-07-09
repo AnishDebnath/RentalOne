@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ScanLine, PackageCheck } from 'lucide-react';
 import { Html5Qrcode } from 'html5-qrcode';
-import { useLenis } from '@camera-rental-house/ui';
+import { useLenis } from '@rentalone/ui';
 import axiosInstance from '../../api/axiosInstance';
 
 interface Props {

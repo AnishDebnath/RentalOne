@@ -15,10 +15,10 @@ import {
   History,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { getAuthRole, getAuthUser, clearAdminSession, resolveAuthAppUrl } from '@camera-rental-house/shared';
+import { getAuthRole, getAuthUser, clearAdminSession, resolveAuthAppUrl } from '@rentalone/shared';
 import axiosInstance from '../../api/axiosInstance';
-import logo from '@camera-rental-house/ui/assets/rentalone-logo.png';
-import { useLenis, Watermark } from '@camera-rental-house/ui';
+import logo from '@rentalone/ui/assets/rentalone-logo.png';
+import { useLenis, Watermark } from '@rentalone/ui';
 
 const authAppUrl = resolveAuthAppUrl(import.meta.env.VITE_CLIENT_APP_URL || import.meta.env.VITE_AUTH_APP_URL);
 

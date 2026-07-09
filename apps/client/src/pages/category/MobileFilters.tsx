@@ -2,7 +2,7 @@ import { useEffect, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { X } from 'lucide-react';
 import FilterChips from './FilterChips';
-import { useLenis } from '@camera-rental-house/ui';
+import { useLenis } from '@rentalone/ui';
 
 interface MobileFiltersProps {
   showFilters: boolean;

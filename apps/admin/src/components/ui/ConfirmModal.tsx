@@ -2,7 +2,7 @@ import { AlertCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, memo } from 'react';
 import { createPortal } from 'react-dom';
-import { useLenis } from '@camera-rental-house/ui';
+import { useLenis } from '@rentalone/ui';
 
 interface ConfirmModalProps {
   isOpen: boolean;

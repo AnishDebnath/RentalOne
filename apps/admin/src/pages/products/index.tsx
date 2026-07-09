@@ -1,7 +1,7 @@
 import { Loader2, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import axiosInstance from '../../api/axiosInstance';
-import { BRAND_ICONS, CATEGORY_ICONS, CATEGORIES, BRANDS } from '@camera-rental-house/shared';
+import { BRAND_ICONS, CATEGORY_ICONS, CATEGORIES, BRANDS } from '@rentalone/shared';
 
 // Modular Components
 import ProductHeader from './ProductHeader';

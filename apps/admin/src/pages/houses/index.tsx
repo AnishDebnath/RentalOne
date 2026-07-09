@@ -5,7 +5,7 @@ import HouseFilters from './HouseFilters';
 import HouseCard from './HouseCard';
 import HouseModal from './HouseModal';
 import HouseSkeleton from './HouseSkeleton';
-import { useToast } from '@camera-rental-house/ui';
+import { useToast } from '@rentalone/ui';
 import axiosInstance from '../../api/axiosInstance';
 
 const ProductionHouses = () => {

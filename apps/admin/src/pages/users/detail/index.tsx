@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../../api/axiosInstance';
-import { useToast } from '@camera-rental-house/ui';
+import { useToast } from '@rentalone/ui';
 import ConfirmModal from '../../../components/ui/ConfirmModal';
 
 // Components

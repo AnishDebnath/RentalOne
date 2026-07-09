@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ADMIN_TOKEN_STORAGE_KEY, ADMIN_ROLE_STORAGE_KEY } from '@camera-rental-house/shared';
+import { ADMIN_TOKEN_STORAGE_KEY, ADMIN_ROLE_STORAGE_KEY } from '@rentalone/shared';
 
 const API_URL = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL;
 const CLIENT_APP_URL = import.meta.env.VITE_CLIENT_APP_URL || import.meta.env.VITE_AUTH_APP_URL || 'http://localhost:5173';

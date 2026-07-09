@@ -2,7 +2,7 @@ import { useState, type FormEvent, useEffect } from 'react';
 import { Building2, User, Phone, X, Loader2, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
-import { useLenis } from '@camera-rental-house/ui';
+import { useLenis } from '@rentalone/ui';
 import axiosInstance from '../../api/axiosInstance';
 
 type HouseModalProps = {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar as CalendarIcon, CreditCard, Trash2, Plus, Loader2, ChevronDown, ChevronLeft, ChevronRight, Check, Wallet } from 'lucide-react';
-import { useToast } from '@camera-rental-house/ui';
+import { useToast } from '@rentalone/ui';
 import axiosInstance from '../../../api/axiosInstance';
 
 type Payment = {

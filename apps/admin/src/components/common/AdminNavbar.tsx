@@ -2,7 +2,7 @@ import { useState, useEffect, memo } from 'react';
 import { Bell, Calendar, Handshake } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-import { getAuthRole, getAuthUser } from '@camera-rental-house/shared';
+import { getAuthRole, getAuthUser } from '@rentalone/shared';
 import axiosInstance from '../../api/axiosInstance';
 
 const AdminNavbar = ({ onOpenSidebar }) => {

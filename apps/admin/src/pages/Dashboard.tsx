@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import StatsCard from '../components/ui/StatsCard';
 import { adminRentals, adminStats, adminUsers } from '../data/mockAdmin';
-import { getAuthRole } from '@camera-rental-house/shared';
+import { getAuthRole } from '@rentalone/shared';
 
 const shortcuts = [
   {

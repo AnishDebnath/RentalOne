@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { PackageCheck, QrCode, CheckCircle2, Package } from 'lucide-react';
-import { LazyImage } from '@camera-rental-house/ui';
+import { LazyImage } from '@rentalone/ui';
 
 interface Props {
   products: any[];

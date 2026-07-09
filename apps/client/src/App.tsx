@@ -13,8 +13,8 @@ import Checkout from './pages/checkout';
 import Favourites from './pages/favourites';
 import Account from './pages/account';
 import { useAuth } from './store/AuthContext';
-import { PageTransition, ScrollToTop, ErrorBoundary } from '@camera-rental-house/ui';
-import { resolveAdminAppUrl } from '@camera-rental-house/shared';
+import { PageTransition, ScrollToTop, ErrorBoundary } from '@rentalone/ui';
+import { resolveAdminAppUrl } from '@rentalone/shared';
 
 const adminAppUrl = resolveAdminAppUrl(import.meta.env.VITE_ADMIN_APP_URL);
 

@@ -3,7 +3,7 @@ import { ShieldCheck, UserRoundCheck, Eye, Ban, Loader2, Phone } from 'lucide-re
 import { Link } from 'react-router-dom';
 import DataTable from '../../components/ui/DataTable';
 import VirtualizedDataTable from '../../components/ui/VirtualizedDataTable';
-import { optimizeImageUrl } from '@camera-rental-house/ui';
+import { optimizeImageUrl } from '@rentalone/ui';
 
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat('en-IN', {

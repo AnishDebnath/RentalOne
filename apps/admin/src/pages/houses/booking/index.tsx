@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { ArrowLeft, CheckCircle2, Loader2, Building2, Clock as Clockicon, AlertCircle } from 'lucide-react';
-import { BRAND_ICONS, CATEGORY_ICONS, CATEGORIES, BRANDS } from '@camera-rental-house/shared';
-import { useToast } from '@camera-rental-house/ui';
+import { BRAND_ICONS, CATEGORY_ICONS, CATEGORIES, BRANDS } from '@rentalone/shared';
+import { useToast } from '@rentalone/ui';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../../api/axiosInstance';
 

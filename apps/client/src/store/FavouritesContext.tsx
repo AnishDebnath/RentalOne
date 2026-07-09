@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, useState } from 'react';
-import { useToast } from '@camera-rental-house/ui';
+import { useToast } from '@rentalone/ui';
 
 const FavouritesContext = createContext(null);
 

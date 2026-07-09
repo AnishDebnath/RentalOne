@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
-import { useToast } from '@camera-rental-house/ui';
+import { useToast } from '@rentalone/ui';
 import UserHeader from './UserHeader';
 import UserStats from './UserStats';
 import UserFilters from './UserFilters';

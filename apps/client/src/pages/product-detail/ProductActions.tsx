@@ -2,7 +2,7 @@ import { createPortal } from 'react-dom';
 import { Heart, ShoppingBag, CheckCheck, ShieldCheck, Calendar, CalendarX } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../store/CartContext';
-import { useToast } from '@camera-rental-house/ui';
+import { useToast } from '@rentalone/ui';
 
 interface ProductActionsProps {
   product: any;

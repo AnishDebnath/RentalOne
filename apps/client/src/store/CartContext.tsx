@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
-import { useToast } from '@camera-rental-house/ui';
+import { useToast } from '@rentalone/ui';
 
 const CartContext = createContext(null);
 

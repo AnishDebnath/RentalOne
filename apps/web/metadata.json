@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Remix: RentalOne",
+  "description": "Premium Rental Management CRM \u0026 Business Management Software for camera, equipment, furniture, event, and vehicle rental businesses.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

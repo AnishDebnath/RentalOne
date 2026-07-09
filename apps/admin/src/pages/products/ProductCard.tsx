@@ -3,7 +3,7 @@ import { Loader2, Pencil, Trash2, QrCode } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import DataTable from '../../components/ui/DataTable';
 import VirtualizedDataTable from '../../components/ui/VirtualizedDataTable';
-import { BRAND_ICONS, CATEGORY_ICONS } from '@camera-rental-house/shared';
+import { BRAND_ICONS, CATEGORY_ICONS } from '@rentalone/shared';
 
 type ProductCardProps = {
   rows: any[];

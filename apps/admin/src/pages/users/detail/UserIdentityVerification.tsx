@@ -1,6 +1,6 @@
 import React from 'react';
 import { IdCard, Hash, Image as ImageIcon } from 'lucide-react';
-import { optimizeImageUrl } from '@camera-rental-house/ui';
+import { optimizeImageUrl } from '@rentalone/ui';
 
 type UserIdentityVerificationProps = {
   user: any;

@@ -1,5 +1,5 @@
 {
-  "name": "@camera-rental-house/cloud-storage",
+  "name": "@rentalone/cloud-storage",
   "private": true,
   "version": "1.0.0",
   "type": "module",

@@ -3,10 +3,10 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCart } from '../../store/CartContext';
 import { useFavourites } from '../../store/FavouritesContext';
 import formatCurrency from '../../utils/formatCurrency';
-import { BRAND_ICONS, CATEGORY_ICONS } from '@camera-rental-house/shared';
+import { BRAND_ICONS, CATEGORY_ICONS } from '@rentalone/shared';
 
 import { memo } from 'react';
-import { LazyImage, useToast } from '@camera-rental-house/ui';
+import { LazyImage, useToast } from '@rentalone/ui';
 
 const ProductCard = ({ product, hideCart = false }) => {
   const { items, addToCart, removeFromCart, pickupDate, dropDate } = useCart();

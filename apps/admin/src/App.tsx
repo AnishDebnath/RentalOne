@@ -24,8 +24,8 @@ import {
   saveAuthUser,
   resolveAuthAppUrl,
   clearAdminSession,
-} from '@camera-rental-house/shared';
-import { useToast, ScrollToTop, ErrorBoundary } from '@camera-rental-house/ui';
+} from '@rentalone/shared';
+import { useToast, ScrollToTop, ErrorBoundary } from '@rentalone/ui';
 
 const authAppUrl = resolveAuthAppUrl(import.meta.env.VITE_CLIENT_APP_URL || import.meta.env.VITE_AUTH_APP_URL);
 

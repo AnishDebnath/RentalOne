@@ -6,7 +6,7 @@ import { differenceInDays } from 'date-fns';
 import { useAuth } from '../../store/AuthContext';
 import { useCart } from '../../store/CartContext';
 import axiosInstance from '../../api/axiosInstance';
-import { useToast } from '@camera-rental-house/ui';
+import { useToast } from '@rentalone/ui';
 
 import CheckoutHeader from './CheckoutHeader';
 import UserDetailsStep from './UserDetailsStep';

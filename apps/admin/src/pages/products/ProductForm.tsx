@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import PrintLabel from '../../components/ui/PrintLabel';
 import CustomSelect from '../../components/ui/CustomSelect';
 import axiosInstance from '../../api/axiosInstance';
-import { CATEGORIES_LIST as categoryOptions, BRANDS_LIST as brandOptions } from '@camera-rental-house/shared';
+import { CATEGORIES_LIST as categoryOptions, BRANDS_LIST as brandOptions } from '@rentalone/shared';
 import ConfirmModal from '../../components/ui/ConfirmModal';
 import ProductFormSkeleton from './ProductFormSkeleton';
 

@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { History, Search, ChevronRight, Calendar, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { optimizeImageUrl } from '@camera-rental-house/ui';
+import { optimizeImageUrl } from '@rentalone/ui';
 
 type UserRentalHistoryProps = {
   rentals: any[];

@@ -7,7 +7,7 @@ import Footer from '../../components/common/footer/Footer';
 import axiosInstance from '../../api/axiosInstance';
 import useDebounce from '../../hooks/useDebounce';
 import usePullToRefresh from '../../hooks/usePullToRefresh';
-import { sessionCache } from '@camera-rental-house/utils';
+import { sessionCache } from '@rentalone/utils';
 import { format } from 'date-fns';
 
 import { useCart } from '../../store/CartContext';

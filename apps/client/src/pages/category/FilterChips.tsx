@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { CATEGORIES_LIST as CategoriesList, BRANDS_LIST as BrandsList } from '@camera-rental-house/shared';
+import { CATEGORIES_LIST as CategoriesList, BRANDS_LIST as BrandsList } from '@rentalone/shared';
 
 interface FilterChipsProps {
   activeCategory: string;

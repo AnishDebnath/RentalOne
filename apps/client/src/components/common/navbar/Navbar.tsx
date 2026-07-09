@@ -7,7 +7,7 @@ import { useCart } from '../../../store/CartContext';
 import { useFavourites } from '../../../store/FavouritesContext';
 import clsx from 'clsx';
 import { useTypewriter } from '../../../hooks/useTypewriter';
-import { logo } from '@camera-rental-house/shared';
+import { logo } from '@rentalone/shared';
 
 
 const Navbar = () => {

@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import { CATEGORIES_LIST as CategoriesList } from '@camera-rental-house/shared';
+import { CATEGORIES_LIST as CategoriesList } from '@rentalone/shared';
 import { LayoutGrid } from 'lucide-react';
 
-import { LazyImage } from '@camera-rental-house/ui';
+import { LazyImage } from '@rentalone/ui';
 
 const CategorySelection = () => {
   return (

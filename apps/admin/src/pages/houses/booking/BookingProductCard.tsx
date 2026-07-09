@@ -1,7 +1,7 @@
 import React from 'react';
 import { Package, Plus, Check, ShoppingBag, CalendarX, Calendar } from 'lucide-react';
-import { BRAND_ICONS, CATEGORY_ICONS } from '@camera-rental-house/shared';
-import { useToast } from '@camera-rental-house/ui';
+import { BRAND_ICONS, CATEGORY_ICONS } from '@rentalone/shared';
+import { useToast } from '@rentalone/ui';
 
 interface BookingProductCardProps {
   product: any;

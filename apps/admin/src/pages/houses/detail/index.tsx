@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Loader2, ArrowLeft, Building2, PlusCircle } from 'lucide-react';
-import { useToast } from '@camera-rental-house/ui';
+import { useToast } from '@rentalone/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import axiosInstance from '../../../api/axiosInstance';
 

@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import axiosInstance from '../api/axiosInstance';
-import { useToast } from '@camera-rental-house/ui';
+import { useToast } from '@rentalone/ui';
 
 export interface User {
   id: string;
