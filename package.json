@@ -31,6 +31,7 @@
   },
   "optionalDependencies": {
     "@esbuild/linux-x64": "^0.28.1",
+    "@img/sharp-linuxmusl-x64": "^0.35.3",
     "@rollup/rollup-linux-x64-gnu": "^4.62.2"
   }
 }
