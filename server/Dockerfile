@@ -28,6 +28,9 @@ COPY . .
 # 6. Build the server
 RUN npm run build:server
 
+# 7. Rebuild sharp to ensure native binary for this platform (linuxmusl)
+RUN npm rebuild sharp
+
 EXPOSE 5000
 
 CMD ["npm", "run", "start:server"]
