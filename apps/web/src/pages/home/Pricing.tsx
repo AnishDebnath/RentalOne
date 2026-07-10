@@ -95,7 +95,7 @@ export default function Pricing() {
   };
 
   return (
-    <section id="plan-structure" className="py-24 bg-transparent text-slate-900 relative overflow-hidden">
+    <section id="plan-structure" className="py-16 bg-transparent text-slate-900 relative overflow-hidden">
       {/* Background glow effects */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl h-150 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute bottom-[-10%] left-[-10%] w-125 h-125 rounded-full bg-primary-light/40 blur-[120px]" />
@@ -132,7 +132,7 @@ export default function Pricing() {
         </div>
 
         {/* Plan Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto">
           {plans.map((plan, idx) => (
             <motion.div
               key={plan.name}
@@ -141,14 +141,14 @@ export default function Pricing() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
               className={`p-7 sm:p-8 rounded-4xl border bg-white/75 backdrop-blur-md shadow-sm hover:shadow-xl flex flex-col justify-between relative transition-all duration-300 hover:-translate-y-1 group ${plan.name === 'Growth'
-                  ? 'border-primary/30 ring-4 ring-primary/5'
-                  : 'border-slate-200/80 hover:border-primary/30'
+                ? 'border-primary/30 ring-4 ring-primary/5'
+                : 'border-slate-200/80 hover:border-primary/30'
                 }`}
             >
               <div>
                 {/* Icon positioned beautifully above the plan name */}
                 <div className={`w-12 h-12 rounded-2xl border flex items-center justify-center mb-5 shadow-sm ${plan.iconColor}`}>
-                  <plan.icon className="w-5.5 h-5.5 stroke-[2]" />
+                  <plan.icon className="w-5.5 h-5.5 stroke-2" />
                 </div>
 
                 <h3 className="text-2xl font-bold text-slate-900 mb-2 font-display">{plan.name} Plan</h3>
@@ -163,7 +163,7 @@ export default function Pricing() {
                     {plan.highlightFeatures.map((feat) => (
                       <li key={feat} className="flex items-center gap-3">
                         <div className="w-5 h-5 rounded-full bg-primary-light border border-primary-light/50 flex items-center justify-center shrink-0">
-                          <Check className="w-3 h-3 text-primary stroke-[3]" />
+                          <Check className="w-3 h-3 text-primary stroke-3" />
                         </div>
                         <span className="font-medium text-slate-700">{feat}</span>
                       </li>
@@ -175,8 +175,8 @@ export default function Pricing() {
               <button
                 onClick={() => handleOpenBooking(plan.name)}
                 className={`w-full group inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 ${plan.name === 'Growth'
-                    ? 'bg-secondary hover:bg-secondary-hover text-white shadow-md shadow-secondary/15 hover:shadow-secondary/25'
-                    : 'bg-slate-50 hover:bg-primary-light text-slate-800 hover:text-primary border border-slate-200/60 hover:border-primary-light'
+                  ? 'bg-secondary hover:bg-secondary-hover text-white shadow-md shadow-secondary/15 hover:shadow-secondary/25'
+                  : 'bg-slate-50 hover:bg-primary-light text-slate-800 hover:text-primary border border-slate-200/60 hover:border-primary-light'
                   }`}
               >
                 <span>Book {plan.name} Plan</span>

@@ -72,8 +72,8 @@ function BrowseMockup() {
             <div
               key={chip}
               className={`text-[7.5px] font-bold px-2 py-0.5 rounded-full border transition-all ${idx === 0
-                  ? 'bg-primary-light border-primary-light text-primary shadow-3xs font-extrabold'
-                  : 'bg-white/80 border-slate-100 text-slate-400'
+                ? 'bg-primary-light border-primary-light text-primary shadow-3xs font-extrabold'
+                : 'bg-white/80 border-slate-100 text-slate-400'
                 }`}
             >
               {chip}
@@ -225,8 +225,8 @@ function CalendarMockup() {
                   {/* Day cell / button */}
                   <motion.div
                     className={`w-4.5 h-4.5 rounded-md flex items-center justify-center text-[7.5px] font-extrabold relative z-10 transition-all ${isSelected
-                        ? 'bg-primary text-white shadow-xs font-black'
-                        : 'text-slate-600 hover:bg-slate-50'
+                      ? 'bg-primary text-white shadow-xs font-black'
+                      : 'text-slate-600 hover:bg-slate-50'
                       }`}
                     animate={isSelected ? {
                       scale: [1, 1.05, 1],
@@ -306,8 +306,8 @@ function CheckoutMockup() {
             <div key={idx} className="flex flex-col items-center text-center z-10">
               <div
                 className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-2xs transition-all duration-300 ${isActive
-                    ? `${step.colorClass} border-2 scale-105 shadow-xs`
-                    : 'bg-white text-slate-400 border border-slate-100 hover:border-slate-200 hover:text-slate-500'
+                  ? `${step.colorClass} border-2 scale-105 shadow-xs`
+                  : 'bg-white text-slate-400 border border-slate-100 hover:border-slate-200 hover:text-slate-500'
                   } cursor-pointer`}
               >
                 <StepIcon className="w-5 h-5" />
@@ -361,8 +361,8 @@ function CollectMockup() {
             <div key={idx} className="flex flex-col items-center text-center z-10">
               <div
                 className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-2xs transition-all duration-300 ${isActive
-                    ? `${step.colorClass} border-2 scale-105 shadow-xs`
-                    : 'bg-white text-slate-400 border border-slate-100 hover:border-slate-200 hover:text-slate-500'
+                  ? `${step.colorClass} border-2 scale-105 shadow-xs`
+                  : 'bg-white text-slate-400 border border-slate-100 hover:border-slate-200 hover:text-slate-500'
                   } cursor-pointer`}
               >
                 <StepIcon className="w-5 h-5" />
@@ -383,7 +383,7 @@ function CollectMockup() {
 
 export default function HowItWorks() {
   return (
-    <section id="solution" className="py-24 bg-transparent relative overflow-hidden select-none">
+    <section id="solution" className="py-16 bg-transparent relative overflow-hidden select-none">
       {/* Background soft ambient glowing circles */}
       <div className="absolute top-[10%] left-[5%] w-112.5 h-112.5 rounded-full bg-primary-light/45 blur-[130px] pointer-events-none -z-10" />
       <div className="absolute bottom-[10%] right-[5%] w-112.5 h-112.5 rounded-full bg-primary-light/35 blur-[130px] pointer-events-none -z-10" />
@@ -426,7 +426,7 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-102.5 relative overflow-hidden"
+            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-88 relative overflow-hidden"
           >
             {/* Visual Preview Container */}
             <BrowseMockup />
@@ -453,7 +453,7 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-102.5 relative overflow-hidden"
+            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-88 relative overflow-hidden"
           >
             {/* Visual Calendar Mockup */}
             <CalendarMockup />
@@ -480,7 +480,7 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-102.5 relative overflow-hidden"
+            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-88 relative overflow-hidden"
           >
             {/* Visual Preview Container */}
             <CheckoutMockup />
@@ -507,7 +507,7 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-102.5 relative overflow-hidden"
+            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-88 relative overflow-hidden"
           >
             {/* Visual Preview Container */}
             <CollectMockup />

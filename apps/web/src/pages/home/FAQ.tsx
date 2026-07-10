@@ -12,7 +12,7 @@ export default function FAQ() {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <section id="faq" className="py-24 bg-transparent relative overflow-hidden">
+    <section id="faq" className="py-16 bg-transparent relative overflow-hidden">
       <div className="absolute bottom-0 right-0 w-100 h-100 rounded-full bg-primary-light/40 blur-[120px] pointer-events-none -z-10" />
 
       <div className="max-w-6xl mx-auto px-6">

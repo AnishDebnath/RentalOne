@@ -199,7 +199,7 @@ export default function FinalCTA() {
           >
             <button
               onClick={() => setIsModalOpen(true)}
-              className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 bg-secondary hover:bg-secondary-hover text-white font-semibold px-8 py-4 rounded-xl transition-all duration-200 shadow-xl shadow-secondary/25 hover:shadow-secondary/35 active:scale-[0.98] text-[15px]"
+              className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 bg-secondary hover:bg-secondary-hover text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-xl shadow-secondary/25 hover:shadow-secondary/35 active:scale-[0.98] text-sm"
             >
               Book Free Demo
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -212,7 +212,7 @@ export default function FinalCTA() {
                   target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
               }}
-              className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 bg-white hover:bg-primary hover:text-white border border-primary text-primary font-semibold px-8 py-4 rounded-xl transition-all duration-200 active:scale-[0.98] text-[15px] shadow-sm"
+              className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 bg-white hover:bg-primary hover:text-white border border-primary text-primary font-semibold px-6 py-3 rounded-xl transition-all duration-200 active:scale-[0.98] text-sm shadow-sm"
             >
               View Pricing
             </button>

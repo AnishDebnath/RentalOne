@@ -346,8 +346,8 @@ function RentalBookingMockup() {
             <div key={idx} className="contents">
               <div
                 className={`flex-1 bg-white border rounded-xl p-1.5 sm:p-2 flex flex-col items-center text-center transition-all duration-300 ${isActive
-                    ? 'border-slate-200 shadow-md scale-[1.04]'
-                    : 'border-slate-100 hover:border-slate-200 hover:shadow-2xs opacity-80'
+                  ? 'border-slate-200 shadow-md scale-[1.04]'
+                  : 'border-slate-100 hover:border-slate-200 hover:shadow-2xs opacity-80'
                   } cursor-pointer`}
               >
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mb-1 transition-all duration-300 ${isActive ? card.activeColorClass : card.baseColorClass
@@ -547,8 +547,8 @@ function SecureTrackingMockup() {
             <div key={idx} className="flex flex-col items-center text-center z-10">
               <div
                 className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-2xs transition-all duration-300 ${isActive
-                    ? `${step.colorClass} border-2 scale-105 shadow-xs`
-                    : 'bg-white text-slate-400 border border-slate-100 hover:border-slate-200 hover:text-slate-500'
+                  ? `${step.colorClass} border-2 scale-105 shadow-xs`
+                  : 'bg-white text-slate-400 border border-slate-100 hover:border-slate-200 hover:text-slate-500'
                   } cursor-pointer`}
               >
                 <StepIcon className="w-5 h-5" />
@@ -596,7 +596,7 @@ function SecureTrackingMockup() {
 
 export default function Features() {
   return (
-    <section id="product" className="py-24 bg-transparent relative">
+    <section id="product" className="py-16 bg-transparent relative">
       {/* Background radial gradient glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-7xl h-150 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute top-[20%] left-[20%] w-125 h-125 rounded-full bg-primary-light/45 blur-[130px]" />

@@ -89,7 +89,7 @@ export default function TrustedBy() {
   ];
 
   return (
-    <section id="trusted-by" className="pt-2 pb-12 bg-transparent">
+    <section id="trusted-by" className="py-16 bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
         <p className="text-center text-xs font-semibold uppercase tracking-wider text-slate-400 mb-8 font-mono">
           Trusted by 200 Rental Businesses

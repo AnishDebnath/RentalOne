@@ -39,7 +39,7 @@ export default function Stats() {
   ];
 
   return (
-    <section id="statistics" className="py-24 bg-transparent border-y border-slate-200/40">
+    <section id="statistics" className="py-16 bg-transparent border-y border-slate-200/40">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Subtle grid backing */}

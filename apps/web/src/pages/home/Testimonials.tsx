@@ -10,7 +10,7 @@ import { testimonialsRow1, testimonialsRow2 } from '../../data/testimonials';
 export default function Testimonials() {
 
   return (
-    <section id="testimonials" className="py-20 bg-transparent relative overflow-hidden">
+    <section id="testimonials" className="py-16 bg-transparent relative overflow-hidden">
       {/* Dynamic Background subtle grid and glowing spot */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl h-125 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute top-1/2 left-1/4 w-100 h-100 rounded-full bg-emerald-50/20 blur-[100px]" />

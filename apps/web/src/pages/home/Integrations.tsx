@@ -88,7 +88,7 @@ export default function Integrations() {
   const selectedNodeInfo = integrationNodes.find(node => node.id === activeNode);
 
   return (
-    <section id="integrations" className="py-24 bg-transparent relative overflow-hidden">
+    <section id="integrations" className="py-16 bg-transparent relative overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 bg-slate-50 rounded-full blur-[120px] pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-6">
@@ -130,8 +130,8 @@ export default function Integrations() {
                     }`}
                 >
                   <div className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center relative shadow-sm transition-all ${isActive
-                      ? 'bg-slate-950 border-primary shadow-primary/10'
-                      : 'bg-white border-slate-200'
+                    ? 'bg-slate-950 border-primary shadow-primary/10'
+                    : 'bg-white border-slate-200'
                     }`}>
                     {node.icon}
 
@@ -183,8 +183,8 @@ export default function Integrations() {
                 <button
                   onClick={() => toggleConnection(selectedNodeInfo.id)}
                   className={`w-full sm:w-auto text-xs font-bold px-5 py-2.5 rounded-xl transition-all shadow-xs flex items-center justify-center gap-2 ${connectionStates[selectedNodeInfo.id]
-                      ? 'bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-100'
-                      : 'bg-primary hover:bg-primary-hover text-white shadow-lg shadow-primary/10'
+                    ? 'bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-100'
+                    : 'bg-primary hover:bg-primary-hover text-white shadow-lg shadow-primary/10'
                     }`}
                 >
                   {connectionStates[selectedNodeInfo.id] ? (

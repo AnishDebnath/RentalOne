@@ -97,7 +97,7 @@ export default function DashboardShowcase() {
   };
 
   return (
-    <section id="showcase" className="py-24 bg-transparent relative">
+    <section id="showcase" className="py-16 bg-transparent relative">
       <div className="absolute top-1/3 right-1/4 w-125 h-125 rounded-full bg-primary-light/40 blur-[140px] pointer-events-none -z-10" />
 
       <div className="max-w-7xl mx-auto px-6">
@@ -461,8 +461,8 @@ export default function DashboardShowcase() {
 
                           <div>
                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${book.status === 'Active Out' ? 'bg-primary-light/10 text-primary border border-primary-light/20' :
-                                book.status === 'Pending Prep' ? 'bg-amber-950 text-amber-400 border border-amber-900/40' :
-                                  'bg-emerald-950 text-emerald-400 border border-emerald-900/40'
+                              book.status === 'Pending Prep' ? 'bg-amber-950 text-amber-400 border border-amber-900/40' :
+                                'bg-emerald-950 text-emerald-400 border border-emerald-900/40'
                               }`}>
                               {book.status}
                             </span>

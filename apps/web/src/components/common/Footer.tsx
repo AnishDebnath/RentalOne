@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import logo from '@rentalone/ui/assets/rentalone-logo.png';
 import mindtrixLogo from '@rentalone/ui/assets/watermark.png';
+import parentEnterpriseLogo from '@rentalone/ui/assets/mindtrix-media-logo.png';
 
 export default function Footer() {
   const handleScrollTo = (e: MouseEvent<HTMLAnchorElement | HTMLButtonElement>, href: string) => {
@@ -25,7 +26,7 @@ export default function Footer() {
   };
 
   return (
-    <footer id="main-footer" className="pb-20 bg-transparent px-4 sm:px-6 relative overflow-hidden flex flex-col items-center">
+    <footer id="main-footer" className="pb-6 bg-transparent px-4 sm:px-6 relative overflow-hidden flex flex-col items-center">
 
       {/* Outer Banner Wrapper matching CTA style */}
       <div className="w-full max-w-6xl rounded-[2.5rem] bg-[#fbfbfc] border border-slate-200/50 p-8 sm:p-12 md:p-16 shadow-xs relative overflow-hidden">
@@ -60,8 +61,8 @@ export default function Footer() {
             </p>
 
             <div className="mt-6 flex items-center gap-3.5 bg-white border border-slate-100 rounded-2xl p-3.5 w-full max-w-sm shadow-xs">
-              <div className="w-9 h-9 rounded-xl bg-primary-light border border-primary-light flex items-center justify-center shrink-0 shadow-3xs">
-                <span className="font-display font-extrabold text-primary text-sm">M</span>
+              <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center shrink-0 shadow-3xs">
+                <img src={parentEnterpriseLogo} alt="Mindtrix Media" className="w-full h-full object-contain" />
               </div>
               <div className="text-left">
                 <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wide block leading-none">
