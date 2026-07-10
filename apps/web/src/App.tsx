@@ -3,17 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import Navigation from './components/Navigation';
-import Hero from './components/Hero';
-import TrustedBy from './components/TrustedBy';
-import Features from './components/Features';
-import HowItWorks from './components/HowItWorks';
-import WhoIsItFor from './components/WhoIsItFor';
-import Testimonials from './components/Testimonials';
-import Pricing from './components/Pricing';
-import FAQ from './components/FAQ';
-import FinalCTA from './components/FinalCTA';
-import Footer from './components/Footer';
+import Home from './pages/home';
 
 export default function App() {
   return (
@@ -35,38 +25,7 @@ export default function App() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-size-[4rem_4rem] mask-[radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-[0.2]" />
       </div>
 
-      {/* 1. Sticky Navigation */}
-      <Navigation />
-
-      {/* 2. Hero Section */}
-      <Hero />
-
-      {/* 3. Trusted By Section */}
-      <TrustedBy />
-
-      {/* 4. Features Bento Grid */}
-      <Features />
-
-      {/* 5. How RentalOne Works */}
-      <HowItWorks />
-
-      {/* 5b. Who Is RentalOne For */}
-      <WhoIsItFor />
-
-      {/* 6. Pricing Plans Options */}
-      <Pricing />
-
-      {/* 7. Customer Testimonials */}
-      <Testimonials />
-
-      {/* 8. Support FAQ Accordion */}
-      <FAQ />
-
-      {/* 9. Final Closure CTA */}
-      <FinalCTA />
-
-      {/* 10. Professional Footer */}
-      <Footer />
+      <Home />
     </div>
   );
 }

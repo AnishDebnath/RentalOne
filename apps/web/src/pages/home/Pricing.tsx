@@ -97,19 +97,19 @@ export default function Pricing() {
   return (
     <section id="plan-structure" className="py-24 bg-transparent text-slate-900 relative overflow-hidden">
       {/* Background glow effects */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl h-[600px] pointer-events-none -z-10 overflow-hidden">
-        <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-primary-light/40 blur-[120px]" />
-        <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full bg-sky-100/30 blur-[120px]" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl h-150 pointer-events-none -z-10 overflow-hidden">
+        <div className="absolute bottom-[-10%] left-[-10%] w-125 h-125 rounded-full bg-primary-light/40 blur-[120px]" />
+        <div className="absolute top-[-10%] right-[-10%] w-125 h-125 rounded-full bg-sky-100/30 blur-[120px]" />
       </div>
 
       <div className="max-w-7xl mx-auto px-6">
-        
+
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-light border border-primary-light text-xs font-semibold text-primary font-mono tracking-tight uppercase mb-4">
             <Star className="w-3.5 h-3.5 text-secondary fill-secondary" /> Simple Pricing Plans
           </div>
-          
+
           <motion.h2
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -117,9 +117,9 @@ export default function Pricing() {
             transition={{ delay: 0.1 }}
             className="font-display text-4xl sm:text-5xl font-black tracking-tight text-slate-950 mb-4"
           >
-            Flexible Plans Built for Any <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">Rental Business Size</span>
+            Flexible Plans Built for Any <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">Rental Business Size</span>
           </motion.h2>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -140,11 +140,10 @@ export default function Pricing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className={`p-7 sm:p-8 rounded-[2rem] border bg-white/75 backdrop-blur-md shadow-sm hover:shadow-xl flex flex-col justify-between relative transition-all duration-300 hover:-translate-y-1 group ${
-                plan.name === 'Growth'
+              className={`p-7 sm:p-8 rounded-4xl border bg-white/75 backdrop-blur-md shadow-sm hover:shadow-xl flex flex-col justify-between relative transition-all duration-300 hover:-translate-y-1 group ${plan.name === 'Growth'
                   ? 'border-primary/30 ring-4 ring-primary/5'
                   : 'border-slate-200/80 hover:border-primary/30'
-              }`}
+                }`}
             >
               <div>
                 {/* Icon positioned beautifully above the plan name */}
@@ -153,8 +152,8 @@ export default function Pricing() {
                 </div>
 
                 <h3 className="text-2xl font-bold text-slate-900 mb-2 font-display">{plan.name} Plan</h3>
-                
-                <p className="text-slate-500 text-xs sm:text-sm mb-6 leading-relaxed min-h-[48px]">
+
+                <p className="text-slate-500 text-xs sm:text-sm mb-6 leading-relaxed min-h-12">
                   {plan.tagline}
                 </p>
 
@@ -175,11 +174,10 @@ export default function Pricing() {
 
               <button
                 onClick={() => handleOpenBooking(plan.name)}
-                className={`w-full group inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 ${
-                  plan.name === 'Growth'
+                className={`w-full group inline-flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 ${plan.name === 'Growth'
                     ? 'bg-secondary hover:bg-secondary-hover text-white shadow-md shadow-secondary/15 hover:shadow-secondary/25'
                     : 'bg-slate-50 hover:bg-primary-light text-slate-800 hover:text-primary border border-slate-200/60 hover:border-primary-light'
-                }`}
+                  }`}
               >
                 <span>Book {plan.name} Plan</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-200" />
@@ -339,7 +337,7 @@ export default function Pricing() {
                   <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center mb-6 text-emerald-600">
                     <CheckCircle2 className="w-10 h-10 stroke-[1.5]" />
                   </div>
-                  
+
                   <h3 className="text-2xl font-bold text-slate-900 font-display mb-2">Booking Reserved!</h3>
                   <p className="text-slate-500 text-xs sm:text-sm max-w-sm leading-relaxed mb-6">
                     Thank you, <span className="font-bold text-slate-800">{bookingForm.name}</span>. Your request for the <span className="font-bold text-primary">{selectedPlan} Plan</span> structure for <span className="font-bold text-slate-800">{bookingForm.company}</span> has been successfully logged.

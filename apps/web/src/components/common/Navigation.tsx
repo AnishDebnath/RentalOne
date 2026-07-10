@@ -43,17 +43,16 @@ export default function Navigation() {
   return (
     <header
       id="main-navigation"
-      className="fixed top-0 left-0 right-0 z-[100] transition-all duration-300 py-4 px-4 sm:px-6 md:px-8"
+      className="fixed top-0 left-0 right-0 z-100 transition-all duration-300 py-4 px-4 sm:px-6 md:px-8"
     >
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className={`max-w-6xl mx-auto w-full transition-all duration-300 ${
-          isScrolled
+        className={`max-w-6xl mx-auto w-full transition-all duration-300 ${isScrolled
             ? 'bg-white/95 border-slate-200/80 shadow-lg shadow-slate-100/50'
             : 'bg-white/90 border-slate-100/50 shadow-md'
-        } backdrop-blur-md border rounded-[22px] px-6 py-2.5 flex items-center justify-between`}
+          } backdrop-blur-md border rounded-[22px] px-6 py-2.5 flex items-center justify-between`}
       >
         {/* Logo */}
         <a href="#" className="flex items-center gap-2 group">

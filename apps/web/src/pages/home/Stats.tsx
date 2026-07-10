@@ -41,7 +41,7 @@ export default function Stats() {
   return (
     <section id="statistics" className="py-24 bg-transparent border-y border-slate-200/40">
       <div className="max-w-7xl mx-auto px-6">
-        
+
         {/* Subtle grid backing */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {statistics.map((stat, idx) => (
@@ -51,7 +51,7 @@ export default function Stats() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="bg-white border border-slate-200/60 p-6 rounded-2xl shadow-xs hover:shadow-md hover:border-slate-300/80 transition-all text-left flex flex-col justify-between min-h-[200px]"
+              className="bg-white border border-slate-200/60 p-6 rounded-2xl shadow-xs hover:shadow-md hover:border-slate-300/80 transition-all text-left flex flex-col justify-between min-h-50"
             >
               <div>
                 {/* Upper line */}
