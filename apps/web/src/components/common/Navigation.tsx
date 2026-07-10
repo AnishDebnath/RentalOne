@@ -6,6 +6,7 @@
 import { useState, useEffect, MouseEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, ArrowRight, ShieldCheck, Layers } from 'lucide-react';
+import logo from '@rentalone/ui/assets/rentalone-logo.png';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,23 +51,17 @@ export default function Navigation() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className={`max-w-6xl mx-auto w-full transition-all duration-300 ${isScrolled
-            ? 'bg-white/95 border-slate-200/80 shadow-lg shadow-slate-100/50'
-            : 'bg-white/90 border-slate-100/50 shadow-md'
+          ? 'bg-white/95 border-slate-200/80 shadow-lg shadow-slate-100/50'
+          : 'bg-white/90 border-slate-100/50 shadow-md'
           } backdrop-blur-md border rounded-[22px] px-6 py-2.5 flex items-center justify-between`}
       >
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2 group">
-          {/* Creative clover logo matching Deflexai/RentalOne screenshot style */}
-          <div className="relative w-6 h-6 flex items-center justify-center shrink-0">
-            <div className="absolute w-2.5 h-2.5 bg-slate-950 rounded-full top-0 left-0 group-hover:bg-primary transition-colors duration-300" />
-            <div className="absolute w-2.5 h-2.5 bg-slate-950 rounded-full top-0 right-0 group-hover:bg-primary transition-colors duration-300" />
-            <div className="absolute w-2.5 h-2.5 bg-slate-950 rounded-full bottom-0 left-0 group-hover:bg-primary transition-colors duration-300" />
-            <div className="absolute w-2.5 h-2.5 bg-slate-950 rounded-full bottom-0 right-0 group-hover:bg-primary transition-colors duration-300" />
-            <div className="absolute w-2 h-2 bg-slate-950 group-hover:bg-primary rotate-45 transition-colors duration-300" />
-          </div>
-          <span className="font-sans font-bold text-[17px] tracking-tight text-slate-950">
-            RentalOne
-          </span>
+        <a href="#" className="flex items-center group shrink-0">
+          <img
+            src={logo}
+            alt="RentalOne"
+            className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105 origin-left"
+          />
         </a>
 
         {/* Desktop Navigation */}

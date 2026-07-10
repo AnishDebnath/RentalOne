@@ -10,6 +10,8 @@ import {
   Twitter,
   Linkedin
 } from 'lucide-react';
+import logo from '@rentalone/ui/assets/rentalone-logo.png';
+import mindtrixLogo from '@rentalone/ui/assets/watermark.png';
 
 export default function Footer() {
   const handleScrollTo = (e: MouseEvent<HTMLAnchorElement | HTMLButtonElement>, href: string) => {
@@ -47,9 +49,11 @@ export default function Footer() {
               </span>
             </div>
 
-            <h3 className="font-display text-3xl sm:text-[38px] font-black text-slate-950 tracking-tight leading-none">
-              RentalOne.
-            </h3>
+            <img
+              src={logo}
+              alt="RentalOne"
+              className="h-10 sm:h-12 w-auto object-contain"
+            />
 
             <p className="text-slate-500 text-xs sm:text-sm leading-relaxed mt-4 max-w-sm font-medium">
               RentalOne is a premium rental management platform by Mindtrix Media. Simplify your rental business with our top-rated software, featuring automated online bookings and real-time inventory tracking.
@@ -183,6 +187,23 @@ export default function Footer() {
             RentalOne
           </span>
         </div>
+
+        {/* Mindtrix Media Branding */}
+        <a
+          href="https://www.mindtrixmedia.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-6 pt-4 border-t border-slate-200/40 text-center flex flex-col items-center gap-2 hover:opacity-80 transition-opacity relative z-10"
+        >
+          <img
+            src={mindtrixLogo}
+            alt="Mindtrix Media"
+            className="w-28 object-contain"
+          />
+          <p className="text-[10px] text-slate-400 tracking-[0.2em] uppercase leading-tight font-semibold">
+            Growing Together with <span className="text-primary">♥</span> Mindtrix Media
+          </p>
+        </a>
 
       </div>
     </footer>
