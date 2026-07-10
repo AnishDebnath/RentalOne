@@ -117,7 +117,7 @@ export default function Hero() {
               Trusted by growing rental operators worldwide.
             </p>
             <p className="text-[11px] sm:text-xs text-primary font-bold uppercase tracking-wider mt-1">
-              Secure • Cloud-Based • No Credit Card Required
+              Secure • Cloud-Based • Real-Time Tracking
             </p>
           </motion.div>
         </div>
