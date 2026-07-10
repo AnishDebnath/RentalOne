@@ -183,8 +183,8 @@ export default function Footer() {
         {/* ========================================================= */}
         {/* Giant visual display text watermark at the bottom center */}
         {/* ========================================================= */}
-        <div className="w-full text-center mt-8 select-none pointer-events-none relative z-0 overflow-hidden">
-          <span className="font-display tracking-[0.12em] font-black text-[7.5vw] md:text-[8vw] lg:text-[88px] leading-none opacity-[0.035] text-slate-950 uppercase block select-none truncate">
+        <div className="w-full text-center mt-8 pointer-events-none relative z-0 overflow-hidden">
+          <span className="font-display tracking-[0.12em] font-black text-[7.5vw] md:text-[8vw] lg:text-[88px] leading-none opacity-[0.035] text-slate-950 uppercase block truncate">
             RentalOne
           </span>
         </div>

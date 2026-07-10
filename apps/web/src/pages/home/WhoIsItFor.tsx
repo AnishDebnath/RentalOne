@@ -48,7 +48,7 @@ export default function WhoIsItFor() {
   ];
 
   return (
-    <section id="who-is-it-for" className="py-16 bg-transparent relative overflow-hidden select-none">
+    <section id="who-is-it-for" className="py-16 bg-transparent relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Outer Container with Soft Theme Background */}

@@ -95,7 +95,7 @@ export default function TrustedBy() {
           Trusted by 200 Rental Businesses
         </p>
         {/* Marquee Row: Left to Right */}
-        <div className="relative w-full overflow-hidden select-none">
+        <div className="relative w-full overflow-hidden">
           <div className="flex overflow-hidden w-full">
             <div className="animate-marquee flex gap-12 md:gap-16 lg:gap-20 items-center">
               {logos.map((logo) => (

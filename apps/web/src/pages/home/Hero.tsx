@@ -33,7 +33,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-slate-200/60 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.04)] backdrop-blur-sm mb-6 select-none"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-slate-200/60 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.04)] backdrop-blur-sm mb-6"
           >
             <span className="flex items-center gap-1.5 text-xs font-semibold text-primary uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5 text-secondary" />
@@ -111,7 +111,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.45 }}
-            className="text-center max-w-2xl mx-auto mb-16 select-none"
+            className="text-center max-w-2xl mx-auto mb-16"
           >
             <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">
               Trusted by growing rental operators worldwide.
@@ -274,7 +274,7 @@ export default function Hero() {
               </div>
 
               {/* Unified Bottom Fade-out Overlay to fade out and blur both laptop and mobile mockups together */}
-              <div className="absolute bottom-0 left-0 right-0 h-32 md:h-44 pointer-events-none z-40 select-none overflow-hidden">
+              <div className="absolute bottom-0 left-0 right-0 h-32 md:h-44 pointer-events-none z-40 overflow-hidden">
                 {/* Layered backdrop-blur zones to simulate a smooth gradient-like blur */}
                 <div className="absolute bottom-0 left-0 right-0 h-full bg-slate-50/10 backdrop-blur-[2px] mask-[linear-gradient(to_top,black_20%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_top,black_20%,transparent_100%)]" />
                 <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-slate-50/20 backdrop-blur-[6px] mask-[linear-gradient(to_top,black_30%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_top,black_30%,transparent_100%)]" />

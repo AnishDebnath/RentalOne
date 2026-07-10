@@ -30,7 +30,7 @@ function BrowseMockup() {
   const chips = ['All', 'Audio', 'Visual'];
 
   return (
-    <div className="w-full h-52 bg-linear-to-tr from-slate-50 via-primary-light/20 to-slate-100 rounded-2xl relative overflow-hidden flex flex-col justify-between p-3.5 border border-slate-100 mb-6 select-none">
+    <div className="w-full h-52 bg-linear-to-tr from-slate-50 via-primary-light/20 to-slate-100 rounded-2xl relative overflow-hidden flex flex-col justify-between p-3.5 border border-slate-100 mb-6">
       {/* Background soft ambient glowing circles */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,49,136,0.03)_0%,transparent_70%)] pointer-events-none" />
 
@@ -290,7 +290,7 @@ function CheckoutMockup() {
   ];
 
   return (
-    <div className="w-full h-52 bg-linear-to-tr from-slate-50 via-secondary-light/25 to-slate-100 rounded-2xl relative overflow-hidden flex flex-col items-center justify-center p-4 border border-slate-100 mb-6 select-none">
+    <div className="w-full h-52 bg-linear-to-tr from-slate-50 via-secondary-light/25 to-slate-100 rounded-2xl relative overflow-hidden flex flex-col items-center justify-center p-4 border border-slate-100 mb-6">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,49,136,0.02)_0%,transparent_70%)] pointer-events-none" />
 
       {/* 4 Connected Icons Horizontal Chain */}
@@ -345,7 +345,7 @@ function CollectMockup() {
   ];
 
   return (
-    <div className="w-full h-52 bg-linear-to-tr from-slate-50 via-emerald-50/20 to-slate-100 rounded-2xl relative overflow-hidden flex flex-col items-center justify-center p-4 border border-slate-100 mb-6 select-none">
+    <div className="w-full h-52 bg-linear-to-tr from-slate-50 via-emerald-50/20 to-slate-100 rounded-2xl relative overflow-hidden flex flex-col items-center justify-center p-4 border border-slate-100 mb-6">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.02)_0%,transparent_70%)] pointer-events-none" />
 
       {/* 4 Connected Icons Horizontal Chain */}
@@ -383,7 +383,7 @@ function CollectMockup() {
 
 export default function HowItWorks() {
   return (
-    <section id="solution" className="py-16 bg-transparent relative overflow-hidden select-none">
+    <section id="solution" className="py-16 bg-transparent relative overflow-hidden">
       {/* Background soft ambient glowing circles */}
       <div className="absolute top-[10%] left-[5%] w-112.5 h-112.5 rounded-full bg-primary-light/45 blur-[130px] pointer-events-none -z-10" />
       <div className="absolute bottom-[10%] right-[5%] w-112.5 h-112.5 rounded-full bg-primary-light/35 blur-[130px] pointer-events-none -z-10" />

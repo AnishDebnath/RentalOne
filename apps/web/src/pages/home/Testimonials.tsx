@@ -46,7 +46,7 @@ export default function Testimonials() {
         </div>
 
         {/* Double Row Continuous Sliding Marquee */}
-        <div className="relative w-full overflow-hidden flex flex-col gap-8 select-none py-4">
+        <div className="relative w-full overflow-hidden flex flex-col gap-8 py-4">
 
           {/* Row 1: Left to Right */}
           <div className="flex overflow-hidden w-full relative">

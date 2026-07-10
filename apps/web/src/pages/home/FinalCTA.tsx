@@ -70,7 +70,7 @@ export default function FinalCTA() {
         {/* ========================================================= */}
 
         {/* CARD 1 (Top Left): Camera Gear Booking */}
-        <div className="absolute left-6 top-8 hidden xl:flex flex-col bg-white shadow-md rounded-2xl p-4 w-48 text-left pointer-events-none select-none z-10 transition-all duration-300 hover:shadow-lg">
+        <div className="absolute left-6 top-8 hidden xl:flex flex-col bg-white shadow-md rounded-2xl p-4 w-48 text-left pointer-events-none z-10 transition-all duration-300 hover:shadow-lg">
           <div className="flex items-center gap-2 mb-3">
             <div className="w-7 h-7 rounded-lg bg-primary-light flex items-center justify-center text-primary">
               <Camera className="w-4 h-4" />
@@ -93,7 +93,7 @@ export default function FinalCTA() {
         </div>
 
         {/* CARD 2 (Bottom Left): Vehicle & Logistics Tracker */}
-        <div className="absolute left-6 bottom-8 hidden lg:flex flex-col bg-white shadow-lg rounded-2xl p-4 w-52 text-left pointer-events-none select-none z-10 transition-all duration-300 hover:shadow-xl">
+        <div className="absolute left-6 bottom-8 hidden lg:flex flex-col bg-white shadow-lg rounded-2xl p-4 w-52 text-left pointer-events-none z-10 transition-all duration-300 hover:shadow-xl">
           <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] font-mono font-bold text-primary uppercase tracking-widest bg-primary-light px-1.5 py-0.5 rounded">F-102 TRANSIT</span>
             <Truck className="w-3.5 h-3.5 text-slate-400" />
@@ -113,7 +113,7 @@ export default function FinalCTA() {
         </div>
 
         {/* CARD 3 (Top Right): Event & Truss Inventory Stack */}
-        <div className="absolute right-6 top-8 hidden xl:flex flex-col bg-white shadow-md rounded-2xl p-4 w-44 text-left pointer-events-none select-none z-10 transition-all duration-300 hover:shadow-lg">
+        <div className="absolute right-6 top-8 hidden xl:flex flex-col bg-white shadow-md rounded-2xl p-4 w-44 text-left pointer-events-none z-10 transition-all duration-300 hover:shadow-lg">
           <div className="flex items-center gap-2 mb-2.5">
             <div className="w-7 h-7 rounded-lg bg-primary-light flex items-center justify-center text-primary">
               <Layers className="w-4 h-4" />
@@ -133,7 +133,7 @@ export default function FinalCTA() {
         </div>
 
         {/* CARD 4 (Bottom Right): Weekly Equipment Return Rate */}
-        <div className="absolute right-6 bottom-8 hidden lg:flex flex-col bg-white shadow-lg rounded-2xl p-3.5 w-44 text-left pointer-events-none select-none z-10 transition-all duration-300 hover:shadow-xl">
+        <div className="absolute right-6 bottom-8 hidden lg:flex flex-col bg-white shadow-lg rounded-2xl p-3.5 w-44 text-left pointer-events-none z-10 transition-all duration-300 hover:shadow-xl">
           <div className="flex items-center justify-between mb-1">
             <span className="text-[11px] font-bold text-slate-800 font-display">Check-in Rates</span>
             <span className="text-[8px] font-bold text-slate-400 font-mono">4 Weeks</span>

@@ -32,7 +32,7 @@ import {
 // --- CARD 01 SUPPORT COMPONENTS ---
 function ControlPanelMockup() {
   return (
-    <div className="relative w-full px-6 pb-8 md:px-8 select-none flex items-stretch gap-4 md:gap-5 mt-4">
+    <div className="relative w-full px-6 pb-8 md:px-8 flex items-stretch gap-4 md:gap-5 mt-4">
       {/* Left Sidebar Mockup Container */}
       <div className="w-14 sm:w-16 bg-white rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgba(0,0,0,0.02)] py-4 flex flex-col items-center gap-3 shrink-0">
         {/* Logo Icon */}
@@ -76,7 +76,7 @@ function ControlPanelMockup() {
         {/* Spline Wave Graph with axis labels */}
         <div className="relative h-28 w-full mt-5 flex items-end">
           {/* Axis indicators */}
-          <div className="absolute left-0 inset-y-0 flex flex-col justify-between text-[8px] font-mono font-bold text-slate-400 py-1 z-10 select-none">
+          <div className="absolute left-0 inset-y-0 flex flex-col justify-between text-[8px] font-mono font-bold text-slate-400 py-1 z-10">
             <span>50k</span>
             <span>30k</span>
             <span>10k</span>
@@ -159,7 +159,7 @@ function ControlPanelMockup() {
 // --- CARD 02 SUPPORT COMPONENTS ---
 function SmartInventoryMockup() {
   return (
-    <div className="relative w-full flex-1 min-h-65 flex items-center justify-center select-none overflow-hidden pb-6">
+    <div className="relative w-full flex-1 min-h-65 flex items-center justify-center overflow-hidden pb-6">
       {/* Background concentric orbital paths */}
       <div className="absolute w-55 h-55 rounded-full border border-dashed border-slate-300/60 flex items-center justify-center">
         <div className="absolute w-37.5 h-37.5 rounded-full border border-dashed border-slate-200 flex items-center justify-center" />
@@ -305,7 +305,7 @@ function RentalBookingMockup() {
   ];
 
   return (
-    <div className="relative w-full flex flex-col select-none mt-1 pb-2">
+    <div className="relative w-full flex flex-col mt-1 pb-2">
       {/* Sleek multi-segmented status timeline */}
       <div className="w-[96%] mx-auto flex flex-col gap-1.5 mb-5 mt-2">
         <div className="flex justify-between items-center text-[8px] sm:text-[8.5px] font-bold text-slate-400 font-mono tracking-wider">
@@ -379,7 +379,7 @@ function RentalBookingMockup() {
 // --- CARD 04 SUPPORT COMPONENTS ---
 function CustomerBusinessMockup() {
   return (
-    <div className="relative w-full h-50 flex flex-col items-center justify-center select-none overflow-hidden mt-1 pb-1">
+    <div className="relative w-full h-50 flex flex-col items-center justify-center overflow-hidden mt-1 pb-1">
       {/* Network background vector connections */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 300 180" preserveAspectRatio="none">
         <defs>
@@ -533,7 +533,7 @@ function SecureTrackingMockup() {
   ];
 
   return (
-    <div className="relative w-full flex flex-col items-center select-none mt-1 pb-2">
+    <div className="relative w-full flex flex-col items-center mt-1 pb-2">
       {/* 4 Connected Icons Horizontal Chain */}
       <div className="relative w-full grid grid-cols-4 gap-2 z-10 mb-6">
         {/* Background connection track line */}

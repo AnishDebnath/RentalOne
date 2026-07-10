@@ -7,7 +7,7 @@ import Home from './pages/home';
 
 export default function App() {
   return (
-    <div className="relative min-h-screen text-slate-900 overflow-x-hidden antialiased select-none bg-slate-50">
+    <div className="relative min-h-screen text-slate-900 overflow-x-hidden antialiased bg-slate-50">
       {/* 0. Elegant Global Flow Gradient Background Map */}
       <div className="absolute inset-0 -z-50 pointer-events-none overflow-hidden">
         {/* Continuous Linear Gradient Base */}
