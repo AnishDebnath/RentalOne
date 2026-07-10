@@ -25,8 +25,8 @@ export default function Navigation() {
   }, []);
 
   const menuItems = [
-    { label: 'Product', href: '#product' },
-    { label: 'Solution', href: '#solution' },
+    { label: 'Features', href: '#product' },
+    { label: 'How It Works', href: '#solution' },
     { label: 'Pricing', href: '#plan-structure' },
     { label: 'Testimonial', href: '#testimonials' },
     { label: 'FAQ', href: '#faq' },
@@ -71,14 +71,14 @@ export default function Navigation() {
             onClick={(e) => handleScrollTo(e, '#product')}
             className="text-[13.5px] font-semibold text-slate-900 hover:text-primary transition-colors"
           >
-            Product
+            Features
           </a>
           <a
             href="#solution"
             onClick={(e) => handleScrollTo(e, '#solution')}
             className="text-[13.5px] font-semibold text-slate-900 hover:text-primary transition-colors"
           >
-            Solution
+            How It Works
           </a>
           <a
             href="#plan-structure"
@@ -146,14 +146,14 @@ export default function Navigation() {
                 onClick={(e) => handleScrollTo(e, '#product')}
                 className="text-[14px] font-semibold text-slate-700 hover:text-primary transition-colors py-1"
               >
-                Product
+                Features
               </a>
               <a
                 href="#solution"
                 onClick={(e) => handleScrollTo(e, '#solution')}
                 className="text-[14px] font-semibold text-slate-700 hover:text-primary transition-colors py-1"
               >
-                Solution
+                How It Works
               </a>
               <a
                 href="#plan-structure"
