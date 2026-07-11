@@ -26,7 +26,7 @@ export default function Footer() {
   };
 
   return (
-    <footer id="main-footer" className="pb-6 bg-transparent px-4 sm:px-6 relative overflow-hidden flex flex-col items-center">
+    <footer id="main-footer" className="pb-6 bg-transparent px-4 md:px-8 lg:px-12 xl:px-20 relative overflow-hidden flex flex-col items-center">
 
       {/* Outer Banner Wrapper matching CTA style */}
       <div className="w-full max-w-6xl rounded-[2.5rem] bg-[#fbfbfc] border border-slate-200/50 p-8 sm:p-12 md:p-16 shadow-xs relative overflow-hidden">
@@ -134,7 +134,7 @@ export default function Footer() {
             </div>
 
             {/* Social Media Row aligned to the right side on larger viewports */}
-            <div className="flex items-center justify-start lg:justify-end gap-2.5">
+            <div className="flex items-center justify-start md:justify-end gap-2.5">
               <a
                 href="#"
                 className="w-8 h-8 rounded-full border border-slate-200/80 hover:border-slate-400 hover:bg-white flex items-center justify-center text-slate-600 hover:text-slate-950 transition-all duration-200 shadow-2xs"

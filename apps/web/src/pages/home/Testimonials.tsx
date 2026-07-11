@@ -19,7 +19,7 @@ export default function Testimonials() {
       <div className="w-full">
 
         {/* Header */}
-        <div className="max-w-4xl mx-auto text-center mb-14 px-6">
+        <div className="max-w-4xl mx-auto text-center mb-14 px-4 md:px-8 lg:px-12 xl:px-20">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-light border border-primary-light text-xs font-semibold text-primary font-mono tracking-tight uppercase mb-4">
             <MessageSquare className="w-3.5 h-3.5 text-primary fill-primary" /> Trusted by Operators
           </div>
@@ -29,7 +29,7 @@ export default function Testimonials() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="font-display text-4xl sm:text-5xl font-black tracking-tight text-slate-950 mb-4 leading-tight"
+            className="font-display text-4xl md:text-5xl font-black tracking-tight text-slate-950 mb-4 leading-tight"
           >
             Why Rental Businesses Choose <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">RentalOne</span>
           </motion.h2>
@@ -39,7 +39,7 @@ export default function Testimonials() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-slate-500 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-medium"
+            className="text-slate-500 text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-medium"
           >
             See how equipment rental shops around the world simplify their daily rental operations, manage inventory, and automate customer bookings with our premium rental management software.
           </motion.p>

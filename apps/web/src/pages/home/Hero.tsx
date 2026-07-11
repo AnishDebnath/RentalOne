@@ -3,13 +3,25 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useState, useEffect } from 'react';
 import {
   ArrowRight, Play, CheckCircle2, Sparkles, Star, Calendar, Box, ShieldCheck, QrCode,
-  ChevronDown, LayoutDashboard, Users, Bed, Brush, CreditCard, TrendingUp, Search, Mic, Bell, Moon, MoreVertical, LogOut, DoorOpen
+  ChevronDown, Users, Bed, Brush, CreditCard, TrendingUp, Search, Mic, Bell, Moon, MoreVertical, LogOut, DoorOpen
 } from 'lucide-react';
+import productDesktop from '../../assets/product-desktop.png';
+import productMobile from '../../assets/product-mobile.png';
 
 export default function Hero() {
+  const [activeDevice, setActiveDevice] = useState<'phone' | 'laptop'>('phone');
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveDevice(prev => prev === 'phone' ? 'laptop' : 'phone');
+    }, 4500);
+    return () => clearInterval(interval);
+  }, []);
+
   const handleScrollTo = (id: string) => {
     const target = document.querySelector(id);
     if (target) {
@@ -26,7 +38,7 @@ export default function Hero() {
         <div className="absolute top-[40%] left-[30%] w-75 h-75 rounded-full bg-primary-light/35 blur-[80px]" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 xl:px-20">
         <div className="text-center max-w-4xl mx-auto">
           {/* Badge */}
           <motion.div
@@ -46,7 +58,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-slate-950 mb-6 leading-[1.1]"
+            className="font-display text-4xl md:text-[2.75rem] lg:text-6xl font-bold tracking-tight text-slate-950 mb-6 leading-[1.1]"
           >
             Scale Your Rental Business with <br className="hidden md:block" />
             <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent bg-size-[200%_auto] animate-[shiny-text_8s_linear_infinite]">
@@ -69,12 +81,12 @@ export default function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10"
+            className="flex flex-col md:flex-row items-center justify-center gap-4 mb-10"
           >
             <button
               id="hero-cta-get-started"
               onClick={() => handleScrollTo('#final-cta')}
-              className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 bg-secondary hover:bg-secondary-hover text-white font-semibold px-8 py-4 rounded-xl transition-all duration-200 shadow-xl shadow-secondary/25 hover:shadow-secondary/35 active:scale-[0.98] text-[15px]"
+              className="w-full md:w-auto group inline-flex items-center justify-center gap-2 bg-secondary hover:bg-secondary-hover text-white font-semibold px-5 md:px-8 py-3 md:py-4 rounded-xl transition-all duration-200 shadow-xl shadow-secondary/25 hover:shadow-secondary/35 active:scale-[0.98] text-sm md:text-[15px]"
             >
               Book a Free Demo
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -82,7 +94,7 @@ export default function Hero() {
             <button
               id="hero-cta-demo"
               onClick={() => handleScrollTo('#plan-structure')}
-              className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 bg-white hover:bg-primary hover:text-white border border-primary text-primary font-semibold px-8 py-4 rounded-xl transition-all duration-200 active:scale-[0.98] text-[15px] shadow-sm"
+              className="w-full md:w-auto group inline-flex items-center justify-center gap-2 bg-white hover:bg-primary hover:text-white border border-primary text-primary font-semibold px-5 md:px-8 py-3 md:py-4 rounded-xl transition-all duration-200 active:scale-[0.98] text-sm md:text-[15px] shadow-sm"
             >
               Explore Plans & Pricing
             </button>
@@ -111,7 +123,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.45 }}
-            className="text-center max-w-2xl mx-auto mb-16"
+            className="text-center max-w-2xl mx-auto mb-0 md:mb-16"
           >
             <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed">
               Trusted by growing rental operators worldwide.
@@ -133,155 +145,98 @@ export default function Hero() {
           <div className="relative w-full max-w-5xl mx-auto flex flex-col items-center justify-center">
             {/* Dual Device (Laptop & Mobile) Mockup Area */}
             <div
-              className="relative w-full flex flex-col items-center justify-center pt-8 pb-16 min-h-115 md:min-h-140"
-              style={{
-                maskImage: 'linear-gradient(to bottom, black 50%, rgba(0, 0, 0, 0.3) 78%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, black 50%, rgba(0, 0, 0, 0.3) 78%, transparent 100%)'
-              }}
+              className="relative w-full flex flex-col items-center justify-center pt-0 md:pt-4 pb-0 md:pb-8 min-h-100 md:min-h-120"
             >
-
-              {/* 1. LAPTOP MOCKUP (Centered, Large - Static positioning, no bobbing animation) */}
-              <div className="relative w-[88%] md:w-full max-w-3xl z-10">
-                {/* Laptop Screen Body */}
-                <div className="relative rounded-2xl border-4 border-slate-900 bg-slate-950 shadow-2xl overflow-hidden aspect-16/10 w-full">
-                  {/* Camera / Sensor */}
-                  <div className="absolute top-1 left-1/2 -translate-x-1/2 w-12 h-3 bg-slate-900 rounded-full z-30 flex items-center justify-center gap-1">
-                    <div className="w-1.5 h-1.5 rounded-full bg-slate-800" />
-                    <div className="w-1 h-1 rounded-full bg-blue-900/80" />
-                  </div>
-
-                  {/* Main Laptop Content Area - Ideal for actual product dashboard image */}
-                  <div className="absolute inset-0 bg-linear-to-br from-slate-50 to-slate-100 flex flex-col justify-between p-4 md:p-6 overflow-hidden">
-
-                    {/* Clean, Modern Dashboard Template Placeholder to look production-ready */}
-                    <div className="w-full h-full flex flex-col opacity-60">
-                      {/* Top simulated navbar */}
-                      <div className="flex items-center justify-between border-b border-slate-200 pb-2.5 mb-3">
-                        <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 rounded-full bg-primary" />
-                          <div className="w-16 h-2.5 bg-slate-200 rounded-full" />
-                        </div>
-                        <div className="flex gap-2">
-                          <div className="w-10 h-4 bg-slate-150 rounded-md" />
-                          <div className="w-14 h-4 bg-slate-200 rounded-md" />
+              {/* Mobile Carousel - Alternating Phone & Laptop */}
+              <div className="flex md:hidden relative w-full min-h-100 items-center justify-center">
+                <AnimatePresence mode="wait">
+                  {activeDevice === 'phone' ? (
+                    <motion.div
+                      key="phone"
+                      initial={{ opacity: 0, x: 100 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -100 }}
+                      transition={{ duration: 0.45, ease: 'easeInOut' }}
+                      className="absolute flex items-center justify-center w-full"
+                    >
+                      <div className="relative w-35 sm:w-42.5 drop-shadow-2xl z-30">
+                        <div className="relative border-4 border-slate-900 bg-slate-950 rounded-3xl sm:rounded-[28px] overflow-hidden aspect-9/19 w-full shadow-2xl">
+                          <div className="absolute top-2 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-slate-900 rounded-full z-40 flex items-center justify-center">
+                            <div className="w-2 h-2 rounded-full bg-slate-800" />
+                          </div>
+                          <img
+                            src={productMobile}
+                            alt="Mobile App"
+                            className="absolute inset-0 w-full h-full object-cover"
+                            loading="lazy"
+                          />
                         </div>
                       </div>
-
-                      {/* Layout body */}
-                      <div className="flex gap-3 flex-1 overflow-hidden text-left">
-                        {/* Left list sidebar */}
-                        <div className="w-1/4 hidden sm:flex flex-col gap-2 border-r border-slate-100 pr-2">
-                          <div className="w-full h-5 bg-primary-light rounded" />
-                          <div className="w-3/4 h-3 bg-slate-100 rounded" />
-                          <div className="w-1/2 h-3 bg-slate-100 rounded" />
-                          <div className="w-2/3 h-3 bg-slate-100 rounded" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="laptop"
+                      initial={{ opacity: 0, x: 100 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -100 }}
+                      transition={{ duration: 0.45, ease: 'easeInOut' }}
+                      className="absolute flex items-center justify-center w-full"
+                    >
+                      <div className="relative w-[88%] max-w-3xl z-10">
+                        <div className="relative rounded-2xl border-4 border-slate-900 bg-slate-950 shadow-2xl overflow-hidden aspect-16/10 w-full">
+                          <div className="absolute top-1 left-1/2 -translate-x-1/2 w-8 h-2 bg-slate-900 rounded-full z-30 flex items-center justify-center gap-0.5">
+                            <div className="w-1 h-1 rounded-full bg-slate-800" />
+                            <div className="w-0.5 h-0.5 rounded-full bg-blue-900/80" />
+                          </div>
+                          <img
+                            src={productDesktop}
+                            alt="Product Dashboard"
+                            className="absolute inset-0 w-full h-full object-cover"
+                            loading="lazy"
+                          />
                         </div>
-
-                        {/* Main grid */}
-                        <div className="flex-1 grid grid-cols-2 gap-3">
-                          <div className="border border-slate-200/80 bg-white rounded-lg p-3 flex flex-col justify-between">
-                            <div className="w-1/2 h-3 bg-slate-200 rounded" />
-                            <div className="w-full h-12 bg-primary-light/50 rounded border border-primary-light border-dashed mt-2" />
-                          </div>
-                          <div className="border border-slate-200/80 bg-white rounded-lg p-3 flex flex-col justify-between">
-                            <div className="w-2/3 h-3 bg-slate-200 rounded" />
-                            <div className="w-full h-12 bg-slate-100 rounded mt-2" />
-                          </div>
-                          <div className="col-span-2 border border-slate-200/80 bg-white rounded-lg p-3">
-                            <div className="w-1/3 h-3 bg-slate-200 rounded mb-2" />
-                            <div className="w-full h-10 bg-slate-50 rounded" />
-                          </div>
+                        <div className="relative w-[108%] left-[-4%] h-3 bg-slate-800 rounded-b-xl border-t border-slate-700 shadow-lg z-20">
+                          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-slate-900 rounded-b-sm" />
                         </div>
                       </div>
-                    </div>
-
-                    {/* Elegant overlay guiding user where to insert their image */}
-                    <div className="absolute inset-0 bg-slate-950/5 hover:bg-slate-950/0 transition-colors duration-300 flex flex-col items-center justify-center p-4">
-                      <div className="bg-white/95 backdrop-blur-md shadow-xl border border-slate-200/80 px-6 py-4 rounded-2xl flex flex-col items-center gap-2.5 max-w-xs text-center">
-                        <div className="w-10 h-10 rounded-xl bg-primary-light flex items-center justify-center text-primary">
-                          <LayoutDashboard className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <h4 className="text-xs font-bold text-slate-900">Your Web Dashboard</h4>
-                          <p className="text-[10px] text-slate-500 mt-1">Place your web dashboard image inside this section later</p>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-
-                {/* Laptop Keyboard Base & Hinge */}
-                <div className="relative w-[108%] left-[-4%] h-3 bg-slate-800 rounded-b-xl border-t border-slate-700 shadow-lg z-20">
-                  {/* Trackpad notch */}
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-slate-900 rounded-b-sm" />
-                </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
-              {/* 2. OVERLAPPING MOBILE MOCKUP (Bottom Right - Static positioning, no bobbing animation) */}
-              <div className="absolute right-[-2%] sm:right-[4%] bottom-[4%] w-30 sm:w-42.5 md:w-48.75 z-30 drop-shadow-2xl">
-                {/* Smartphone Outer Body */}
-                <div className="relative border-4 border-slate-900 bg-slate-950 rounded-3xl sm:rounded-[28px] overflow-hidden aspect-9/19 w-full shadow-2xl">
-                  {/* Speaker & Sensor bar */}
-                  <div className="absolute top-2 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-slate-900 rounded-full z-40 flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-slate-800" />
+              {/* Tablet/Desktop Static Overlapping Layout */}
+              <div className="hidden md:block relative w-full">
+                <div className="relative w-full max-w-3xl md:max-w-xl lg:max-w-2xl xl:max-w-3xl mx-auto z-10">
+                  <div className="relative rounded-2xl border-4 border-slate-900 bg-slate-950 shadow-2xl overflow-hidden aspect-16/10 w-full">
+                    <div className="absolute top-1 left-1/2 -translate-x-1/2 w-12 h-3 bg-slate-900 rounded-full z-30 flex items-center justify-center gap-1">
+                      <div className="w-1.5 h-1.5 rounded-full bg-slate-800" />
+                      <div className="w-1 h-1 rounded-full bg-blue-900/80" />
+                    </div>
+                    <img
+                      src={productDesktop}
+                      alt="Product Dashboard"
+                      className="absolute inset-0 w-full h-full object-cover"
+                      loading="lazy"
+                    />
                   </div>
-
-                  {/* Smartphone Screen Area */}
-                  <div className="absolute inset-0 bg-linear-to-br from-primary-light to-white flex flex-col justify-between p-2.5 pt-7 overflow-hidden">
-
-                    {/* Clean, Modern Mobile App Template Placeholder */}
-                    <div className="w-full h-full flex flex-col opacity-60">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="w-2.5 h-2.5 rounded-full bg-primary" />
-                        <div className="w-8 h-1 bg-slate-300 rounded-full" />
-                      </div>
-                      <div className="flex flex-col gap-1.5 flex-1">
-                        <div className="w-full h-10 bg-white rounded-lg border border-slate-200 p-1.5 flex items-center gap-1.5">
-                          <div className="w-3.5 h-3.5 rounded bg-primary-light shrink-0" />
-                          <div className="flex-1 space-y-0.5">
-                            <div className="w-1/2 h-1 bg-slate-200 rounded" />
-                            <div className="w-1/3 h-1 bg-slate-150 rounded" />
-                          </div>
-                        </div>
-                        <div className="w-full h-10 bg-white rounded-lg border border-slate-200 p-1.5 flex items-center gap-1.5">
-                          <div className="w-3.5 h-3.5 rounded bg-rose-50 shrink-0" />
-                          <div className="flex-1 space-y-0.5">
-                            <div className="w-2/3 h-1 bg-slate-200 rounded" />
-                            <div className="w-1/2 h-1 bg-slate-150 rounded" />
-                          </div>
-                        </div>
-                        <div className="flex-1 border border-slate-200 border-dashed rounded-lg bg-white/50 p-1.5 flex flex-col justify-end">
-                          <div className="w-3/4 h-1.5 bg-slate-200 rounded mb-1" />
-                          <div className="w-1/2 h-1 bg-slate-150 rounded" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Guides User */}
-                    <div className="absolute inset-0 bg-slate-950/10 hover:bg-slate-950/0 transition-colors duration-300 flex flex-col items-center justify-center p-2 text-center">
-                      <div className="bg-white/95 backdrop-blur-md shadow-lg border border-slate-200 rounded-xl p-2 max-w-32.5">
-                        <div className="w-5 h-5 rounded bg-primary-light flex items-center justify-center text-primary mx-auto mb-1">
-                          <Users className="w-3 h-3" />
-                        </div>
-                        <h5 className="text-[8px] font-bold text-slate-900 leading-tight">Mobile App</h5>
-                        <p className="text-[7px] text-slate-500 mt-0.5 leading-tight">Place mobile image here</p>
-                      </div>
-                    </div>
-
+                  <div className="relative w-[108%] left-[-4%] h-3 bg-slate-800 rounded-b-xl border-t border-slate-700 shadow-lg z-20">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-slate-900 rounded-b-sm" />
                   </div>
                 </div>
-              </div>
 
-              {/* Unified Bottom Fade-out Overlay to fade out and blur both laptop and mobile mockups together */}
-              <div className="absolute bottom-0 left-0 right-0 h-32 md:h-44 pointer-events-none z-40 overflow-hidden">
-                {/* Layered backdrop-blur zones to simulate a smooth gradient-like blur */}
-                <div className="absolute bottom-0 left-0 right-0 h-full bg-slate-50/10 backdrop-blur-[2px] mask-[linear-gradient(to_top,black_20%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_top,black_20%,transparent_100%)]" />
-                <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-slate-50/20 backdrop-blur-[6px] mask-[linear-gradient(to_top,black_30%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_top,black_30%,transparent_100%)]" />
-                <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-slate-50/30 backdrop-blur-md mask-[linear-gradient(to_top,black_40%,transparent_100%)] [WebkitMaskImage:linear-gradient(to_top,black_40%,transparent_100%)]" />
-
-                {/* Color gradient fade to completely blend into slate-50 background */}
-                <div className="absolute inset-0 bg-linear-to-t from-slate-50 via-slate-50/90 to-transparent" />
+                <div className="absolute right-[4%] bottom-[4%] w-48.75 md:w-36.5 lg:w-42.5 xl:w-48.75 z-30 drop-shadow-2xl">
+                  <div className="relative border-4 border-slate-900 bg-slate-950 rounded-[28px] overflow-hidden aspect-9/19 w-full shadow-2xl">
+                    <div className="absolute top-2 left-1/2 -translate-x-1/2 w-12 h-3.5 bg-slate-900 rounded-full z-40 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-slate-800" />
+                    </div>
+                    <img
+                      src={productMobile}
+                      alt="Mobile App"
+                      className="absolute inset-0 w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
               </div>
 
             </div> {/* Close Dual Device Mockup Area */}
@@ -292,7 +247,7 @@ export default function Hero() {
               initial={{ opacity: 0, x: -40, y: 20 }}
               animate={{ opacity: 1, x: 0, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8, ease: 'easeOut' }}
-              className="absolute -left-3.75 xl:-left-8.75 top-[15%] hidden lg:flex z-50"
+              className="absolute -left-3.75 xl:-left-8.75 top-[15%] hidden z-50"
             >
               <motion.div
                 animate={{ y: [0, -12, 0] }}
@@ -315,7 +270,7 @@ export default function Hero() {
               initial={{ opacity: 0, x: -40, y: 40 }}
               animate={{ opacity: 1, x: 0, y: 0 }}
               transition={{ duration: 0.8, delay: 1, ease: 'easeOut' }}
-              className="absolute -left-5 xl:-left-11.25 top-[55%] hidden lg:flex z-50"
+              className="absolute -left-5 xl:-left-11.25 top-[55%] hidden z-50"
             >
               <motion.div
                 animate={{ y: [0, 10, 0] }}
@@ -338,7 +293,7 @@ export default function Hero() {
               initial={{ opacity: 0, x: 40, y: -20 }}
               animate={{ opacity: 1, x: 0, y: 0 }}
               transition={{ duration: 0.8, delay: 0.9, ease: 'easeOut' }}
-              className="absolute -right-25 top-[18%] hidden lg:flex z-50"
+              className="absolute -right-25 lg:-right-12 xl:-right-25 top-[18%] hidden z-50"
             >
               <motion.div
                 animate={{ y: [0, -8, 0] }}
@@ -361,7 +316,7 @@ export default function Hero() {
               initial={{ opacity: 0, x: 40, y: 40 }}
               animate={{ opacity: 1, x: 0, y: 0 }}
               transition={{ duration: 0.8, delay: 1.1, ease: 'easeOut' }}
-              className="absolute -right-25 top-[58%] hidden lg:flex z-50"
+              className="absolute -right-25 lg:-right-12 xl:-right-25 top-[58%] hidden z-50"
             >
               <motion.div
                 animate={{ y: [0, 12, 0] }}

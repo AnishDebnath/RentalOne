@@ -603,7 +603,7 @@ export default function Features() {
         <div className="absolute bottom-[20%] right-[10%] w-112.5 h-112.5 rounded-full bg-secondary-light/35 blur-[120px]" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 xl:px-20">
         {/* Header Section */}
         <div className="text-center max-w-2xl mx-auto mb-10">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-light border border-primary-light text-xs font-semibold text-primary font-mono tracking-tight uppercase mb-4">
@@ -615,9 +615,9 @@ export default function Features() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="font-display text-4xl sm:text-5xl font-black tracking-tight text-slate-950 mb-4"
+            className="font-display text-4xl md:text-5xl font-black tracking-tight text-slate-950 mb-4"
           >
-            The complete platform to <span className="block sm:inline bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">manage your rentals</span>
+            The complete platform to <span className="block md:inline bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">manage your rentals</span>
           </motion.h2>
 
           <motion.p
@@ -625,7 +625,7 @@ export default function Features() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-slate-500 text-sm sm:text-base max-w-xl mx-auto font-medium"
+            className="text-slate-500 text-sm md:text-base max-w-xl mx-auto font-medium"
           >
             RentalOne provides powerful Rental Management Software designed for modern rental business owners. Track your inventory, handle bookings, manage customers, and view real-time business analytics.
           </motion.p>
@@ -643,7 +643,7 @@ export default function Features() {
             <div className="p-6 md:p-8 pb-3 flex flex-col gap-1.5">
               <div className="flex items-center gap-2">
                 <LayoutGrid className="w-5 h-5 text-primary shrink-0" />
-                <h3 className="text-[16px] sm:text-[18px] font-bold text-slate-900 tracking-tight">
+                <h3 className="text-[15px] sm:text-[16px] md:text-[18px] font-bold text-slate-900 tracking-tight">
                   Business Dashboard
                 </h3>
               </div>
@@ -667,7 +667,7 @@ export default function Features() {
             <div className="p-6 md:p-8 pb-3 flex flex-col gap-1.5">
               <div className="flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-emerald-600 shrink-0" />
-                <h3 className="text-[16px] sm:text-[18px] font-bold text-slate-900 tracking-tight">
+                <h3 className="text-[15px] sm:text-[16px] md:text-[18px] font-bold text-slate-900 tracking-tight">
                   Smart Inventory
                 </h3>
               </div>
@@ -696,7 +696,7 @@ export default function Features() {
             <div className="p-6 md:p-8 pb-3 flex flex-col gap-1.5">
               <div className="flex items-center gap-2">
                 <ClipboardList className="w-5 h-5 text-amber-600 shrink-0" />
-                <h3 className="text-[16px] sm:text-[18px] font-bold text-slate-900 tracking-tight">
+                <h3 className="text-[15px] sm:text-[16px] md:text-[18px] font-bold text-slate-900 tracking-tight">
                   Rental Operations
                 </h3>
               </div>
@@ -722,7 +722,7 @@ export default function Features() {
             <div className="p-6 md:p-8 pb-3 flex flex-col gap-1.5">
               <div className="flex items-center gap-2">
                 <Users className="w-5 h-5 text-secondary shrink-0" />
-                <h3 className="text-[16px] sm:text-[18px] font-bold text-slate-900 tracking-tight">
+                <h3 className="text-[15px] sm:text-[16px] md:text-[18px] font-bold text-slate-900 tracking-tight">
                   Customer Management
                 </h3>
               </div>
@@ -748,7 +748,7 @@ export default function Features() {
             <div className="p-6 md:p-8 pb-3 flex flex-col gap-1.5">
               <div className="flex items-center gap-2">
                 <Shield className="w-5 h-5 text-blue-600 shrink-0" />
-                <h3 className="text-[16px] sm:text-[18px] font-bold text-slate-900 tracking-tight">
+                <h3 className="text-[15px] sm:text-[16px] md:text-[18px] font-bold text-slate-900 tracking-tight">
                   Insights & Reports
                 </h3>
               </div>

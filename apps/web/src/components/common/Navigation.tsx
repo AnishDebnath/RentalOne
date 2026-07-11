@@ -44,7 +44,7 @@ export default function Navigation() {
   return (
     <header
       id="main-navigation"
-      className="fixed top-0 left-0 right-0 z-100 transition-all duration-300 py-4 px-4 sm:px-6 md:px-8"
+      className="fixed top-0 left-0 right-0 z-100 transition-all duration-300 py-4 px-4 md:px-8 lg:px-12 xl:px-20"
     >
       <motion.div
         initial={{ y: -20, opacity: 0 }}
@@ -60,7 +60,7 @@ export default function Navigation() {
           <img
             src={logo}
             alt="RentalOne"
-            className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105 origin-left"
+            className="h-7 md:h-8 lg:h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105 origin-left"
           />
         </a>
 
@@ -69,35 +69,35 @@ export default function Navigation() {
           <a
             href="#product"
             onClick={(e) => handleScrollTo(e, '#product')}
-            className="text-[13.5px] font-semibold text-slate-900 hover:text-primary transition-colors"
+            className="text-[13px] md:text-[13.5px] lg:text-[14px] font-semibold text-slate-900 hover:text-primary transition-colors"
           >
             Features
           </a>
           <a
             href="#solution"
             onClick={(e) => handleScrollTo(e, '#solution')}
-            className="text-[13.5px] font-semibold text-slate-900 hover:text-primary transition-colors"
+            className="text-[13px] md:text-[13.5px] lg:text-[14px] font-semibold text-slate-900 hover:text-primary transition-colors"
           >
             How It Works
           </a>
           <a
             href="#plan-structure"
             onClick={(e) => handleScrollTo(e, '#plan-structure')}
-            className="text-[13.5px] font-semibold text-slate-900 hover:text-primary transition-colors"
+            className="text-[13px] md:text-[13.5px] lg:text-[14px] font-semibold text-slate-900 hover:text-primary transition-colors"
           >
             Pricing
           </a>
           <a
             href="#testimonials"
             onClick={(e) => handleScrollTo(e, '#testimonials')}
-            className="text-[13.5px] font-semibold text-slate-900 hover:text-primary transition-colors"
+            className="text-[13px] md:text-[13.5px] lg:text-[14px] font-semibold text-slate-900 hover:text-primary transition-colors"
           >
             Testimonial
           </a>
           <a
             href="#faq"
             onClick={(e) => handleScrollTo(e, '#faq')}
-            className="text-[13.5px] font-semibold text-slate-900 hover:text-primary transition-colors"
+            className="text-[13px] md:text-[13.5px] lg:text-[14px] font-semibold text-slate-900 hover:text-primary transition-colors"
           >
             FAQ
           </a>
@@ -111,7 +111,7 @@ export default function Navigation() {
               const target = document.querySelector('#final-cta');
               if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }}
-            className="group bg-primary hover:bg-primary-hover text-white text-[13px] font-bold px-6 py-2.5 rounded-xl transition-all shadow-sm active:scale-[0.98] inline-flex items-center gap-1.5"
+            className="group bg-primary hover:bg-primary-hover text-white text-xs md:text-[13px] font-bold px-5 md:px-6 py-2 md:py-2.5 rounded-xl transition-all shadow-sm active:scale-[0.98] inline-flex items-center gap-1.5"
           >
             Book a Free Demo
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />

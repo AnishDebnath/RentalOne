@@ -15,10 +15,10 @@ export default function FAQ() {
     <section id="faq" className="py-16 bg-transparent relative overflow-hidden">
       <div className="absolute bottom-0 right-0 w-100 h-100 rounded-full bg-primary-light/40 blur-[120px] pointer-events-none -z-10" />
 
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-4 md:px-8 lg:px-12 xl:px-20">
 
         {/* Header */}
-        <div className="max-w-4xl mx-auto text-center mb-16 px-6">
+        <div className="max-w-4xl mx-auto text-center mb-16 px-4 md:px-8 lg:px-12 xl:px-20">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-light border border-primary-light text-xs font-semibold text-primary font-mono tracking-tight uppercase mb-4">
             <HelpCircle className="w-3.5 h-3.5 text-primary fill-primary" /> Frequently Asked
           </div>
@@ -28,7 +28,7 @@ export default function FAQ() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="font-display text-4xl sm:text-5xl font-black tracking-tight text-slate-950 mb-4 leading-tight"
+            className="font-display text-4xl md:text-5xl font-black tracking-tight text-slate-950 mb-4 leading-tight"
           >
             Questions Rental <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent font-display">Businesses Ask</span>
           </motion.h2>
@@ -38,7 +38,7 @@ export default function FAQ() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-slate-500 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-medium"
+            className="text-slate-500 text-sm md:text-base max-w-2xl mx-auto leading-relaxed font-medium"
           >
             Find quick answers about RentalOne, rental management software, online booking, inventory management, pricing, and getting started.
           </motion.p>

@@ -102,7 +102,7 @@ export default function Pricing() {
         <div className="absolute top-[-10%] right-[-10%] w-125 h-125 rounded-full bg-sky-100/30 blur-[120px]" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 xl:px-20">
 
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -115,7 +115,7 @@ export default function Pricing() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="font-display text-4xl sm:text-5xl font-black tracking-tight text-slate-950 mb-4"
+            className="font-display text-4xl md:text-5xl font-black tracking-tight text-slate-950 mb-4"
           >
             Flexible Plans Built for Any <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">Rental Business Size</span>
           </motion.h2>
@@ -125,7 +125,7 @@ export default function Pricing() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-slate-500 text-sm sm:text-base max-w-xl mx-auto font-medium"
+            className="text-slate-500 text-sm md:text-base max-w-xl mx-auto font-medium"
           >
             Scale your business with our versatile Rental Management Software. Our flexible Rental Business Platform is designed to automate bookings, track assets, and boost efficiency.
           </motion.p>
@@ -250,7 +250,7 @@ export default function Pricing() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="email" className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
                           Work Email *
@@ -351,7 +351,7 @@ export default function Pricing() {
 
                   <button
                     onClick={handleCloseBooking}
-                    className="py-3 px-6 bg-primary hover:bg-primary-hover text-white rounded-xl font-semibold text-xs sm:text-sm transition-all"
+                    className="py-3 px-5 md:px-6 bg-primary hover:bg-primary-hover text-white rounded-xl font-semibold text-xs sm:text-sm transition-all"
                   >
                     Back to Showcase
                   </button>

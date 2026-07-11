@@ -90,7 +90,7 @@ export default function TrustedBy() {
 
   return (
     <section id="trusted-by" className="pt-8 pb-16 bg-transparent">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 xl:px-20">
         <p className="text-center text-xs font-semibold uppercase tracking-wider text-slate-400 mb-8 font-mono">
           Trusted by 200 Rental Businesses
         </p>

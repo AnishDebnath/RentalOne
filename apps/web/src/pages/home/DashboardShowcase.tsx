@@ -100,17 +100,17 @@ export default function DashboardShowcase() {
     <section id="showcase" className="py-16 bg-transparent relative">
       <div className="absolute top-1/3 right-1/4 w-125 h-125 rounded-full bg-primary-light/40 blur-[140px] pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 xl:px-20">
 
         {/* Section Header */}
         <div className="max-w-3xl mx-auto text-center mb-16">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-light border border-primary-light text-xs font-semibold text-primary font-mono tracking-tight uppercase mb-4">
             <Sliders className="w-3.5 h-3.5" /> Interactive Sandbox
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 mb-4">
+          <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-4">
             Experience the <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent font-display">Live CRM Dashboard</span>
           </h2>
-          <p className="text-slate-500 text-sm sm:text-base">
+          <p className="text-slate-500 text-sm md:text-base">
             This is a fully-operational interactive replica of the RentalOne ERP command station. Feel free to click around, trigger simulated orders, scan returns, and toggle system states.
           </p>
         </div>
@@ -123,7 +123,7 @@ export default function DashboardShowcase() {
         >
 
           {/* Top Panel Brand Bar */}
-          <div className="bg-slate-950 px-6 py-4 border-b border-slate-900 flex flex-wrap items-center justify-between gap-4">
+          <div className="bg-slate-950 px-4 md:px-6 py-4 border-b border-slate-900 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white font-bold">
                 R1
@@ -539,7 +539,7 @@ export default function DashboardShowcase() {
           </AnimatePresence>
 
           {/* Sandbox prompt overlay */}
-          <div className="bg-slate-950 px-6 py-4 border-t border-slate-900 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-4">
+          <div className="bg-slate-950 px-4 md:px-6 py-4 border-t border-slate-900 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-4">
             <span className="flex items-center gap-2">
               <ShieldAlert className="w-4 h-4 text-primary" />
               Automated master legal vaults are active. Security deposit authorization released via local bank link.

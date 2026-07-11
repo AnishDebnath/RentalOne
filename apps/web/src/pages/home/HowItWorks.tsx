@@ -388,7 +388,7 @@ export default function HowItWorks() {
       <div className="absolute top-[10%] left-[5%] w-112.5 h-112.5 rounded-full bg-primary-light/45 blur-[130px] pointer-events-none -z-10" />
       <div className="absolute bottom-[10%] right-[5%] w-112.5 h-112.5 rounded-full bg-primary-light/35 blur-[130px] pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-12 xl:px-20">
 
         {/* Header Section */}
         <div className="text-center max-w-2xl mx-auto mb-20">
@@ -401,7 +401,7 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="font-display text-4xl sm:text-5xl font-black tracking-tight text-slate-950 mb-4"
+            className="font-display text-4xl md:text-5xl font-black tracking-tight text-slate-950 mb-4"
           >
             A Modern Online <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">Booking System</span> for Customers
           </motion.h2>
@@ -411,14 +411,14 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-slate-500 text-sm sm:text-base max-w-xl mx-auto font-medium"
+            className="text-slate-500 text-sm md:text-base max-w-xl mx-auto font-medium"
           >
             Provide your customers with a modern, effortless booking experience while automating reservations, tracking rental dates, and streamlining checkouts behind the scenes.
           </motion.p>
         </div>
 
         {/* Operations Grid styled with exactly 4 steps */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 items-stretch max-w-7xl mx-auto">
 
           {/* Card 1: Browse Products */}
           <motion.div
@@ -426,7 +426,7 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-88 relative overflow-hidden"
+            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-5 md:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-80 md:min-h-88 relative overflow-hidden"
           >
             {/* Visual Preview Container */}
             <BrowseMockup />
@@ -453,7 +453,7 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-88 relative overflow-hidden"
+            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-5 md:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-80 md:min-h-88 relative overflow-hidden"
           >
             {/* Visual Calendar Mockup */}
             <CalendarMockup />
@@ -480,7 +480,7 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-88 relative overflow-hidden"
+            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-5 md:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-80 md:min-h-88 relative overflow-hidden"
           >
             {/* Visual Preview Container */}
             <CheckoutMockup />
@@ -507,7 +507,7 @@ export default function HowItWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-6 sm:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-88 relative overflow-hidden"
+            className="group bg-white/60 backdrop-blur-md border border-slate-200/50 rounded-[2.2rem] p-5 md:p-7 flex flex-col justify-between shadow-xs hover:shadow-md transition-all duration-300 min-h-80 md:min-h-88 relative overflow-hidden"
           >
             {/* Visual Preview Container */}
             <CollectMockup />

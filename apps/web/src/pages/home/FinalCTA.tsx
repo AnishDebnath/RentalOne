@@ -54,7 +54,7 @@ export default function FinalCTA() {
   };
 
   return (
-    <section id="cta" className="py-16 bg-transparent px-4 sm:px-6 relative overflow-hidden flex flex-col items-center">
+    <section id="cta" className="py-16 bg-transparent px-4 md:px-8 lg:px-12 xl:px-20 relative overflow-hidden flex flex-col items-center">
 
       {/* Outer Banner Wrapper matching the elegant, premium website theme */}
       <div className="w-full max-w-5xl rounded-3xl bg-white border border-slate-100 p-8 sm:p-12 md:py-16 md:px-12 shadow-[0_8px_30px_rgb(0,0,0,0.02)] relative overflow-hidden flex flex-col items-center text-center">
@@ -174,9 +174,9 @@ export default function FinalCTA() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="font-display text-3xl sm:text-4xl font-black tracking-tight text-slate-900 mb-4 leading-tight"
+            className="font-display text-3xl md:text-4xl font-black tracking-tight text-slate-900 mb-4 leading-tight"
           >
-            Ready to Scale Your <br className="hidden sm:inline" /> <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">Rental Business?</span>
+            Ready to Scale Your <br className="hidden md:inline" /> <span className="bg-linear-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">Rental Business?</span>
           </motion.h2>
 
           <motion.p
@@ -184,7 +184,7 @@ export default function FinalCTA() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.08 }}
-            className="text-slate-500 text-sm sm:text-base leading-relaxed font-medium mb-8 max-w-lg mx-auto"
+            className="text-slate-500 text-sm md:text-base leading-relaxed font-medium mb-8 max-w-lg mx-auto"
           >
             Experience the ultimate rental management software. Simplify your daily bookings, track physical inventory in real-time, and scale your business operations.
           </motion.p>
@@ -195,11 +195,11 @@ export default function FinalCTA() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.12 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto px-4"
+            className="flex flex-col md:flex-row items-center justify-center gap-4 w-full md:w-auto px-4"
           >
             <button
               onClick={() => setIsModalOpen(true)}
-              className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 bg-secondary hover:bg-secondary-hover text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-xl shadow-secondary/25 hover:shadow-secondary/35 active:scale-[0.98] text-sm"
+              className="w-full md:w-auto group inline-flex items-center justify-center gap-2 bg-secondary hover:bg-secondary-hover text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-xl shadow-secondary/25 hover:shadow-secondary/35 active:scale-[0.98] text-sm"
             >
               Book Free Demo
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -212,7 +212,7 @@ export default function FinalCTA() {
                   target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
               }}
-              className="w-full sm:w-auto group inline-flex items-center justify-center gap-2 bg-white hover:bg-primary hover:text-white border border-primary text-primary font-semibold px-6 py-3 rounded-xl transition-all duration-200 active:scale-[0.98] text-sm shadow-sm"
+              className="w-full md:w-auto group inline-flex items-center justify-center gap-2 bg-white hover:bg-primary hover:text-white border border-primary text-primary font-semibold px-6 py-3 rounded-xl transition-all duration-200 active:scale-[0.98] text-sm shadow-sm"
             >
               View Pricing
             </button>
